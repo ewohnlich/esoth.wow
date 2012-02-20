@@ -1,0 +1,38 @@
+.progressionTable {
+  border-collapse: collapse;
+}
+
+.progressionTable th,
+.progressionTable td {
+  width: 90px;
+  height: 25px;
+  border: 1px solid black;
+  text-align: center;
+  font-size: 10px;
+  line-height: 1em;
+}
+
+.progressionTable th {
+  background-color: White;
+}
+  
+.killed {
+  background-color:#205c90;
+}
+
+.notKilled {
+  background-color:#dddddd;
+}
+
+.wowcharinfo {
+  float: right;
+  margin-right: 1em;
+}
+
+.avatarFrame {
+  font-weight: bold;
+  border: 1px solid black;
+  padding: 1em;
+  width: 200px;
+  background-color: #dddddd;
+}

@@ -1,0 +1,44 @@
+Metadata-Version: 1.0
+Name: esoth.wow
+Version: 1.0dev
+Summary: character progression and stuff
+Home-page: https://github.com/esoth/esoth.wow
+Author: Esoth
+Author-email: plone-developers@lists.sourceforge.net
+License: GPL
+Description: .. contents::
+        
+        .. Note!
+           -----
+           Update the following URLs to point to your:
+        
+           - code repository
+           - bug tracker
+           - questions/comments feedback mail
+           (do not set a real mail, to avoid spams)
+        
+           Or remove it if not used.
+        
+        - Code repository: http://svn.somewhere.com/...
+        - Questions and comments to somemailing_list
+        - Report bugs at http://bug.somewhere.com/..
+        Change history
+        **************
+        
+        #
+        Detailed Documentation
+        **********************
+        
+        #
+        Contributors
+        ************
+        
+        Esoth, Author
+        Download
+        ********
+        
+Platform: UNKNOWN
+Classifier: Framework :: Plone
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: License :: OSI Approved :: GNU General Public License (GPL)

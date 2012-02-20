@@ -1,0 +1,9 @@
+Add to buildout
+
+eggs =
+    ...
+    esoth.wow
+    
+zcml =
+    ...
+    esoth.wow

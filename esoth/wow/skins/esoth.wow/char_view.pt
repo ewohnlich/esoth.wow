@@ -1,0 +1,252 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="plone">
+<body>
+
+<metal:content-core fill-slot="main">
+    <metal:content-core define-macro="content-core"
+                        tal:define="kssClassesView context/@@kss_field_decorator_view;
+                                    getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
+                                    templateId template/getId;
+                                    toLocalizedTime nocall:context/@@plone/toLocalizedTime;
+                                    server python:here.getServer().lower().replace('\'','');
+                                    charname python:here.Title().lower();
+                                    dummy here/autoUpdateData;
+                                    maintitle python:here.specTitle(here.getMainspec());
+                                    secondtitle python:here.specTitle(here.getSecondspec())">
+
+        <h1 tal:content="string:${here/Title} <${here/getGuild}>"/>
+                                    
+        <div class="updateData">
+          <form tal:attributes="action string:${here/absolute_url}/update_data_script">
+            <input type="submit" class="context" value="update" />
+            <span class="discreet" tal:content="python:'last cached: ' + toLocalizedTime(here.getCacheDate(),long_format=1)"/>
+          </form>
+        </div>
+
+        <div class="wowcharinfo">
+          <table class="vertical listing">
+						<tr>
+							<th>Armory link</th>
+							<td>
+							  <a tal:content="string:http://us.battle.net/wow/en/character/${server}/${charname}/advanced"
+							     tal:attributes="href string:http://us.battle.net/wow/en/character/${server}/${charname}/advanced"/>
+							</td>
+						</tr>
+						<tr tal:condition="here/getGuild">
+							<th>Guild</th>
+							<td>
+							  <a tal:content="string:http://us.battle.net/wow/en/guild/${server}/${here/getGuild}/"
+							     tal:attributes="href string:http://us.battle.net/wow/en/guild/${server}/${here/getGuild}/"/>
+						</tr>
+						<tr>
+							<th>Server</th>
+							<td tal:content="here/getServer|string:"/>
+						</tr>
+						<tr>
+							<th>Class</th>
+							<td tal:content="here/getClass|string:"/>
+						</tr>
+						<tr>
+							<th>Race</th>
+							<td tal:content="here/getRace|string:"/>
+						</tr>
+						<tr>
+						  <th>Gender</th>
+						  <td tal:content="here/getGender|string:"/>
+						</tr>
+						<tr>
+						  <th>Level</th>
+						  <td tal:content="here/getLevel|string:"/>
+						</tr>
+						<tr>
+						  <th>Primary Spec</th>
+						  <td tal:content="string:${maintitle}: ${here/getMainspec}"/>
+						</tr>
+						<tr>
+						  <th>Secondary Spec</th>
+						  <td tal:content="string:${secondtitle}: ${here/getSecondspec}"/>
+						</tr>
+						<tr>
+						  <th>Titles</th>
+						  <td tal:content="here/getTitles"/>
+						</tr>
+						<tr>
+						  <th>Companions</th>
+						  <td tal:content="here/getCompanions"/>
+						</tr>
+						<tr>
+						  <th>Mounts</th>
+						  <td tal:content="here/getMounts"/>
+						</tr>
+          </table>
+        </div>
+
+        <div class="avatarFrame">
+          <div tal:condition="here/getAvatar">
+          	<img tal:replace="structure python:context.tag(scale='thumb', css_class='mediaImage')" src="" alt="" /><br/>
+          </div>
+          <div tal:condition="python:here.getAvatarLink() and not here.getAvatar()">
+            <img tal:attributes="src string:http://us.battle.net/static-render/us/${here/getAvatarLink}"/><br/>
+          </div>
+          <span tal:content="here/getPoints"/> achievement points.
+        </div>
+        
+        <h2>Stats</h2>
+        <table class="listing verticle">
+          <tr tal:condition="python:maintitle in ['Enhancement','Marksmanship','Survival','Beast Master','Feral','Subtlety','Assassination','Combat']">
+            <th>Agility</th>
+            <td tal:content="here/getAgility|string:;"/>
+            <th>Stamina</th>
+            <td tal:content="here/getStamina|string:;"/>
+          </tr>
+          <tr tal:condition="python:maintitle in ['Arms','Fury','Protection','Blood','Unholy','Frost','Retribution']">
+            <th>Strength</th>
+            <td tal:content="here/getStrength|string:;"/>
+            <th>Stamina</th>
+            <td tal:content="here/getStamina|string:;"/>
+          </tr>
+          <tr tal:condition="python:maintitle in ['Discipline','Holy','Shadow','Fire','Frost','Arcane','Destruction','Demonology','Affliction','Balance','Elemental','Restoration']">
+            <th>Intellect</th>
+            <td tal:content="here/getIntellect|string:;"/>
+            <th>Stamina</th>
+            <td tal:content="here/getStamina|string:;"/>
+          </tr>
+          <tr>
+            <th>Hit</th>
+            <td tal:content="here/getHit|string:;"/>
+            <th>Crit</th>
+            <td tal:content="here/getCrit|string:;"/>
+          </tr>
+          <tr>
+            <th>Haste</th>
+            <td tal:content="here/getHaste|string:;"/>
+            <th>Mastery</th>
+            <td tal:content="here/getMastery|string:;"/>
+          </tr>
+          <tr tal:condition="python:maintitle in ['Balance','Elemental','Restoration','Holy','Shadow','Discipline']">
+            <th>Spirit</th>
+            <td tal:content="here/getSpirit|string:;"/>
+            <th/><td/>
+          </tr>
+        </table>
+        <div class="visualClear"> </div>
+        
+        <h2 tal:define="normalCount python:len([k for k in context.getTier11() if 'Heroic' not in k]);
+                        heroicCount python:len([k for k in context.getTier11() if 'Heroic' in k]);"
+            tal:content="string:Tier 11 Progression (${normalCount}/12, ${heroicCount}/13H)"/>
+        <table class="progressionTable">
+          <thead>
+            <tr>
+              <tal:headers repeat="boss python:['Omnotron','Magmaw','Maloriak','Atramedes','Chimaeron','Nefarian','Halfus','Val. / Ther.','Ascendant Council','Cho\'gal','Conclave of Wind','Al\'Akir']">
+                <th tal:content="boss"/>
+              </tal:headers>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <tal:boss repeat="boss python:[b for b in here.tier11bosses() if 'Heroic' not in b]">
+                <td tal:attributes="class python:boss in here.getTier11() and 'killed' or 'notKilled'"></td>
+              </tal:boss>
+            </tr>
+          </tbody>
+        </table>
+        <table class="progressionTable">
+          <thead>
+            <tr>
+              <tal:headers repeat="boss python:['Omnotron (H)','Magmaw (H)','Maloriak (H)','Atramedes (H)','Chimaeron (H)','Nefarian (H)','Halfus (H)','Val. / Ther. (H)',
+                                                'Ascendant Council (H)','Cho\'gal (H)','Sinestra (H)','Conclave of Wind (H)','Al\'Akir (H)']">
+                <th tal:content="boss"/>
+              </tal:headers>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <tal:boss repeat="boss python:[b for b in here.tier11bosses() if 'Heroic' in b]">
+                <td tal:attributes="class python:boss in here.getTier11() and 'killed' or 'notKilled'"></td>
+              </tal:boss>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h2 tal:define="normalCount python:len([k for k in context.getTier12() if 'Heroic' not in k]);
+                        heroicCount python:len([k for k in context.getTier12() if 'Heroic' in k]);"
+            tal:content="string:Tier 12 Progression (${normalCount}/7, ${heroicCount}/7H)"/>
+        <table class="progressionTable">
+          <thead>
+            <tr>
+              <tal:headers repeat="boss python:['Shannox','Rhyolith','Alysrazor','Beth\'tilac','Baleroc','Majordomo Staghelm','Ragnaros']">
+                <th tal:content="boss"/>
+              </tal:headers>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <tal:boss repeat="boss python:[b for b in here.tier12bosses() if 'Heroic' not in b]">
+                <td tal:attributes="class python:boss in here.getTier12() and 'killed' or 'notKilled'"></td>
+              </tal:boss>
+            </tr>
+          </tbody>
+        </table>
+        <table class="progressionTable">
+          <thead>
+            <tr>
+              <tal:headers repeat="boss python:['Shannox (H)','Rhyolith (H)','Alysrazor (H)','Beth\'tilac (H)','Baleroc (H)','Majordomo Staghelm (H)','Ragnaros (H)']">
+                <th tal:content="boss"/>
+              </tal:headers>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <tal:boss repeat="boss python:[b for b in here.tier12bosses() if 'Heroic' in b]">
+                <td tal:attributes="class python:boss in here.getTier12() and 'killed' or 'notKilled'"></td>
+              </tal:boss>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h2 tal:define="normalCount python:len([k for k in context.getTier13() if 'Heroic' not in k]);
+                        heroicCount python:len([k for k in context.getTier13() if 'Heroic' in k]);"
+            tal:content="string:Tier 13 Progression (${normalCount}/8, ${heroicCount}/8H)"/>
+        <table class="progressionTable">
+          <thead>
+            <tr>
+              <tal:headers repeat="boss python:['Morchok','Zon\'ozz','Yor\'sahj','Hagara','Ultraxion','Warmaster Blackhorn','Spine of Deathwing','Madness of Deathwing']">
+                <th tal:content="boss"/>
+              </tal:headers>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <tal:boss repeat="boss python:[b for b in here.tier13bosses() if 'Heroic' not in b]">
+                <td tal:attributes="class python:boss in here.getTier13() and 'killed' or 'notKilled'"></td>
+              </tal:boss>
+            </tr>
+          </tbody>
+        </table>
+        <table class="progressionTable">
+          <thead>
+            <tr>
+              <tal:headers repeat="boss python:['Morchok (H)','Zon\'ozz (H)','Yor\'sahj (H)','Hagara (H)','Ultraxion (H)','Warmaster Blackhorn (H)','Spine of Deathwing (H)','Madness of Deathwing (H)']">
+                <th tal:content="boss"/>
+              </tal:headers>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <tal:boss repeat="boss python:[b for b in here.tier13bosses() if 'Heroic' in b]">
+                <td tal:attributes="class python:boss in here.getTier13() and 'killed' or 'notKilled'"></td>
+              </tal:boss>
+            </tr>
+          </tbody>
+        </table>
+
+    </metal:content-core>
+</metal:content-core>
+
+</body>
+</html>
