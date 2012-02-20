@@ -76,9 +76,6 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
             label= u'Avatar (upload)'),
 
     ),
-    StringField('avatarLink',
-        widget = StringWidget(visible={'edit':'hidden'}),
-    ),
     IntegerField('points',
         widget = IntegerWidget(visible={'edit':'hidden'}),
     ),
@@ -167,6 +164,11 @@ class WoWChar(ATCTContent):
     security.declareProtected(View, 'classSelection')
     def classSelection(self):
       return ('Death Knight','Druid','Hunter','Mage','Monk','Paladin','Priest','Rogue','Shaman','Warlock','Warrior')
+      
+    security.declareProtected(View, 'hasAvatar')
+    def hasAvatar(self):
+      """ check this before making an image tag """
+      return self.getAvatar() and True or False
     
     security.declareProtected(View, 'tier11bosses')
     def tier11bosses(self):
@@ -238,6 +240,8 @@ class WoWChar(ATCTContent):
       from urllib import urlopen
       from DateTime import DateTime
       base_url = 'http://us.battle.net/api/wow/character/%s/%s?fields=talents,stats,items,reputation,titles,professions,appearance,companions,mounts,pets,achievements,progression,titles'
+      base_image_url = 'http://us.battle.net/static-render/us/'
+
       server = self.getServer().lower().replace("'","")
       charname = self.Title().lower()
       
@@ -246,11 +250,12 @@ class WoWChar(ATCTContent):
       # general
       self.setCacheDate(DateTime())
       self.setLevel(_json['level'])
-      racemap = {"1":"Human",'5':'Undead','11':'Draenei','7':'Gnome','8':'Troll','4':'Night Elf','2':'Orc','3':'Dwarf','10':'Blood Elf','22':'Worgen','6':'Tauren','9':'Goblin'}
+      racemap = {'1':'Human','5':'Undead','11':'Draenei','7':'Gnome','8':'Troll','4':'Night Elf','2':'Orc','3':'Dwarf','10':'Blood Elf','22':'Worgen','6':'Tauren','9':'Goblin'}
       self.setRace(racemap[str(_json['race'])])
       self.setClass(['none','Warrior','Paladin','Hunter','Rogue','Priest','Death Knight','Shaman','Mage','Warlock','Monk','Druid'][_json['class']])
       self.setGender(_json['gender'] and 'Female' or 'Male')
-      self.setAvatarLink(_json['thumbnail'])
+      img = urlopen(base_image_url+_json['thumbnail']).read()
+      self.setAvatar(img)
       self.setPoints(_json['achievementPoints'])
       
       # talents

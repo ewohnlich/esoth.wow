@@ -1,19 +1,13 @@
 <?xml version="1.0"?>
 <object name="portal_catalog" meta_type="CMF Catalog">
- <index name="artist" meta_type="FieldIndex">
-  <indexed_attr value="artist"/>
+ <index name="guild" meta_type="FieldIndex">
+  <indexed_attr value="guild"/>
  </index>
- <index name="year" meta_type="FieldIndex">
-  <indexed_attr value="year"/>
+ <index name="server" meta_type="FieldIndex">
+  <indexed_attr value="server"/>
  </index>
- <index name="artistYear" meta_type="FieldIndex">
-  <indexed_attr value="artistYear"/>
- </index>
- <index name="country" meta_type="KeywordIndex">
-  <indexed_attr value="country"/>
- </index>
- <column value="artist"/>
- <column value="country"/>
- <column value="year"/>
- <column value="hasTag"/>
+ <column value="guild"/>
+ <column value="hasAvatar"/>
+ <column value="server"/>
+ <column value="class"/>
 </object>

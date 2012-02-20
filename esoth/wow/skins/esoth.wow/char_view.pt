@@ -90,9 +90,6 @@
           <div tal:condition="here/getAvatar">
           	<img tal:replace="structure python:context.tag(scale='thumb', css_class='mediaImage')" src="" alt="" /><br/>
           </div>
-          <div tal:condition="python:here.getAvatarLink() and not here.getAvatar()">
-            <img tal:attributes="src string:http://us.battle.net/static-render/us/${here/getAvatarLink}"/><br/>
-          </div>
           <span tal:content="here/getPoints"/> achievement points.
         </div>
         
