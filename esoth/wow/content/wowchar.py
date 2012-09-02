@@ -8,6 +8,9 @@ from Products.ATContentTypes.content.base import ATCTContent, registerATCT
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema
 from Products.Archetypes.atapi import AnnotationStorage
 from Products.CMFCore.permissions import View
+from Products.DataGridField.DataGridField import DataGridField
+from Products.DataGridField.DataGridWidget import DataGridWidget
+from Products.DataGridField.Column import Column
 from esoth.wow.config import PROJECTNAME
 from esoth.wow.interfaces import IWoWChar
 from zope.interface import implements
@@ -53,13 +56,33 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
         widget = StringWidget(
             label= u'Guild'),
     ),
-    StringField('mainspec',
-        required = False,
-        widget = StringWidget(visible={'edit':'hidden'}),
+    DataGridField('specs',
+                searchable=True, # One unit tests checks whether text search works
+                widget = DataGridWidget(label = 'Main Spec',
+                     columns={
+                        'name' : Column(_(u"Name")),
+                        'icon': Column(_(u"Icon")),}),
+                columns=('name','icon'),
+            ),
+    DataGridField('mainTalents',
+        widget = DataGridWidget(label = 'Main Talents',
+                     columns = {
+                    'tier' : Column(_(u"Tier")),
+                    'column' : Column(_(u"Column")),
+                    'id' : Column(_(u"ID")),
+                    'name' : Column(_(u"Name")),
+                    'icon' : Column(_(u"Icon")),}),
+        columns = ('tier','column','id','name','icon'),
     ),
-    StringField('secondspec',
-        required = False,
-        widget = StringWidget(visible={'edit':'hidden'}),
+    DataGridField('secondTalents',
+        widget = DataGridWidget(label = 'Second Talents',
+                     columns = {
+                    'tier' : Column(_(u"Tier")),
+                    'column' : Column(_(u"Column")),
+                    'id' : Column(_(u"ID")),
+                    'name' : Column(_(u"Name")),
+                    'icon' : Column(_(u"Icon")),}),
+        columns = ('tier','column','id','name','icon'),
     ),
     ImageField('avatar',
         required = False,
@@ -259,11 +282,29 @@ class WoWChar(ATCTContent):
       self.setPoints(_json['achievementPoints'])
       
       # talents
-      mainspec = '/'.join([str(t['total']) for t in _json['talents'][0]['trees']])
-      self.setMainspec(mainspec)
-      if len(_json['talents'])>1:
-        secondspec = '/'.join([str(t['total']) for t in _json['talents'][1]['trees']])
-        self.setSecondspec(secondspec)
+      talents = _json['talents']
+      specs = []
+      for talentRoot in talents:
+        _talents = []
+        for talent in talentRoot['talents']:
+          _talent = {}
+          _talent['tier'] = str(talent['tier'])
+          _talent['column'] = str(talent['column'])
+          _talent['id'] = str(talent['spell']['id'])
+          _talent['name'] = talent['spell']['name']
+          _talent['icon'] = talent['spell']['icon']
+          _talents.append(_talent)
+        _talents.sort(lambda x,y: cmp(int(x['tier']),int(y['tier'])))
+        _spec = {}
+        _spec['name'] = talentRoot['spec']['name']
+        _spec['icon'] = talentRoot['spec']['icon']
+        if talentRoot.get('selected'):
+          self.setMainTalents(_talents)
+          specs.insert(0,_spec)
+        else:
+          self.setSecondTalents(_talents)
+          specs.append(_spec)
+      self.setSpecs(specs)
         
       # stats
       self.setAgility(_json['stats']['agi'])
@@ -313,27 +354,6 @@ class WoWChar(ATCTContent):
       now = DateTime()
       if not self.getCacheDate() or now >= self.getCacheDate()+1:
         self.updateData()
-        
-    security.declareProtected(View,'specTitle')
-    def specTitle(self,specstring):
-      specs = {'Death Knight':('Blood','Frost','Unholy'),
-                'Druid':('Balance','Feral','Restoration'),
-                'Hunter':('Beast Master','Marksmanship','Survival'),
-                'Mage':('Arcane','Fire','Frost'),
-                'Monk':('Brewmaster','Mistweaver','Windwalker'),
-                'Paladin':('Holy','Protection','Retribution'),
-                'Priest':('Discipline','Holy','Shadow'),
-                'Rogue':('Assassination','Combat','Subtlety'),
-                'Shaman':('Elemental','Enhancement','Restoration'),
-                'Warlock':('Affliction','Demonology','Destruction'),
-                'Warrior':('Arms','Fury','Protection')}
-      trees = specstring.split('/')
-      if int(trees[0])>int(trees[1]) and int(trees[0])>int(trees[2]):
-        return specs[self.getClass()][0]
-      elif int(trees[1])>int(trees[2]):
-        return specs[self.getClass()][1]
-      else:
-        return specs[self.getClass()][2]
         
     security.declarePublic('updateProgression')
     def updateProgression(self,tier,raids):

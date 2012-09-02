@@ -15,9 +15,7 @@
                                     toLocalizedTime nocall:context/@@plone/toLocalizedTime;
                                     server python:here.getServer().lower().replace('\'','');
                                     charname python:here.Title().lower();
-                                    dummy here/autoUpdateData;
-                                    maintitle python:here.specTitle(here.getMainspec());
-                                    secondtitle python:here.specTitle(here.getSecondspec())">
+                                    dummy here/autoUpdateData;">
 
         <h1 tal:content="string:${here/Title} <${here/getGuild}>"/>
                                     
@@ -64,14 +62,6 @@
 						  <td tal:content="here/getLevel|string:"/>
 						</tr>
 						<tr>
-						  <th>Primary Spec</th>
-						  <td tal:content="string:${maintitle}: ${here/getMainspec}"/>
-						</tr>
-						<tr>
-						  <th>Secondary Spec</th>
-						  <td tal:content="string:${secondtitle}: ${here/getSecondspec}"/>
-						</tr>
-						<tr>
 						  <th>Titles</th>
 						  <td tal:content="here/getTitles"/>
 						</tr>
@@ -91,23 +81,47 @@
           	<img tal:replace="structure python:context.tag(scale='thumb', css_class='mediaImage')" src="" alt="" /><br/>
           </div>
           <span tal:content="here/getPoints"/> achievement points.
+            
+          <h3>Main Spec: <span tal:content="python:here.getSpecs()[0]['name']"/></h3>
+          <ul class="visualNoMarker">
+            <tal:talent repeat="talent here/getMainTalents">
+              <li>
+                <span tal:content="python:(int(talent['tier'])+1)*15"/>:
+                <img tal:attributes="src string:http://wow.zamimg.com/images/wow/icons/small/${talent/icon}.jpg"/>
+                <a tal:attributes="href string:http://www.wowhead.com?spell=${talent/id}"
+                   tal:content="talent/name"/>
+              </li>
+            </tal:talent>
+          </ul>
+            
+          <h3>Second Spec: <span tal:content="python:here.getSpecs()[1]['name']"/></h3>
+          <ul class="visualNolMarker">
+            <tal:talent repeat="talent here/getSecondTalents">
+              <li>
+                <span tal:content="python:(int(talent['tier'])+1)*15"/>:
+                <a tal:attributes="href string:http://www.wowhead.com?item=${talent/id}"
+                   tal:content="talent/name"/>
+              </li>
+            </tal:talent>
+          </ul>
+          
         </div>
         
-        <h2>Stats</h2>
+       <h2>Stats</h2>
         <table class="listing verticle">
-          <tr tal:condition="python:maintitle in ['Enhancement','Marksmanship','Survival','Beast Master','Feral','Subtlety','Assassination','Combat']">
+          <tr tal:condition="python:int(here.getAgility()) > int(here.getIntellect()) and int(here.getAgility()) > int(here.getStrength())">
             <th>Agility</th>
             <td tal:content="here/getAgility|string:;"/>
             <th>Stamina</th>
             <td tal:content="here/getStamina|string:;"/>
           </tr>
-          <tr tal:condition="python:maintitle in ['Arms','Fury','Protection','Blood','Unholy','Frost','Retribution']">
+          <tr tal:condition="python:int(here.getStrength()) > int(here.getAgility()) and int(here.getStrength()) > int(here.getIntellect())">
             <th>Strength</th>
             <td tal:content="here/getStrength|string:;"/>
             <th>Stamina</th>
             <td tal:content="here/getStamina|string:;"/>
           </tr>
-          <tr tal:condition="python:maintitle in ['Discipline','Holy','Shadow','Fire','Frost','Arcane','Destruction','Demonology','Affliction','Balance','Elemental','Restoration']">
+          <tr tal:condition="python:int(here.getIntellect()) > int(here.getAgility()) and int(here.getIntellect()) > int(here.getAgility())">
             <th>Intellect</th>
             <td tal:content="here/getIntellect|string:;"/>
             <th>Stamina</th>
@@ -125,7 +139,7 @@
             <th>Mastery</th>
             <td tal:content="here/getMastery|string:;"/>
           </tr>
-          <tr tal:condition="python:maintitle in ['Balance','Elemental','Restoration','Holy','Shadow','Discipline']">
+          <tr tal:condition="python:int(here.getSpirit())>500">
             <th>Spirit</th>
             <td tal:content="here/getSpirit|string:;"/>
             <th/><td/>

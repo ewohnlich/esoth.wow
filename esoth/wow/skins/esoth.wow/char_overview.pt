@@ -19,6 +19,10 @@
                                     plone_view context/@@plone;">
 
         <h1 tal:content="string:${here/Title}"/>
+
+        <form tal:attributes="action string:${here/absolute_url}/update_folderdata_script">
+           <input type="submit" value="Update all"/>
+        </form>
                                     
         <table class="listing">
           <thead>
@@ -27,6 +31,11 @@
               <th>*</th>
               <th>Server</th>
               <th>Guild</th>
+              <th>Class</th>
+              <th>Achievement Points</th>
+              <th>Mounts</th>
+              <th>Companions</th>
+              <th>Titles</th>
             </tr>
           </thead>
           <tbody>
@@ -57,6 +66,11 @@
                     &lt;<span tal:omit-tag="" tal:content="char/guild"/>&gt;
                   </tal:guild>
                 </td>
+                <td tal:content="char/class"/>
+                <td tal:content="char/points"/>
+                <td tal:content="char/mounts"/>
+                <td tal:content="char/companions"/>
+                <td tal:content="char/titles"/>
               </tr>
             </tal:char>
           </tbody>
