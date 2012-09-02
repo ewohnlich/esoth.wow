@@ -286,18 +286,20 @@ class WoWChar(ATCTContent):
       specs = []
       for talentRoot in talents:
         _talents = []
-        for talent in talentRoot['talents']:
-          _talent = {}
-          _talent['tier'] = str(talent['tier'])
-          _talent['column'] = str(talent['column'])
-          _talent['id'] = str(talent['spell']['id'])
-          _talent['name'] = talent['spell']['name']
-          _talent['icon'] = talent['spell']['icon']
-          _talents.append(_talent)
+        for talent in talentRoot.get('talents',[]):
+          if talent:
+            _talent = {}
+            _talent['tier'] = str(talent['tier'])
+            _talent['column'] = str(talent['column'])
+            _talent['id'] = str(talent['spell']['id'])
+            _talent['name'] = talent['spell']['name']
+            _talent['icon'] = talent['spell']['icon']
+            _talents.append(_talent)
         _talents.sort(lambda x,y: cmp(int(x['tier']),int(y['tier'])))
         _spec = {}
-        _spec['name'] = talentRoot['spec']['name']
-        _spec['icon'] = talentRoot['spec']['icon']
+        if talentRoot.get('spec'):
+          _spec['name'] = talentRoot['spec']['name']
+          _spec['icon'] = talentRoot['spec']['icon']
         if talentRoot.get('selected'):
           self.setMainTalents(_talents)
           specs.insert(0,_spec)

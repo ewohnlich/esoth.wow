@@ -82,28 +82,33 @@
           </div>
           <span tal:content="here/getPoints"/> achievement points.
             
-          <h3>Main Spec: <span tal:content="python:here.getSpecs()[0]['name']"/></h3>
-          <ul class="visualNoMarker">
-            <tal:talent repeat="talent here/getMainTalents">
-              <li>
-                <span tal:content="python:(int(talent['tier'])+1)*15"/>:
-                <img tal:attributes="src string:http://wow.zamimg.com/images/wow/icons/small/${talent/icon}.jpg"/>
-                <a tal:attributes="href string:http://www.wowhead.com?spell=${talent/id}"
-                   tal:content="talent/name"/>
-              </li>
-            </tal:talent>
-          </ul>
+          <div tal:condition="python:len(here.getSpecs())>0">
+            <h3>Main Spec: <span tal:content="python:here.getSpecs()[0]['name']"/></h3>
+            <ul class="visualNoMarker">
+              <tal:talent repeat="talent here/getMainTalents">
+                <li>
+                  <span tal:content="python:(int(talent['tier'])+1)*15"/>:
+                  <img tal:attributes="src string:http://wow.zamimg.com/images/wow/icons/small/${talent/icon}.jpg"/>
+                  <a tal:attributes="href string:http://www.wowhead.com?spell=${talent/id}"
+                     tal:content="talent/name"/>
+                </li>
+              </tal:talent>
+            </ul>
+          </div>
             
-          <h3>Second Spec: <span tal:content="python:here.getSpecs()[1]['name']"/></h3>
-          <ul class="visualNolMarker">
-            <tal:talent repeat="talent here/getSecondTalents">
-              <li>
-                <span tal:content="python:(int(talent['tier'])+1)*15"/>:
-                <a tal:attributes="href string:http://www.wowhead.com?item=${talent/id}"
-                   tal:content="talent/name"/>
-              </li>
-            </tal:talent>
-          </ul>
+          <div tal:condition="python:len(here.getSpecs())>1">
+            <h3>Second Spec: <span tal:content="python:here.getSpecs()[1]['name']"/></h3>
+            <ul class="visualNoMarker">
+              <tal:talent repeat="talent here/getSecondTalents">
+                <li>
+                  <span tal:content="python:(int(talent['tier'])+1)*15"/>:
+                  <img tal:attributes="src string:http://wow.zamimg.com/images/wow/icons/small/${talent/icon}.jpg"/>
+                  <a tal:attributes="href string:http://www.wowhead.com?spell=${talent/id}"
+                     tal:content="talent/name"/>
+                </li>
+              </tal:talent>
+            </ul>
+          </div>
           
         </div>
         
