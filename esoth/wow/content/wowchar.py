@@ -102,20 +102,15 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
     IntegerField('points',
         widget = IntegerWidget(visible={'edit':'hidden'}),
     ),
-    LinesField('tier11',
-        required = False,
-        vocabulary='tier11bosses',
-        widget = MultiSelectionWidget(visible={'edit':'hidden'}),
-    ),
-    LinesField('tier12',
-        required = False,
-        vocabulary='tier12bosses',
-        widget = MultiSelectionWidget(visible={'edit':'hidden'}),
-    ),
-    LinesField('tier13',
-        required = False,
-        vocabulary='tier13bosses',
-        widget = MultiSelectionWidget(visible={'edit':'hidden'}),
+    LinesField('progression',
+        widget = DataGridWidget(label = 'Progression',
+                     columns = {
+                    'tier' : Column(_(u"Tier")),
+                    'raid' : Column(_(u"Raid")),
+                    'boss' : Column(_(u"Boss")),
+                    'nkills':Column(_(u"Normal Kills")),
+                    'hkills':Column(_(u"Heroic Kills"))}),
+        columns = ('tier','column','id','name','icon'),
     ),
     DateTimeField('cacheDate',
         widget = CalendarWidget(visible={'edit':'hidden'}),
@@ -164,6 +159,8 @@ WoWCharSchema.changeSchemataForField('hit','stats')
 WoWCharSchema.changeSchemataForField('tier11','progression')
 WoWCharSchema.changeSchemataForField('tier12','progression')
 WoWCharSchema.changeSchemataForField('tier13','progression')
+WoWCharSchema.changeSchemataForField('tier14','progression')
+WoWCharSchema.changeSchemataForField('tier15','progression')
 
 class WoWChar(ATCTContent):
     schema = WoWCharSchema
@@ -206,20 +203,7 @@ class WoWChar(ATCTContent):
               'Elementium Monstrosity',
               'Cho\'gall',
               'Conclave of Wind',
-              'Al\'Akir',
-              'Toxitron (Heroic)',
-              'Magmaw (Heroic)',
-              'Maloriak (Heroic)',
-              'Atramedes (Heroic)',
-              'Chimaeron (Heroic)',
-              'Nefarian (Heroic)',
-              'Halfus Wyrmbreaker (Heroic)',
-              'Valiona (Heroic)',
-              'Elementium Monstrosity (Heroic)',
-              'Cho\'gall (Heroic)',
-              'Sinestra (Heroic)',
-              'Conclave of Wind (Heroic)',
-              'Al\'Akir (Heroic)',)
+              'Al\'Akir',,)
     
     security.declareProtected(View, 'tier12bosses')
     def tier12bosses(self):
@@ -229,14 +213,7 @@ class WoWChar(ATCTContent):
               'Beth\'tilac',
               'Baleroc',
               'Majordomo Staghelm',
-              'Ragnaros',
-              'Shannox (Heroic)',
-              'Lord Rhyolith (Heroic)',
-              'Alysrazor (Heroic)',
-              'Beth\'tilac (Heroic)',
-              'Baleroc (Heroic)',
-              'Majordomo Staghelm (Heroic)',
-              'Ragnaros (Heroic)',)
+              'Ragnaros',)
     
     security.declareProtected(View, 'tier13bosses')
     def tier13bosses(self):
@@ -247,15 +224,7 @@ class WoWChar(ATCTContent):
               'Ultraxion',
               'Warmaster Blackhorn',
               'Spine of Deathwing',
-              'Madness of Deathwing',
-              'Morchok (Heroic)',
-              'Warlord Zon\'ozz (Heroic)',
-              'Yor\'sahj the Unsleeping (Heroic)',
-              'Hagara the Stormbinder (Heroic)',
-              'Ultraxion (Heroic)',
-              'Warmaster Blackhorn (Heroic)',
-              'Spine of Deathwing (Heroic)',
-              'Madness of Deathwing (Heroic)',)
+              'Madness of Deathwing')
 
     security.declarePublic('updateData')
     def updateData(self):
@@ -320,27 +289,33 @@ class WoWChar(ATCTContent):
       self.setHit(_json['stats']['hitRating'])
       
       # progression
+      tiermap = ['Blackwing Descent',
+                 'The Bastion of Twilight',
+                 'Throne of the Four Winds',
+                 'Firelands',
+                 'Dragon Soul',
+                 "Mogu'shan Vaults",
+                 'Heart of Fear',
+                 'Terrace of Endless Spring',
+                 'Throne of Thunder']
       raids = _json['progression']['raids']
-      tier13 = []
-      tier12 = []
-      tier11 = []
+      progression = []
       for raid in raids:
-        if raid['name']=='Dragon Soul':
-          tier13.append(raid.copy())
-        elif raid['name']=='Firelands':
-          tier12.append(raid.copy())
-        elif raid['name']=='Throne of the Four Winds':
-          tier11.append(raid.copy())
-        elif raid['name']=='The Bastion of Twilight':
-          tier11.append(raid.copy())
-        elif raid['name']=='Blackwing Descent':
-          tier11.append(raid.copy())
-      self.updateProgression('tier13',tier13)
-      self.updateProgression('tier12',tier12)
-      self.updateProgression('tier11',tier11)
+        for boss in raid['bosses']:
+          progression.append({'tier':tiermap.index(raid['name']),
+                              'raid':raid['name'],
+                              'boss':boss['name'],
+                              'nkils':boss['normalKills'],
+                              'hkills':boss['heroicKills']})
+      progression.sort(lambda x,y: cmp(x['tier'],y['tier']))
+      self.setProgression(progression)
       
       # companions
-      self.setCompanions(len(_json['companions']))
+      pets = _json['pets']
+      total = pets['numCollected']
+      names = [p['name'] for p in pets['collected']]
+      uniques = {}.fromkeys(names).keys()
+      self.setCompanions('%d unique (%d total)' % (len(uniques),total)
       
       # mounts
       self.setMounts(len(_json['mounts']))
@@ -355,25 +330,6 @@ class WoWChar(ATCTContent):
       from DateTime import DateTime
       now = DateTime()
       if not self.getCacheDate() or now >= self.getCacheDate()+1:
-        self.updateData()
-        
-    security.declarePublic('updateProgression')
-    def updateProgression(self,tier,raids):
-      normalKills = []
-      heroicKills = []
-      for raid in raids:
-        for boss in raid['bosses']:
-          if boss['normalKills']>0:
-            normalKills.append(boss['name'])
-          if boss['heroicKills']>0:
-            heroicKills.append(boss['name'])
-      for hk in heroicKills:
-        normalKills.append('%s (Heroic)' % hk)
-      if tier == 'tier13':
-        self.setTier13(normalKills)
-      elif tier == 'tier12':
-        self.setTier12(normalKills)
-      elif tier == 'tier11':
-        self.setTier11(normalKills)          
+        self.updateData()          
 
 registerATCT(WoWChar, PROJECTNAME)
