@@ -156,11 +156,6 @@ WoWCharSchema.changeSchemataForField('crit','stats')
 WoWCharSchema.changeSchemataForField('haste','stats')
 WoWCharSchema.changeSchemataForField('mastery','stats')
 WoWCharSchema.changeSchemataForField('hit','stats')
-WoWCharSchema.changeSchemataForField('tier11','progression')
-WoWCharSchema.changeSchemataForField('tier12','progression')
-WoWCharSchema.changeSchemataForField('tier13','progression')
-WoWCharSchema.changeSchemataForField('tier14','progression')
-WoWCharSchema.changeSchemataForField('tier15','progression')
 
 class WoWChar(ATCTContent):
     schema = WoWCharSchema
