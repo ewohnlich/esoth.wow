@@ -231,8 +231,8 @@ class WoWChar(ATCTContent):
       import json
       from urllib import urlopen
       from DateTime import DateTime
-      base_url = 'http://us.battle.net/api/wow/character/%s/%s?fields=talents,stats,items,reputation,titles,professions,appearance,companions,mounts,pets,achievements,progression,titles'
-      base_image_url = 'http://us.battle.net/static-render/us/'
+      base_url = 'http://www.esoth.com/proxyw?u=http://us.battle.net/api/wow/character/%s/%s?fields=talents,stats,items,reputation,titles,professions,appearance,companions,mounts,pets,achievements,progression,titles'
+      base_image_url = 'http://www.esoth.com/proxyi?u=http://us.battle.net/static-render/us/'
 
       server = self.getServer().lower().replace("'","")
       charname = self.Title().lower()

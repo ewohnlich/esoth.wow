@@ -152,44 +152,10 @@
         </table>
         <div class="visualClear"> </div>
         
-        <h2 tal:define="normalCount python:len([k for k in context.getTier11() if 'Heroic' not in k]);
-                        heroicCount python:len([k for k in context.getTier11() if 'Heroic' in k]);"
-            tal:content="string:Tier 11 Progression (${normalCount}/12, ${heroicCount}/13H)"/>
-        <table class="progressionTable">
-          <thead>
-            <tr>
-              <tal:headers repeat="boss python:['Omnotron','Magmaw','Maloriak','Atramedes','Chimaeron','Nefarian','Halfus','Val. / Ther.','Ascendant Council','Cho\'gal','Conclave of Wind','Al\'Akir']">
-                <th tal:content="boss"/>
-              </tal:headers>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <tal:boss repeat="boss python:[b for b in here.tier11bosses() if 'Heroic' not in b]">
-                <td tal:attributes="class python:boss in here.getTier11() and 'killed' or 'notKilled'"></td>
-              </tal:boss>
-            </tr>
-          </tbody>
-        </table>
-        <table class="progressionTable">
-          <thead>
-            <tr>
-              <tal:headers repeat="boss python:['Omnotron (H)','Magmaw (H)','Maloriak (H)','Atramedes (H)','Chimaeron (H)','Nefarian (H)','Halfus (H)','Val. / Ther. (H)',
-                                                'Ascendant Council (H)','Cho\'gal (H)','Sinestra (H)','Conclave of Wind (H)','Al\'Akir (H)']">
-                <th tal:content="boss"/>
-              </tal:headers>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <tal:boss repeat="boss python:[b for b in here.tier11bosses() if 'Heroic' in b]">
-                <td tal:attributes="class python:boss in here.getTier11() and 'killed' or 'notKilled'"></td>
-              </tal:boss>
-            </tr>
-          </tbody>
-        </table>
+        <h2>Progression</h2>
+        <span tal:content="here/getProgression"/>
         
-        <h2 tal:define="normalCount python:len([k for k in context.getTier12() if 'Heroic' not in k]);
+        <!-- <h2 tal:define="normalCount python:len([k for k in context.getTier12() if 'Heroic' not in k]);
                         heroicCount python:len([k for k in context.getTier12() if 'Heroic' in k]);"
             tal:content="string:Tier 12 Progression (${normalCount}/7, ${heroicCount}/7H)"/>
         <table class="progressionTable">
@@ -223,43 +189,7 @@
               </tal:boss>
             </tr>
           </tbody>
-        </table>
-        
-        <h2 tal:define="normalCount python:len([k for k in context.getTier13() if 'Heroic' not in k]);
-                        heroicCount python:len([k for k in context.getTier13() if 'Heroic' in k]);"
-            tal:content="string:Tier 13 Progression (${normalCount}/8, ${heroicCount}/8H)"/>
-        <table class="progressionTable">
-          <thead>
-            <tr>
-              <tal:headers repeat="boss python:['Morchok','Zon\'ozz','Yor\'sahj','Hagara','Ultraxion','Warmaster Blackhorn','Spine of Deathwing','Madness of Deathwing']">
-                <th tal:content="boss"/>
-              </tal:headers>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <tal:boss repeat="boss python:[b for b in here.tier13bosses() if 'Heroic' not in b]">
-                <td tal:attributes="class python:boss in here.getTier13() and 'killed' or 'notKilled'"></td>
-              </tal:boss>
-            </tr>
-          </tbody>
-        </table>
-        <table class="progressionTable">
-          <thead>
-            <tr>
-              <tal:headers repeat="boss python:['Morchok (H)','Zon\'ozz (H)','Yor\'sahj (H)','Hagara (H)','Ultraxion (H)','Warmaster Blackhorn (H)','Spine of Deathwing (H)','Madness of Deathwing (H)']">
-                <th tal:content="boss"/>
-              </tal:headers>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <tal:boss repeat="boss python:[b for b in here.tier13bosses() if 'Heroic' in b]">
-                <td tal:attributes="class python:boss in here.getTier13() and 'killed' or 'notKilled'"></td>
-              </tal:boss>
-            </tr>
-          </tbody>
-        </table>
+        </table> -->
 
     </metal:content-core>
 </metal:content-core>
