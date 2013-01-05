@@ -16,8 +16,11 @@
                                     server python:here.getServer().lower().replace('\'','');
                                     charname python:here.Title().lower();
                                     dummy here/autoUpdateData;">
-
-        <h1 tal:content="string:${here/Title} <${here/getGuild}>"/>
+      <h1 tal:content="string:${here/Title} <${here/getGuild}>"/>
+      <div tal:condition="python:not here.getLevel() or not int(here.getLevel())==90">
+        Not max level!!!
+      </div>
+      <div tal:condition="python:here.getLevel() and int(here.getLevel())==90">
                                     
         <div class="updateData">
           <form tal:attributes="action string:${here/absolute_url}/update_data_script">
@@ -66,7 +69,7 @@
 						  <td tal:content="here/getTitles"/>
 						</tr>
 						<tr>
-						  <th>Companions</th>
+						  <th>Pets (unique)</th>
 						  <td tal:content="here/getCompanions"/>
 						</tr>
 						<tr>
@@ -153,43 +156,35 @@
         <div class="visualClear"> </div>
         
         <h2>Progression</h2>
-        <span tal:content="here/getProgression"/>
+        <tal:tier repeat="tier here/progressionDisplay">
+          <h3 tal:content="tier/tier"/>
+          <tal:raid repeat="raid tier/raids">
+            <table class="progressionTable">
+              <thead>
+                <tr>
+                  <th class="raidName" tal:attributes="colspan python:len(raid['bosses'])" tal:content="raid/raid"/>
+                </tr>
+                <tr>
+                  <tal:bosses repeat="boss raid/bosses">
+                    <th tal:content="boss/name"/>
+                  </tal:bosses>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <tal:boss repeat="boss raid/bosses">
+                    <td tal:attributes="class python:int(boss['hkills'])>0 and 'killed' or 'notKilled'">
+                      <span tal:content="string:${boss/hkills} heroic kill(s)"/><br/>
+                      <span tal:content="string:${boss/nkills} normal kill(s)"/>
+                    </td>
+                  </tal:boss>
+                </tr>
+              </tbody>
+            </table>
+          </tal:raid>
+        </tal:tier>
         
-        <!-- <h2 tal:define="normalCount python:len([k for k in context.getTier12() if 'Heroic' not in k]);
-                        heroicCount python:len([k for k in context.getTier12() if 'Heroic' in k]);"
-            tal:content="string:Tier 12 Progression (${normalCount}/7, ${heroicCount}/7H)"/>
-        <table class="progressionTable">
-          <thead>
-            <tr>
-              <tal:headers repeat="boss python:['Shannox','Rhyolith','Alysrazor','Beth\'tilac','Baleroc','Majordomo Staghelm','Ragnaros']">
-                <th tal:content="boss"/>
-              </tal:headers>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <tal:boss repeat="boss python:[b for b in here.tier12bosses() if 'Heroic' not in b]">
-                <td tal:attributes="class python:boss in here.getTier12() and 'killed' or 'notKilled'"></td>
-              </tal:boss>
-            </tr>
-          </tbody>
-        </table>
-        <table class="progressionTable">
-          <thead>
-            <tr>
-              <tal:headers repeat="boss python:['Shannox (H)','Rhyolith (H)','Alysrazor (H)','Beth\'tilac (H)','Baleroc (H)','Majordomo Staghelm (H)','Ragnaros (H)']">
-                <th tal:content="boss"/>
-              </tal:headers>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <tal:boss repeat="boss python:[b for b in here.tier12bosses() if 'Heroic' in b]">
-                <td tal:attributes="class python:boss in here.getTier12() and 'killed' or 'notKilled'"></td>
-              </tal:boss>
-            </tr>
-          </tbody>
-        </table> -->
+      </div>
 
     </metal:content-core>
 </metal:content-core>

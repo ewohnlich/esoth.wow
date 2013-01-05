@@ -2,13 +2,17 @@
   border-collapse: collapse;
 }
 
+.progressionTable th.raidName {
+  background-color: #205c90;
+}
+
 .progressionTable th,
 .progressionTable td {
   width: 90px;
   height: 25px;
   border: 1px solid black;
   text-align: center;
-  font-size: 10px;
+  font-size: 11px;
   line-height: 1em;
 }
 
@@ -17,7 +21,7 @@
 }
   
 .killed {
-  background-color:#205c90;
+  background-color:#8CBCD1;
 }
 
 .notKilled {

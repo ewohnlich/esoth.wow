@@ -102,7 +102,7 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
     IntegerField('points',
         widget = IntegerWidget(visible={'edit':'hidden'}),
     ),
-    LinesField('progression',
+    DataGridField('progression',
         widget = DataGridWidget(label = 'Progression',
                      columns = {
                     'tier' : Column(_(u"Tier")),
@@ -110,7 +110,7 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
                     'boss' : Column(_(u"Boss")),
                     'nkills':Column(_(u"Normal Kills")),
                     'hkills':Column(_(u"Heroic Kills"))}),
-        columns = ('tier','column','id','name','icon'),
+        columns = ('tier','raid','boss','nkills','hkills'),
     ),
     DateTimeField('cacheDate',
         widget = CalendarWidget(visible={'edit':'hidden'}),
@@ -184,50 +184,59 @@ class WoWChar(ATCTContent):
     def hasAvatar(self):
       """ check this before making an image tag """
       return self.getAvatar() and True or False
-    
-    security.declareProtected(View, 'tier11bosses')
-    def tier11bosses(self):
-      return ('Toxitron',
-              'Magmaw',
-              'Maloriak',
-              'Atramedes',
-              'Chimaeron',
-              'Nefarian',
-              'Halfus Wyrmbreaker',
-              'Valiona',
-              'Elementium Monstrosity',
-              'Cho\'gall',
-              'Conclave of Wind',
-              'Al\'Akir',,)
-    
-    security.declareProtected(View, 'tier12bosses')
-    def tier12bosses(self):
-      return ('Shannox',
-              'Lord Rhyolith',
-              'Alysrazor',
-              'Beth\'tilac',
-              'Baleroc',
-              'Majordomo Staghelm',
-              'Ragnaros',)
-    
-    security.declareProtected(View, 'tier13bosses')
-    def tier13bosses(self):
-      return ('Morchok',
-              'Warlord Zon\'ozz',
-              'Yor\'sahj the Unsleeping',
-              'Hagara the Stormbinder',
-              'Ultraxion',
-              'Warmaster Blackhorn',
-              'Spine of Deathwing',
-              'Madness of Deathwing')
+      
+    def progressionDisplay(self):
+      prog = self.getProgression()
+      
+      # holy shit data structure
+      tiers = {}
+      raids = {}
+      bosses = {}
+      # tier key: 0-2=Tier 11, 3=Tier 12, 4=Tier 13, 5-7=Tier 14, 8=Tier 15
+      tierkey = ['Tier 11','Tier 11','Tier 11','Tier 12','Tier 13','Tier 14','Tier 14','Tier 14','Tier 15']
+      # fix for Ragnaros bug
+      ragn = {}
+      ragh = {}
+      for boss in prog:
+        # update tiers
+        tierk = tierkey[int(boss['tier'])]
+        if tierk not in tiers:
+          tiers[tierk]=[ boss['raid'] ]
+        elif boss['raid'] not in tiers[tierk]:
+          tiers[tierk].insert(0, boss['raid'] )
+        # update raids
+        if boss['raid'] not in raids.keys():
+          raids[ boss['raid'] ] = [ boss['boss'] ]
+        elif boss['boss'] not in raids[ boss['raid'] ]:
+          raids[ boss['raid'] ].append(boss['boss'])
+        # bosses
+        if boss['boss'] in bosses.keys(): # only needed for stupid Ragnaros bug
+          if int(bosses[boss['boss']]['nkills'])==0:
+            bosses[boss['boss']]['nkills']=boss['nkills']
+          if int(bosses[boss['boss']]['hkills'])==0:
+            bosses[boss['boss']]['hkills']=boss['hkills']
+        else:
+          bosses[boss['boss']]={'nkills':boss['nkills'],'hkills':boss['hkills']}
+          
+      # build a dict of raids connected to boss data
+      _raids = {}
+      for raid in raids.keys():
+        _raids[raid] = [{'name':b,'nkills':bosses[b]['nkills'],'hkills':bosses[b]['hkills']} for b in raids[raid]]
+      
+      # tie the raid dict into a tier dict
+      data = []
+      for tier in tiers.keys():
+        data.append( {'tier':tier, 'raids':[{'raid':r,'bosses':_raids[r]} for r in tiers[tier] ]} )
+      data.sort(lambda x,y: cmp(y['tier'],x['tier'])) # sort by newest raid at top
+      return data
 
     security.declarePublic('updateData')
     def updateData(self):
       import json
       from urllib import urlopen
       from DateTime import DateTime
-      base_url = 'http://www.esoth.com/proxyw?u=http://us.battle.net/api/wow/character/%s/%s?fields=talents,stats,items,reputation,titles,professions,appearance,companions,mounts,pets,achievements,progression,titles'
-      base_image_url = 'http://www.esoth.com/proxyi?u=http://us.battle.net/static-render/us/'
+      base_url = 'http://us.battle.net/api/wow/character/%s/%s?fields=talents,stats,items,reputation,titles,professions,appearance,companions,mounts,pets,achievements,progression,titles'
+      base_image_url = 'http://us.battle.net/static-render/us/'
 
       server = self.getServer().lower().replace("'","")
       charname = self.Title().lower()
@@ -236,8 +245,11 @@ class WoWChar(ATCTContent):
       
       # general
       self.setCacheDate(DateTime())
-      self.setLevel(_json['level'])
-      racemap = {'1':'Human','5':'Undead','11':'Draenei','7':'Gnome','8':'Troll','4':'Night Elf','2':'Orc','3':'Dwarf','10':'Blood Elf','22':'Worgen','6':'Tauren','9':'Goblin'}
+      try:
+        self.setLevel(_json['level'])
+      except:
+        return
+      racemap = {'1':'Human','5':'Undead','11':'Draenei','7':'Gnome','8':'Troll','4':'Night Elf','2':'Orc','3':'Dwarf','10':'Blood Elf','22':'Worgen','6':'Tauren','9':'Goblin','25':'Pandaren'}
       self.setRace(racemap[str(_json['race'])])
       self.setClass(['none','Warrior','Paladin','Hunter','Rogue','Priest','Death Knight','Shaman','Mage','Warlock','Monk','Druid'][_json['class']])
       self.setGender(_json['gender'] and 'Female' or 'Male')
@@ -297,11 +309,14 @@ class WoWChar(ATCTContent):
       progression = []
       for raid in raids:
         for boss in raid['bosses']:
-          progression.append({'tier':tiermap.index(raid['name']),
-                              'raid':raid['name'],
-                              'boss':boss['name'],
-                              'nkils':boss['normalKills'],
-                              'hkills':boss['heroicKills']})
+          if raid['name'] in tiermap:
+            if boss['name'] not in [b['boss'] for b in progression] or boss['name'] == 'Ragnaros':
+              # Ragnaros is broken and lists heroic kills independently
+              progression.append({'tier':str(tiermap.index(raid['name'])),
+                                  'raid':raid['name'],
+                                  'boss':boss['name'],
+                                  'nkills':str(boss['normalKills']),
+                                  'hkills':str(boss['heroicKills'])})
       progression.sort(lambda x,y: cmp(x['tier'],y['tier']))
       self.setProgression(progression)
       
@@ -310,10 +325,10 @@ class WoWChar(ATCTContent):
       total = pets['numCollected']
       names = [p['name'] for p in pets['collected']]
       uniques = {}.fromkeys(names).keys()
-      self.setCompanions('%d unique (%d total)' % (len(uniques),total)
+      self.setCompanions(len(uniques))
       
       # mounts
-      self.setMounts(len(_json['mounts']))
+      self.setMounts(_json['mounts']['numCollected'])
       
       # titles
       self.setTitles(len(_json['titles']))
