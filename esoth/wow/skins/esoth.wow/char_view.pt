@@ -20,14 +20,14 @@
       <div tal:condition="python:not here.getLevel() or not int(here.getLevel())==90">
         Not max level!!!
       </div>
-      <div tal:condition="python:here.getLevel() and int(here.getLevel())==90">
                                     
-        <div class="updateData">
-          <form tal:attributes="action string:${here/absolute_url}/update_data_script">
-            <input type="submit" class="context" value="update" />
-            <span class="discreet" tal:content="python:'last cached: ' + toLocalizedTime(here.getCacheDate(),long_format=1)"/>
-          </form>
-        </div>
+      <div class="updateData">
+        <form tal:attributes="action string:${here/absolute_url}/update_data_script">
+          <input type="submit" class="context" value="update" />
+          <span class="discreet" tal:content="python:'last cached: ' + toLocalizedTime(here.getCacheDate(),long_format=1)"/>
+        </form>
+      </div>
+      <div tal:condition="python:here.getLevel() and int(here.getLevel())==90">
 
         <div class="wowcharinfo">
           <table class="vertical listing">
