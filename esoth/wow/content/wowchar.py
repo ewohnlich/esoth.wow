@@ -43,9 +43,23 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
         required = False,
         widget = StringWidget(visible={'edit':'hidden'}),
     ),
-    StringField('companions',
-        required = False,
-        widget = StringWidget(visible={'edit':'hidden'}),
+    DataGridField('pets',
+        widget = DataGridWidget(label = 'Main Talents',
+                     columns = {
+                    'name' :       Column(_(u"Tier")),
+                    'creatureName':Column(_(u"Creature Name")),
+                    'spellId' :    Column(_(u"Column")),
+                    'creatureId' : Column(_(u"ID")),
+                    'qualityId' :  Column(_(u"Name")),
+                    'icon' :       Column(_(u"Icon")),
+                    'breedId' :    Column(_(u"Can Battle")),#stats
+                    'level' :      Column(_(u"Can Battle")),
+                    'health' :     Column(_(u"Can Battle")),
+                    'power' :      Column(_(u"Can Battle")),
+                    'speed' :      Column(_(u"Can Battle")),
+                    'canBattle' :  Column(_(u"Can Battle")),
+                      }),
+        columns = ('name','creatureName','spellId','creatureId','qualityId','icon','breedId','level','health','power','speed','canBattle',),
     ),
     StringField('mounts',
         required = False,
@@ -323,9 +337,21 @@ class WoWChar(ATCTContent):
       # companions
       pets = _json['pets']
       total = pets['numCollected']
-      names = [p['name'] for p in pets['collected']]
-      uniques = {}.fromkeys(names).keys()
-      self.setCompanions(len(uniques))
+      _pets = []
+      for pet in pets['collected']:
+        _pets.append({'name':pet['name'],
+                      'creatureName':pet['creatureName'],
+                      'spellId':str(pet['spellId']),
+                      'creatureId':str(pet['creatureId']),
+                      'qualityId':str(pet['stats']['petQualityId']),
+                      'icon':pet['icon'],
+                      'breedId':str(pet['stats']['breedId']),
+                      'level':str(pet['stats']['level']),
+                      'health':str(pet['stats']['health']),
+                      'power':str(pet['stats']['power']),
+                      'speed':str(pet['stats']['speed']),
+                      'canBattle':pet['canBattle'] and 'True' or 'False'} )
+      self.setPets(_pets)
       
       # mounts
       self.setMounts(_json['mounts']['numCollected'])
@@ -334,6 +360,45 @@ class WoWChar(ATCTContent):
       self.setTitles(len(_json['titles']))
       
       self.reindexObject()
+      
+    security.declarePublic('companions')
+    def companions(self):
+      names = [p['name'] for p in self.getPets()]
+      uniques = {}.fromkeys(names).keys()
+      return len( uniques )
+      
+    security.declarePublic('petData')
+    def petData(self):
+      data = {'numUnique':0,
+              'numTotal':0,
+              'numMaxLevel':0,
+              'numMaxLevelUnique':0,
+              'numMaxLevelRare':0,
+              'numRare':0,
+              'uniquePets': []}
+      pets = self.getPets()
+      data['numTotal'] = len(pets)
+      
+      uniques = []
+      for p in pets:
+        if p['creatureName'] not in [u['creatureName'] for u in uniques]:
+          uniques.append( p )
+        elif int(p['qualityId']) > int([u['qualityId'] for u in uniques if u['creatureName'] == p['creatureName']][0]):
+          uniques = [u for u in uniques if u['name'] != p['name']]
+          uniques.append( p )
+      uniques.sort(lambda x,y: cmp(int(x['level']),int(y['level'])))
+      data['numUnique'] = len(uniques)
+      
+      data['numMaxLevel'] = len( [p for p in pets if p['level'] == '25'] )
+      data['numUniqueMaxLevel'] = len( [p for p in uniques if p['level'] == '25'] )
+      data['numMaxLevelRare'] = len( [p for p in pets if p['level'] == '25' and p['qualityId'] == '3'] )
+      data['numUniqueMaxLevelRare'] = len( [p for p in uniques if p['level'] == '25' and p['qualityId'] == '3'] )
+      data['numUniqueRare'] = len( [p for p in uniques if p['qualityId'] == '3'] )
+      data['numRare'] = len( [p for p in pets if p['qualityId'] == '3'] )
+        
+      data['uniquePets'] = uniques
+      
+      return data
       
     security.declarePublic('autoUpdateData')
     def autoUpdateData(self):

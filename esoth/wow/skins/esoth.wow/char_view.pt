@@ -70,7 +70,12 @@
 						</tr>
 						<tr>
 						  <th>Pets (unique)</th>
-						  <td tal:content="here/getCompanions"/>
+						  <td>
+						    <a tal:attributes="href string:${here/absolute_url}/pets_view">
+						      <img src="beast.png"/>
+						      <span tal:content="here/companions"/> (click for more details)
+						    </a>
+						  </td>
 						</tr>
 						<tr>
 						  <th>Mounts</th>

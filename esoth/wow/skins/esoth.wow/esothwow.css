@@ -6,6 +6,13 @@
   background-color: #205c90;
 }
 
+td.Legendary { color: #f70; }
+td.Epic { color: #c444ee; }
+td.Rare { color: #1c8eee; }
+td.Uncommon { color: #10b807; }
+td.Common { color: #f; }
+td.Poor { color: #888; }
+
 .progressionTable th,
 .progressionTable td {
   width: 90px;
