@@ -249,7 +249,7 @@ class WoWChar(ATCTContent):
         self.setLevel(_json['level'])
       except:
         return
-      racemap = {'1':'Human','5':'Undead','11':'Draenei','7':'Gnome','8':'Troll','4':'Night Elf','2':'Orc','3':'Dwarf','10':'Blood Elf','22':'Worgen','6':'Tauren','9':'Goblin','25':'Pandaren'}
+      racemap = {'1':'Human','5':'Undead','11':'Draenei','7':'Gnome','8':'Troll','4':'Night Elf','2':'Orc','3':'Dwarf','10':'Blood Elf','22':'Worgen','6':'Tauren','9':'Goblin','25':'Pandaren','26':'Pandaren'}
       self.setRace(racemap[str(_json['race'])])
       self.setClass(['none','Warrior','Paladin','Hunter','Rogue','Priest','Death Knight','Shaman','Mage','Warlock','Monk','Druid'][_json['class']])
       self.setGender(_json['gender'] and 'Female' or 'Male')
