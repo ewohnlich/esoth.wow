@@ -45,7 +45,7 @@
       <h2>All Pets</h2>
       <table class="listing"
              tal:define="quality python:['Poor','Common','Uncommon','Rare','Epic','Legendary'];
-                         breed python:['','','','B','P','S','H','H/P','P/S','H/S','h/P/s','h/p/S','H/p/s','B','P','S','H','H/P','P/S','H/S','h/P/s','h/p/S','H/p/s'];
+                         breed python:['','','','B','P','S','H','H/P','P/S','H/S','P/B','S/B','H/B','B','P','S','H','H/P','P/S','H/S','P/B','S/B','H/B'];
                          breedClass python:{'B':'badBreed','S':'goodBreed','P':'goodBreed','H':'goodBreed'}">
         <thead>
           <tr>
