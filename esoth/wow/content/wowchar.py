@@ -363,7 +363,7 @@ class WoWChar(ATCTContent):
       
     security.declarePublic('companions')
     def companions(self):
-      names = [p['name'] for p in self.getPets()]
+      names = [p['creatureName'] for p in self.getPets()]
       uniques = {}.fromkeys(names).keys()
       return len( uniques )
       
