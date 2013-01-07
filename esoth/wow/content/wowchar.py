@@ -44,7 +44,7 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
         widget = StringWidget(visible={'edit':'hidden'}),
     ),
     DataGridField('pets',
-        widget = DataGridWidget(label = 'Main Talents',
+        widget = DataGridWidget(label = 'Main Talents',visible={'edit':'hidden'},
                      columns = {
                     'name' :       Column(_(u"Tier")),
                     'creatureName':Column(_(u"Creature Name")),
@@ -72,7 +72,7 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
     ),
     DataGridField('specs',
                 searchable=True, # One unit tests checks whether text search works
-                widget = DataGridWidget(label = 'Main Spec',
+                widget = DataGridWidget(label = 'Main Spec',visible={'edit':'hidden'},
                      columns={
                         'name' : Column(_(u"Name")),
                         'icon': Column(_(u"Icon")),}),
@@ -117,7 +117,7 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
         widget = IntegerWidget(visible={'edit':'hidden'}),
     ),
     DataGridField('progression',
-        widget = DataGridWidget(label = 'Progression',
+        widget = DataGridWidget(label = 'Progression',visible={'edit':'hidden'},
                      columns = {
                     'tier' : Column(_(u"Tier")),
                     'raid' : Column(_(u"Raid")),
@@ -156,6 +156,9 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
     StringField('hit',
         widget = StringWidget(visible={'edit':'hidden'}),
     ),
+    LinesField('groups',
+        widget=LinesWidget(label='Groups',)
+        ),
     
   ),
   marshall=RFC822Marshaller()
@@ -247,7 +250,7 @@ class WoWChar(ATCTContent):
     security.declarePublic('updateData')
     def updateData(self):
       import json
-      from urllib import urlopen
+      from urllib2 import urlopen
       from DateTime import DateTime
       base_url = 'http://us.battle.net/api/wow/character/%s/%s?fields=talents,stats,items,reputation,titles,professions,appearance,companions,mounts,pets,achievements,progression,titles'
       base_image_url = 'http://us.battle.net/static-render/us/'
@@ -361,8 +364,8 @@ class WoWChar(ATCTContent):
       
       self.reindexObject()
       
-    security.declarePublic('companions')
-    def companions(self):
+    security.declarePublic('numcompanions')
+    def numcompanions(self):
       names = [p['creatureName'] for p in self.getPets()]
       uniques = {}.fromkeys(names).keys()
       return len( uniques )

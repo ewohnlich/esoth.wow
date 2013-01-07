@@ -45,6 +45,18 @@
 							     tal:attributes="href string:http://us.battle.net/wow/en/guild/${server}/${here/getGuild}/"/>
 						</tr>
 						<tr>
+						  <th>WowWProgress</th>
+						  <td><a tal:attributes="href string:http://www.wowprogress.com/character/us/${server}/${charname}"
+						         tal:content="string:http://www.wowprogress.com/character/us/${server}/${charname}"/>
+						  </td>
+						</tr>
+						<tr>
+						  <th>epeen bot</th>
+						  <td><a tal:attributes="href string:http://raidbots.com/epeenbot/${server}/${charname}"
+						         tal:content="string:http://raidbots.com/epeenbot/${server}/${charname}"/>
+						  </td>
+						</tr>
+						<tr>
 							<th>Server</th>
 							<td tal:content="here/getServer|string:"/>
 						</tr>
@@ -73,7 +85,7 @@
 						  <td>
 						    <a tal:attributes="href string:${here/absolute_url}/pets_view">
 						      <img src="beast.png"/>
-						      <span tal:content="here/companions"/> (click for more details)
+						      <span tal:content="here/numcompanions"/> (click for more details)
 						    </a>
 						  </td>
 						</tr>

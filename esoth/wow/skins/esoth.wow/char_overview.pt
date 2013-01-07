@@ -69,7 +69,7 @@
                 <td tal:content="char/class"/>
                 <td tal:content="char/points"/>
                 <td tal:content="char/mounts"/>
-                <td tal:content="char/companions"/>
+                <td tal:content="char/numcompanions"/>
                 <td tal:content="char/titles"/>
               </tr>
             </tal:char>
