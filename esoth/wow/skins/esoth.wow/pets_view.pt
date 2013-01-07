@@ -44,7 +44,9 @@
       
       <h2>All Pets</h2>
       <table class="listing"
-             tal:define="quality python:['Poor','Common','Uncommon','Rare','Epic','Legendary']">
+             tal:define="quality python:['Poor','Common','Uncommon','Rare','Epic','Legendary'];
+                         breed python:['','','','B','P','S','H','H/P','P/S','H/S','h/P/s','h/p/S','H/p/s','B','P','S','H','H/P','P/S','H/S','h/P/s','h/p/S','H/p/s'];
+                         breedClass python:{'B':'badBreed','S':'goodBreed','P':'goodBreed','H':'goodBreed'}">
         <thead>
           <tr>
             <th>Pet Name</th>
@@ -53,6 +55,7 @@
             <th>Health</th>
             <th>Speed</th>
             <th>Power</th>
+            <th>Breed</th>
           </tr>
         </thead>
         <tbody>
@@ -77,8 +80,11 @@
                 <td tal:content="pet/health"/>
                 <td tal:content="pet/speed"/>
                 <td tal:content="pet/power"/>
+                <td tal:content="python:breed[ int( pet['breedId'] ) ]"
+                    tal:attributes="class python:breedClass.get(breed[ int( pet['breedId'] ) ], 'neutralBreed')"/>
               </tal:battle>
               <tal:nonbattle condition="python:pet['canBattle']!='True'">
+                <td />
                 <td />
                 <td />
                 <td />

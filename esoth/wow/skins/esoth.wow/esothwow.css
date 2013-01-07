@@ -6,6 +6,19 @@
   background-color: #205c90;
 }
 
+.goodBreed {
+  background-color: #e4f3d3 !important;
+  text-align: center;
+}
+.neutralBreed {
+  background-color: #ffffbf !important;
+  text-align: center;
+}
+.badBreed {
+  background-color: #ffbfbf !important;
+  text-align: center;
+}
+
 td.Legendary { color: #f70; }
 td.Epic { color: #c444ee; }
 td.Rare { color: #1c8eee; }
