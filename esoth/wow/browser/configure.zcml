@@ -1,0 +1,14 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+	  xmlns:zcml="http://namespaces.zope.org/zcml"
+    i18n_domain="esoth.media">
+
+    <browser:page
+        name="find-player"
+        for="*"
+        class=".find_player.FindPlayer"
+        permission="zope2.View"
+        />
+
+</configure>

@@ -44,7 +44,7 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
         widget = StringWidget(visible={'edit':'hidden'}),
     ),
     DataGridField('pets',
-        widget = DataGridWidget(label = 'Main Talents',visible={'edit':'hidden'},
+        widget = DataGridWidget(label = 'Pets',
                      columns = {
                     'name' :       Column(_(u"Tier")),
                     'creatureName':Column(_(u"Creature Name")),
@@ -59,7 +59,7 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
                     'speed' :      Column(_(u"Can Battle")),
                     'canBattle' :  Column(_(u"Can Battle")),
                       }),
-        columns = ('name','creatureName','spellId','creatureId','qualityId','icon','breedId','level','health','power','speed','canBattle',),
+        columns = ('name','creatureName',),
     ),
     StringField('mounts',
         required = False,
@@ -159,7 +159,7 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
     LinesField('groups',
         widget=LinesWidget(label='Groups',)
         ),
-    
+
   ),
   marshall=RFC822Marshaller()
   )
@@ -196,15 +196,15 @@ class WoWChar(ATCTContent):
     security.declareProtected(View, 'classSelection')
     def classSelection(self):
       return ('Death Knight','Druid','Hunter','Mage','Monk','Paladin','Priest','Rogue','Shaman','Warlock','Warrior')
-      
+
     security.declareProtected(View, 'hasAvatar')
     def hasAvatar(self):
       """ check this before making an image tag """
       return self.getAvatar() and True or False
-      
+
     def progressionDisplay(self):
       prog = self.getProgression()
-      
+
       # holy shit data structure
       tiers = {}
       raids = {}
@@ -234,12 +234,12 @@ class WoWChar(ATCTContent):
             bosses[boss['boss']]['hkills']=boss['hkills']
         else:
           bosses[boss['boss']]={'nkills':boss['nkills'],'hkills':boss['hkills']}
-          
+
       # build a dict of raids connected to boss data
       _raids = {}
       for raid in raids.keys():
         _raids[raid] = [{'name':b,'nkills':bosses[b]['nkills'],'hkills':bosses[b]['hkills']} for b in raids[raid]]
-      
+
       # tie the raid dict into a tier dict
       data = []
       for tier in tiers.keys():
@@ -252,14 +252,15 @@ class WoWChar(ATCTContent):
       import json
       from urllib2 import urlopen
       from DateTime import DateTime
-      base_url = 'http://us.battle.net/api/wow/character/%s/%s?fields=talents,stats,items,reputation,titles,professions,appearance,companions,mounts,pets,achievements,progression,titles'
+      base_url = 'http://us.battle.net/api/wow/character/%s/%s?fields=guild,talents,stats,items,reputation,professions,appearance,companions,mounts,pets,achievements,progression,titles'
       base_image_url = 'http://us.battle.net/static-render/us/'
 
       server = self.getServer().lower().replace("'","")
       charname = self.Title().lower()
-      
-      _json = json.load(urlopen(base_url % (server,charname)))
-      
+
+      url = base_url % (server,charname)
+      _json = json.load(urlopen(url))
+
       # general
       self.setCacheDate(DateTime())
       try:
@@ -273,7 +274,7 @@ class WoWChar(ATCTContent):
       img = urlopen(base_image_url+_json['thumbnail']).read()
       self.setAvatar(img)
       self.setPoints(_json['achievementPoints'])
-      
+
       # talents
       talents = _json['talents']
       specs = []
@@ -300,7 +301,9 @@ class WoWChar(ATCTContent):
           self.setSecondTalents(_talents)
           specs.append(_spec)
       self.setSpecs(specs)
-        
+
+      self.setGuild(_json['guild']['name'])
+
       # stats
       self.setAgility(_json['stats']['agi'])
       self.setStrength(_json['stats']['str'])
@@ -311,7 +314,7 @@ class WoWChar(ATCTContent):
       self.setHaste(_json['stats']['hasteRating'])
       self.setMastery(_json['stats']['masteryRating'])
       self.setHit(_json['stats']['hitRating'])
-      
+
       # progression
       tiermap = ['Blackwing Descent',
                  'The Bastion of Twilight',
@@ -336,7 +339,7 @@ class WoWChar(ATCTContent):
                                   'hkills':str(boss['heroicKills'])})
       progression.sort(lambda x,y: cmp(x['tier'],y['tier']))
       self.setProgression(progression)
-      
+
       # companions
       pets = _json['pets']
       total = pets['numCollected']
@@ -355,21 +358,21 @@ class WoWChar(ATCTContent):
                       'speed':str(pet['stats']['speed']),
                       'canBattle':pet['canBattle'] and 'True' or 'False'} )
       self.setPets(_pets)
-      
+
       # mounts
       self.setMounts(_json['mounts']['numCollected'])
-      
+
       # titles
       self.setTitles(len(_json['titles']))
-      
+
       self.reindexObject()
-      
+
     security.declarePublic('numcompanions')
     def numcompanions(self):
       names = [p['creatureName'] for p in self.getPets()]
       uniques = {}.fromkeys(names).keys()
       return len( uniques )
-      
+
     security.declarePublic('petData')
     def petData(self):
       data = {'numUnique':0,
@@ -381,7 +384,7 @@ class WoWChar(ATCTContent):
               'uniquePets': []}
       pets = self.getPets()
       data['numTotal'] = len(pets)
-      
+
       uniques = []
       for p in pets:
         if p['creatureName'] not in [u['creatureName'] for u in uniques]:
@@ -391,23 +394,23 @@ class WoWChar(ATCTContent):
           uniques.append( p )
       uniques.sort(lambda x,y: cmp(int(x['level']),int(y['level'])))
       data['numUnique'] = len(uniques)
-      
+
       data['numMaxLevel'] = len( [p for p in pets if p['level'] == '25'] )
       data['numUniqueMaxLevel'] = len( [p for p in uniques if p['level'] == '25'] )
       data['numMaxLevelRare'] = len( [p for p in pets if p['level'] == '25' and p['qualityId'] == '3'] )
       data['numUniqueMaxLevelRare'] = len( [p for p in uniques if p['level'] == '25' and p['qualityId'] == '3'] )
       data['numUniqueRare'] = len( [p for p in uniques if p['qualityId'] == '3'] )
       data['numRare'] = len( [p for p in pets if p['qualityId'] == '3'] )
-        
+
       data['uniquePets'] = uniques
-      
+
       return data
-      
+
     security.declarePublic('autoUpdateData')
     def autoUpdateData(self):
       from DateTime import DateTime
       now = DateTime()
       if not self.getCacheDate() or now >= self.getCacheDate()+1:
-        self.updateData()          
+        self.updateData()
 
 registerATCT(WoWChar, PROJECTNAME)

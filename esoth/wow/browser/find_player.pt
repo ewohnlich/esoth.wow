@@ -1,0 +1,36 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="plone">
+<body>
+
+<metal:main fill-slot="main">
+
+        <h1>Character Select</h1>
+
+        <dl class="portalMessage error" tal:condition="request/errors|string:">
+          <dt>Error</dt>
+          <dd tal:content="request/errors"/>
+        </dl>
+
+        <form actions="find-player">
+          <label for="server">Server:</label>
+          <select name="server">
+            <tal:server repeat="server view/servers">
+              <option tal:attributes="selected python:request.get('server')==server and 'selected'"       tal:content="server"/>
+            </tal:server>
+          </select>&nbsp;&nbsp;
+
+          <label for="character">Character:</label>
+          <input type="text" name="character" tal:attributes="value request/character|string:"/>
+
+          <input type="submit" class="context" value="Get it!" name="form.actions.go"/>
+        </form>
+
+</metal:main>
+
+</body>
+</html>
