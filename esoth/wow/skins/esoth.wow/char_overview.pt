@@ -13,14 +13,14 @@
                                     getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
                                     templateId template/getId;
                                     toLocalizedTime nocall:context/@@plone/toLocalizedTime;
-                                    characters python:here.getFolderContents({'portal_type':'WoWChar'});
+                                    characters here/players;
                                     use_view_action site_properties/typesUseViewActionInListings|python:();
                                     normalizeString nocall: context/plone_utils/normalizeString;
                                     plone_view context/@@plone;">
 
         <h1 tal:content="string:${here/Title}"/>
 
-        <form tal:attributes="action string:${here/absolute_url}/update_folderdata_script">
+        <form tal:attributes="action string:${here/absolute_url}/update_display_script">
            <input type="submit" value="Update all"/>
         </form>
                                     

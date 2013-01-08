@@ -11,5 +11,10 @@
         permission="zope2.View"
         interface="..interfaces.IWoWChar"/>
   </class>
+  <class class=".display.WoWDisplay">
+    <require
+        permission="zope2.View"
+        interface="..interfaces.IWoWDisplay"/>
+  </class>
 
 </configure>

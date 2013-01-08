@@ -1,0 +1,3 @@
+[actions]
+action.failure=redirect_to_action:string:edit
+action.success=redirect_to_action:string:view

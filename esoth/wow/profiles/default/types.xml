@@ -10,4 +10,6 @@
   <!-- -*- extra stuff goes here -*- -->
   <object name="WoWChar"
     meta_type="Factory-based Type Information with dynamic views" />
+  <object name="WoWDisplay"
+    meta_type="Factory-based Type Information with dynamic views" />
 </object>
