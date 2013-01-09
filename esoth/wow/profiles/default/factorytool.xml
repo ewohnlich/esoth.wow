@@ -9,7 +9,7 @@
   -->
 <object name="portal_factory" meta_type="Plone Factory Tool">
   <factorytypes>
-    <type portal_type="WowChar" />
-    <type portal_type="WowDisplay" />
+    <type portal_type="WoWChar" />
+    <type portal_type="WoWDisplay" />
   </factorytypes>
 </object>

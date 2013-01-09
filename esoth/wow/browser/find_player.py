@@ -42,9 +42,9 @@ class FindPlayer(BrowserView):
       else:        
         # check if exists
         base_url = 'http://us.battle.net/api/wow/character/%s/%s?fields=guild,talents,stats,items,reputation,titles,professions,appearance,companions,mounts,pets,achievements,progression,titles'
-        import json, urllib
+        import json, urllib2
         url = base_url % (_server,_character)
-        _json = json.load(urllib.urlopen(url))
+        _json = json.load(urllib2.urlopen(url))
         if not _json.get('level'):
           self.request.set('errors','Not found')
         elif _json['level'] != 90:

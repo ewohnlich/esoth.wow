@@ -12,6 +12,7 @@ from Products.CMFCore.DirectoryView import registerDirectory
 # Define a message factory for when this product is internationalised.
 # This will be imported with the special name "_" in most modules. Strings
 # like _(u"message") will then be extracted by i18n tools for translation.
+import permissions
 
 wowMessageFactory = MessageFactory('esoth.wow')
 
