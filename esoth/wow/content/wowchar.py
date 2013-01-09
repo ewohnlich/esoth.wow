@@ -44,7 +44,7 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
         widget = StringWidget(visible={'edit':'hidden'}),
     ),
     DataGridField('pets',
-        widget = DataGridWidget(label = 'Pets',
+        widget = DataGridWidget(label = 'Pets',visible={'edit':'hidden'},
                      columns = {
                     'name' :       Column(_(u"Tier")),
                     'creatureName':Column(_(u"Creature Name")),
