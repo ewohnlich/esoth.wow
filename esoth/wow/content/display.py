@@ -44,7 +44,7 @@ class WoWDisplay(ATCTContent):
       if infolder:
         sfilter['path'] = {'query':'/'.join(self.getPhysicalPath()),'depth':1}
       if group:
-        sfilter['group'] = group
+        sfilter['groups'] = group
       if guild:
         sfilter['guild'] = guild
       if server:
