@@ -59,7 +59,7 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
                     'speed' :      Column(_(u"Can Battle")),
                     'canBattle' :  Column(_(u"Can Battle")),
                       }),
-        columns = ('name','creatureName',),
+        columns = ('name','creatureName','spellId','creatureId','qualityId','icon','breedId','level','health','power','speed','canBattle',),
     ),
     StringField('mounts',
         required = False,
@@ -79,7 +79,7 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
                 columns=('name','icon'),
             ),
     DataGridField('mainTalents',
-        widget = DataGridWidget(label = 'Main Talents',visible={'edit':'hidden'}),
+        widget = DataGridWidget(label = 'Main Talents',visible={'edit':'hidden'},
                      columns = {
                     'tier' : Column(_(u"Tier")),
                     'column' : Column(_(u"Column")),
@@ -89,7 +89,7 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
         columns = ('tier','column','id','name','icon'),
     ),
     DataGridField('secondTalents',
-        widget = DataGridWidget(label = 'Second Talents',visible={'edit':'hidden'}),
+        widget = DataGridWidget(label = 'Second Talents',visible={'edit':'hidden'},
                      columns = {
                     'tier' : Column(_(u"Tier")),
                     'column' : Column(_(u"Column")),
