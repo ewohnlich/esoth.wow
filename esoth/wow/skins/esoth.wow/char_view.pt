@@ -50,7 +50,7 @@
 						<tr>
 						  <th>epeen bot</th>
 						  <td><a tal:attributes="href string:http://raidbots.com/epeenbot/${server}/${charname}"
-						         tal:content="string:http://raidbots.com/epeenbot/${server}/${charname}"/>
+						         tal:content="string:http://raidbots.com/epeenbot/us/${server}/${charname}"/>
 						  </td>
 						</tr>
 						<tr>
