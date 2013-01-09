@@ -21,6 +21,9 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
         widget = StringWidget(
             label= u'Server'),
     ),
+    LinesField('groups',
+        widget=LinesWidget(label='Groups',)
+        ),
     StringField('race',
         required = False,
         vocabulary='raceSelection',
@@ -44,7 +47,7 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
         widget = StringWidget(visible={'edit':'hidden'}),
     ),
     DataGridField('pets',
-        widget = DataGridWidget(label = 'Pets',visible={'edit':'hidden'},
+        widget = DataGridWidget(label = 'Pets',
                      columns = {
                     'name' :       Column(_(u"Tier")),
                     'creatureName':Column(_(u"Creature Name")),
@@ -79,7 +82,7 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
                 columns=('name','icon'),
             ),
     DataGridField('mainTalents',
-        widget = DataGridWidget(label = 'Main Talents',visible={'edit':'hidden'},
+        widget = DataGridWidget(label = 'Main Talents',
                      columns = {
                     'tier' : Column(_(u"Tier")),
                     'column' : Column(_(u"Column")),
@@ -89,7 +92,7 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
         columns = ('tier','column','id','name','icon'),
     ),
     DataGridField('secondTalents',
-        widget = DataGridWidget(label = 'Second Talents',visible={'edit':'hidden'},
+        widget = DataGridWidget(label = 'Second Talents',
                      columns = {
                     'tier' : Column(_(u"Tier")),
                     'column' : Column(_(u"Column")),
@@ -117,7 +120,7 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
         widget = IntegerWidget(visible={'edit':'hidden'}),
     ),
     DataGridField('progression',
-        widget = DataGridWidget(label = 'Progression',visible={'edit':'hidden'},
+        widget = DataGridWidget(label = 'Progression',
                      columns = {
                     'tier' : Column(_(u"Tier")),
                     'raid' : Column(_(u"Raid")),
@@ -156,9 +159,6 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
     StringField('hit',
         widget = StringWidget(visible={'edit':'hidden'}),
     ),
-    LinesField('groups',
-        widget=LinesWidget(label='Groups',)
-        ),
 
   ),
   marshall=RFC822Marshaller()
