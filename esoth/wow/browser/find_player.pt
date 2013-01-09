@@ -9,14 +9,14 @@
 
 <metal:main fill-slot="main">
 
-        <h1>Character Select</h1>
-
         <dl class="portalMessage error" tal:condition="request/errors|string:">
           <dt>Error</dt>
           <dd tal:content="request/errors"/>
         </dl>
+        
+        <div style="text-align:center">Find a player</div><br/>
 
-        <form actions="find-player">
+        <form actions="find-player" style="width:50%; margin-left:25%;">
           <label for="server">Server:</label>
           <select name="server">
             <tal:server repeat="server view/servers">
