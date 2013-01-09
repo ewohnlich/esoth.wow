@@ -79,7 +79,7 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
                 columns=('name','icon'),
             ),
     DataGridField('mainTalents',
-        widget = DataGridWidget(label = 'Main Talents',
+        widget = DataGridWidget(label = 'Main Talents',visible={'edit':'hidden'}),
                      columns = {
                     'tier' : Column(_(u"Tier")),
                     'column' : Column(_(u"Column")),
@@ -89,7 +89,7 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
         columns = ('tier','column','id','name','icon'),
     ),
     DataGridField('secondTalents',
-        widget = DataGridWidget(label = 'Second Talents',
+        widget = DataGridWidget(label = 'Second Talents',visible={'edit':'hidden'}),
                      columns = {
                     'tier' : Column(_(u"Tier")),
                     'column' : Column(_(u"Column")),
@@ -369,7 +369,7 @@ class WoWChar(ATCTContent):
 
     security.declarePublic('numcompanions')
     def numcompanions(self):
-      names = [p['creatureName'] for p in self.getPets()]
+      names = [p.get('creatureName') for p in self.getPets()]
       uniques = {}.fromkeys(names).keys()
       return len( uniques )
 
