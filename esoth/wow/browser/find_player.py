@@ -31,6 +31,7 @@ class FindPlayer(BrowserView):
       catalog = getToolByName(self.context,'portal_catalog')
       character = character[0].upper() + character[1:].lower()
       _character = character.lower()
+      servername=server
       server = server.replace("'",'')
       server = ' '.join([s[0].upper() + s[1:].lower() for s in server.split(' ')])
       _server = server.lower().replace("'","")
@@ -61,7 +62,7 @@ class FindPlayer(BrowserView):
           folder.invokeFactory('WoWChar',id)
           char=folder[id]
           char.setTitle(character)
-          char.setServer(server)
+          char.setServer(servername)
           char.autoUpdateData()
           self.request.response.redirect(char.absolute_url())
     

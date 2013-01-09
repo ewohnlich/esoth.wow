@@ -255,7 +255,7 @@ class WoWChar(ATCTContent):
       base_url = 'http://us.battle.net/api/wow/character/%s/%s?fields=guild,talents,stats,items,reputation,professions,appearance,companions,mounts,pets,achievements,progression,titles'
       base_image_url = 'http://us.battle.net/static-render/us/'
 
-      server = self.getServer().lower().replace("'","")
+      server = self.getServer().lower().replace("'","").replace(' ','%20')
       charname = self.Title().lower()
 
       url = base_url % (server,charname)
