@@ -24,6 +24,9 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
     LinesField('groups',
         widget=LinesWidget(label='Groups',)
         ),
+    BooleanField('alt',
+        widget=BooleanWidget(label='Alt?',)
+        ),
     StringField('race',
         required = False,
         vocabulary='raceSelection',
@@ -302,7 +305,8 @@ class WoWChar(ATCTContent):
           specs.append(_spec)
       self.setSpecs(specs)
 
-      self.setGuild(_json['guild']['name'])
+      if _json.get('guild'):
+        self.setGuild(_json['guild']['name'])
 
       # stats
       self.setAgility(_json['stats']['agi'])
@@ -385,12 +389,38 @@ class WoWChar(ATCTContent):
       pets = self.getPets()
       data['numTotal'] = len(pets)
 
+      breedmap = {'3' : = {'health':0.5,'power':0.5,'speed':0.5},
+                  '13': = {'health':0.5,'power':0.5,'speed':0.5},
+                  '4' : = {'health':0,  'power':2,  'speed':0},
+                  '14': = {'health':0,  'power':2,  'speed':0},
+                  '5' : = {'health':0,  'power':0,  'speed':2},
+                  '15': = {'health':0,  'power':0,  'speed':2},
+                  '6' : = {'health':2,  'power':0,  'speed':0},
+                  '16': = {'health':2,  'power':0,  'speed':0},
+                  '7' : = {'health':0.9,'power':0.9,'speed':0},
+                  '17': = {'health':0.9,'power':0.9,'speed':0},
+                  '8' : = {'health':0,  'power':0.9,'speed':0.9},
+                  '18': = {'health':0,  'power':0.9,'speed':0.9},
+                  '9' : = {'health':0.9,'power':0,  'speed':0.9},
+                  '19': = {'health':0.9,'power':0,  'speed':0.9},
+                  '10': = {'health':0.4,'power':0.9,'speed':0.4},
+                  '20': = {'health':0.4,'power':0.9,'speed':0.4},
+                  '11': = {'health':0.4,'power':0.4,'speed':0.9},
+                  '21': = {'health':0.4,'power':0.4,'speed':0.9},
+                  '12': = {'health':0.9,'power':0.4,'speed':0.4},
+                  '22': = {'health':0.9,'power':0.4,'speed':0.4}, }
       uniques = []
       for p in pets:
         if p['creatureName'] not in [u['creatureName'] for u in uniques]:
           uniques.append( p )
         elif int(p['qualityId']) > int([u['qualityId'] for u in uniques if u['creatureName'] == p['creatureName']][0]):
           uniques = [u for u in uniques if u['name'] != p['name']]
+          #leveldiff = 25-int(p['level'])
+          #rarity = int(p['petQualityId'])*.1+1
+          # hmm, will need to get base pet numbers and store them somewhere for this. Blech
+          #p['maxH'] = leveldiff * (basep + breedmap[p['breedId']]['health'])
+          #p['maxS'] = leveldiff * (basep + breedmap[p['breedId']]['speed'])
+          #p['maxP'] = leveldiff * (basep + breedmap[p['breedId']]['power'])
           uniques.append( p )
       uniques.sort(lambda x,y: cmp(int(x['level']),int(y['level'])))
       data['numUnique'] = len(uniques)

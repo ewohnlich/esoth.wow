@@ -14,6 +14,10 @@ WoWDisplaySchema = ATContentTypeSchema.copy() + Schema((
         widget = BooleanWidget(
             label= u'Folder only'),
     ),
+    BooleanField('alts',
+        widget = BooleanWidget(
+            label= u'Allow Alts'),
+    ),
     LinesField('group',
         widget = LinesWidget(
             label= u'Group'),
@@ -40,6 +44,7 @@ class WoWDisplay(ATCTContent):
       group = self.getGroup()
       guild = self.getGuild()
       server = self.getServer()
+      alts = self.getAlts()
       sfilter = {'portal_type':'WoWChar','sort_on':'sortable_title'}
       if infolder:
         sfilter['path'] = {'query':'/'.join(self.getPhysicalPath()),'depth':1}
@@ -49,7 +54,10 @@ class WoWDisplay(ATCTContent):
         sfilter['guild'] = guild
       if server:
         sfilter['server'] = server
-      return cat(sfilter)
+      results = cat(sfilter)
+      if not alts:
+        results = [r for r in results if not r.alt]
+      return results
     
     security.declarePublic('updateDisplay')
     def updateDisplay(self):

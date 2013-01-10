@@ -47,8 +47,6 @@ class FindPlayer(BrowserView):
         _json = json.load(urllib2.urlopen(url))
         if not _json.get('level'):
           self.request.set('errors','Not found')
-        elif _json['level'] != 90:
-          self.request.set('errors','Not max level')
         else:
           folder = self.context
           id = character.lower()

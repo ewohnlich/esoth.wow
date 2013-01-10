@@ -16,7 +16,8 @@
                                     server python:here.getServer().lower().replace('\'','');
                                     charname python:here.Title().lower();
                                     dummy here/autoUpdateData;">
-      <h1 tal:content="string:${here/Title} <${here/getGuild}>"/>
+      <h1 tal:condition="here/getGuild" tal:content="string:${here/Title} <${here/getGuild}>"/>
+      <h1 tal:condition="not:here/getGuild" tal:content="string:${here/Title}"/>
                                     
       <div class="updateData">
         <form tal:attributes="action string:${here/absolute_url}/update_data_script">
