@@ -389,26 +389,26 @@ class WoWChar(ATCTContent):
       pets = self.getPets()
       data['numTotal'] = len(pets)
 
-      breedmap = {'3' : = {'health':0.5,'power':0.5,'speed':0.5},
-                  '13': = {'health':0.5,'power':0.5,'speed':0.5},
-                  '4' : = {'health':0,  'power':2,  'speed':0},
-                  '14': = {'health':0,  'power':2,  'speed':0},
-                  '5' : = {'health':0,  'power':0,  'speed':2},
-                  '15': = {'health':0,  'power':0,  'speed':2},
-                  '6' : = {'health':2,  'power':0,  'speed':0},
-                  '16': = {'health':2,  'power':0,  'speed':0},
-                  '7' : = {'health':0.9,'power':0.9,'speed':0},
-                  '17': = {'health':0.9,'power':0.9,'speed':0},
-                  '8' : = {'health':0,  'power':0.9,'speed':0.9},
-                  '18': = {'health':0,  'power':0.9,'speed':0.9},
-                  '9' : = {'health':0.9,'power':0,  'speed':0.9},
-                  '19': = {'health':0.9,'power':0,  'speed':0.9},
-                  '10': = {'health':0.4,'power':0.9,'speed':0.4},
-                  '20': = {'health':0.4,'power':0.9,'speed':0.4},
-                  '11': = {'health':0.4,'power':0.4,'speed':0.9},
-                  '21': = {'health':0.4,'power':0.4,'speed':0.9},
-                  '12': = {'health':0.9,'power':0.4,'speed':0.4},
-                  '22': = {'health':0.9,'power':0.4,'speed':0.4}, }
+      breedmap = {'3' : {'health':0.5,'power':0.5,'speed':0.5},
+                  '13': {'health':0.5,'power':0.5,'speed':0.5},
+                  '4' : {'health':0,  'power':2,  'speed':0},
+                  '14': {'health':0,  'power':2,  'speed':0},
+                  '5' : {'health':0,  'power':0,  'speed':2},
+                  '15': {'health':0,  'power':0,  'speed':2},
+                  '6' : {'health':2,  'power':0,  'speed':0},
+                  '16': {'health':2,  'power':0,  'speed':0},
+                  '7' : {'health':0.9,'power':0.9,'speed':0},
+                  '17': {'health':0.9,'power':0.9,'speed':0},
+                  '8' : {'health':0,  'power':0.9,'speed':0.9},
+                  '18': {'health':0,  'power':0.9,'speed':0.9},
+                  '9' : {'health':0.9,'power':0,  'speed':0.9},
+                  '19': {'health':0.9,'power':0,  'speed':0.9},
+                  '10': {'health':0.4,'power':0.9,'speed':0.4},
+                  '20': {'health':0.4,'power':0.9,'speed':0.4},
+                  '11': {'health':0.4,'power':0.4,'speed':0.9},
+                  '21': {'health':0.4,'power':0.4,'speed':0.9},
+                  '12': {'health':0.9,'power':0.4,'speed':0.4},
+                  '22': {'health':0.9,'power':0.4,'speed':0.4}, }
       uniques = []
       for p in pets:
         if p['creatureName'] not in [u['creatureName'] for u in uniques]:
