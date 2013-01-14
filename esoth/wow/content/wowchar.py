@@ -56,6 +56,7 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
                     'creatureName':Column(_(u"Creature Name")),
                     'spellId' :    Column(_(u"Column")),
                     'creatureId' : Column(_(u"ID")),
+                    'speciesId'  : Column(_(u"Species ID")),
                     'qualityId' :  Column(_(u"Name")),
                     'icon' :       Column(_(u"Icon")),
                     'breedId' :    Column(_(u"Can Battle")),#stats
@@ -65,7 +66,7 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
                     'speed' :      Column(_(u"Can Battle")),
                     'canBattle' :  Column(_(u"Can Battle")),
                       }),
-        columns = ('name','creatureName','spellId','creatureId','qualityId','icon','breedId','level','health','power','speed','canBattle',),
+        columns = ('name','creatureName','spellId','creatureId','speciesId','qualityId','icon','breedId','level','health','power','speed','canBattle',),
     ),
     StringField('mounts',
         required = False,
@@ -199,7 +200,7 @@ class WoWChar(ATCTContent):
     security.declareProtected(View, 'classSelection')
     def classSelection(self):
       return ('Death Knight','Druid','Hunter','Mage','Monk','Paladin','Priest','Rogue','Shaman','Warlock','Warrior')
-
+      
     security.declareProtected(View, 'hasAvatar')
     def hasAvatar(self):
       """ check this before making an image tag """
@@ -353,6 +354,7 @@ class WoWChar(ATCTContent):
                       'creatureName':pet['creatureName'],
                       'spellId':str(pet['spellId']),
                       'creatureId':str(pet['creatureId']),
+                      'speciesId':str(pet['stats']['speciesId']),
                       'qualityId':str(pet['stats']['petQualityId']),
                       'icon':pet['icon'],
                       'breedId':str(pet['stats']['breedId']),
@@ -410,17 +412,38 @@ class WoWChar(ATCTContent):
                   '12': {'health':0.9,'power':0.4,'speed':0.4},
                   '22': {'health':0.9,'power':0.4,'speed':0.4}, }
       uniques = []
+      
+      #update petdata if needed
+      from zope.component import getUtility
+      from esoth.wow.interfaces import IPetUtility
+      petu = getUtility(IPetUtility)
+      newpids = [p['speciesId'] for p in pets if p['speciesId'] not in petu.getPets().keys() and p['speciesId'] != '0']
+      if newpids:
+        petu.addPetsById(newpids)
+      petdata = petu.getPets()
+      if not petdata:
+        petu.populate()
+        petdata = petu.getPets()
+      
       for p in pets:
         if p['creatureName'] not in [u['creatureName'] for u in uniques]:
+          leveldiff = 25-int(p['level'])
+          rarity = int(p['qualityId'])*.1+1
+          base = petdata.get( p['speciesId'] )
+          if base:
+            p['maxH'] = int( 25 * (base['health'] + breedmap[p['breedId']]['health']) * rarity * 5 + 100 )
+            p['maxS'] = int( 25 * (base['speed'] + breedmap[p['breedId']]['speed']) * rarity )
+            p['maxP'] = int( 25 * (base['power'] + breedmap[p['breedId']]['power']) * rarity )
           uniques.append( p )
         elif int(p['qualityId']) > int([u['qualityId'] for u in uniques if u['creatureName'] == p['creatureName']][0]):
           uniques = [u for u in uniques if u['name'] != p['name']]
-          #leveldiff = 25-int(p['level'])
-          #rarity = int(p['petQualityId'])*.1+1
-          # hmm, will need to get base pet numbers and store them somewhere for this. Blech
-          #p['maxH'] = leveldiff * (basep + breedmap[p['breedId']]['health'])
-          #p['maxS'] = leveldiff * (basep + breedmap[p['breedId']]['speed'])
-          #p['maxP'] = leveldiff * (basep + breedmap[p['breedId']]['power'])
+          leveldiff = 25-int(p['level'])
+          rarity = int(p['qualityId'])*.1+1
+          base = petdata.get( p['speciesId'] )
+          if base:
+            p['maxH'] = int( 25 * (base['health'] + breedmap[p['breedId']]['health']) * rarity * 5 + 100 )
+            p['maxS'] = int( 25 * (base['speed'] + breedmap[p['breedId']]['speed']) * rarity )
+            p['maxP'] = int( 25 * (base['power'] + breedmap[p['breedId']]['power']) * rarity )
           uniques.append( p )
       uniques.sort(lambda x,y: cmp(int(x['level']),int(y['level'])))
       data['numUnique'] = len(uniques)

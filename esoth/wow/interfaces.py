@@ -5,3 +5,6 @@ class IWoWChar(Interface):
 
 class IWoWDisplay(Interface):
   """ A WoW Display info interface """
+  
+class IPetUtility(Interface):
+  """ Pet data utility"""
