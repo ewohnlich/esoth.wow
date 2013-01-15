@@ -414,36 +414,36 @@ class WoWChar(ATCTContent):
       uniques = []
       
       #update petdata if needed
-      from zope.component import getUtility
-      from esoth.wow.interfaces import IPetUtility
-      petu = getUtility(IPetUtility)
-      newpids = [p['speciesId'] for p in pets if p['speciesId'] not in petu.getPets().keys() and p['speciesId'] != '0']
-      if newpids:
-        petu.addPetsById(newpids)
-      petdata = petu.getPets()
-      if not petdata:
-        petu.populate()
-        petdata = petu.getPets()
+#      from zope.component import getUtility
+#      from esoth.wow.interfaces import IPetUtility
+#      petu = getUtility(IPetUtility)
+#      newpids = [p['speciesId'] for p in pets if p['speciesId'] not in petu.getPets().keys() and p['speciesId'] != '0']
+#      if newpids:
+#        petu.addPetsById(newpids)
+#      petdata = petu.getPets()
+#      if not petdata:
+#        petu.populate()
+#        petdata = petu.getPets()
       
       for p in pets:
         if p['creatureName'] not in [u['creatureName'] for u in uniques]:
-          leveldiff = 25-int(p['level'])
-          rarity = int(p['qualityId'])*.1+1
-          base = petdata.get( p['speciesId'] )
-          if base:
-            p['maxH'] = int( 25 * (base['health'] + breedmap[p['breedId']]['health']) * rarity * 5 + 100 )
-            p['maxS'] = int( 25 * (base['speed'] + breedmap[p['breedId']]['speed']) * rarity )
-            p['maxP'] = int( 25 * (base['power'] + breedmap[p['breedId']]['power']) * rarity )
+#          leveldiff = 25-int(p['level'])
+#          rarity = int(p['qualityId'])*.1+1
+#          base = petdata.get( p['speciesId'] )
+#          if base:
+#            p['maxH'] = int( 25 * (base['health'] + breedmap[p['breedId']]['health']) * rarity * 5 + 100 )
+#            p['maxS'] = int( 25 * (base['speed'] + breedmap[p['breedId']]['speed']) * rarity )
+#            p['maxP'] = int( 25 * (base['power'] + breedmap[p['breedId']]['power']) * rarity )
           uniques.append( p )
         elif int(p['qualityId']) > int([u['qualityId'] for u in uniques if u['creatureName'] == p['creatureName']][0]):
           uniques = [u for u in uniques if u['name'] != p['name']]
-          leveldiff = 25-int(p['level'])
-          rarity = int(p['qualityId'])*.1+1
-          base = petdata.get( p['speciesId'] )
-          if base:
-            p['maxH'] = int( 25 * (base['health'] + breedmap[p['breedId']]['health']) * rarity * 5 + 100 )
-            p['maxS'] = int( 25 * (base['speed'] + breedmap[p['breedId']]['speed']) * rarity )
-            p['maxP'] = int( 25 * (base['power'] + breedmap[p['breedId']]['power']) * rarity )
+#          leveldiff = 25-int(p['level'])
+#          rarity = int(p['qualityId'])*.1+1
+#          base = petdata.get( p['speciesId'] )
+#          if base:
+#            p['maxH'] = int( 25 * (base['health'] + breedmap[p['breedId']]['health']) * rarity * 5 + 100 )
+#            p['maxS'] = int( 25 * (base['speed'] + breedmap[p['breedId']]['speed']) * rarity )
+#            p['maxP'] = int( 25 * (base['power'] + breedmap[p['breedId']]['power']) * rarity )
           uniques.append( p )
       uniques.sort(lambda x,y: cmp(int(x['level']),int(y['level'])))
       data['numUnique'] = len(uniques)
