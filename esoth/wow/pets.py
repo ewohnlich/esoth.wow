@@ -52,8 +52,8 @@ class PetUtility():
       petdata[ str(pdata['speciesId']) ] = {'health': ( pdata['health'] - 100 ) / 5 - breedmap[ str(pdata['breedId']) ]['health'],
                                             'speed' : pdata['speed'] - breedmap[ str(pdata['breedId']) ]['speed'],
                                             'power' : pdata['power'] - breedmap[ str(pdata['breedId']) ]['power'], }
-    json.dump(petdata,open(os.path.join('var','pets.json'),'wb'))
+    json.dump(petdata,open(os.path.join(os.path.dirname(__file__),'pets.json'),'wb'))
   
   def getPets(self):
-    petdata = json.load(open(os.path.join('var','pets.json')))
+    petdata = json.load(open(os.path.join(os.path.dirname(__file__),'pets.json')))
     return petdata
