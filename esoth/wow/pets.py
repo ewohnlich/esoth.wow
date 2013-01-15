@@ -25,7 +25,7 @@ class PetUtility():
         
   def addPetsById(self, pids):
     petdata = self.getPets()
-    base_url = 'http://us.battle.net/api/wow/battlePet/stats/'
+    base_url = 'http://us.battle.net/api/wow/battlePet/stats/%s?qualityId=0'
     breedmap = {'3' : {'health':0.5,'power':0.5,'speed':0.5},
                 '13': {'health':0.5,'power':0.5,'speed':0.5},
                 '4' : {'health':0,  'power':2,  'speed':0},
@@ -47,11 +47,11 @@ class PetUtility():
                 '12': {'health':0.9,'power':0.4,'speed':0.4},
                 '22': {'health':0.9,'power':0.4,'speed':0.4}, }
     for pid in pids:
-      url = base_url + pid
+      url = base_url % pid
       pdata = json.load(urllib2.urlopen(url))
-      petdata[ str(pdata['speciesId']) ] = {'health': (pdata['health']-100) / (1 + breedmap[ str(pdata['breedId']) ]['health'] ),
-                                            'speed' : pdata['speed'] / (1 + breedmap[ str(pdata['breedId']) ]['speed'] ),
-                                            'power' : pdata['power'] / (1 + breedmap[ str(pdata['breedId']) ]['power'] ), }
+      petdata[ str(pdata['speciesId']) ] = {'health': ( pdata['health'] - 100 ) / 5 - breedmap[ str(pdata['breedId']) ]['health'],
+                                            'speed' : pdata['speed'] - breedmap[ str(pdata['breedId']) ]['speed'],
+                                            'power' : pdata['power'] - breedmap[ str(pdata['breedId']) ]['power'], }
     json.dump(petdata,open(os.path.join('var','pets.json'),'wb'))
   
   def getPets(self):

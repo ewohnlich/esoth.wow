@@ -49,6 +49,11 @@
           <td tal:content="petData/numMaxLevelRare"/>
         </tr>
       </table>
+        
+        <br/>
+        <p>Attention! The level 25 predicted pet data is not currently correct. It's a reasonable prediction in most cases though, only off by something under 20. Probably
+          a bug with calculating base data
+        </p>
       
       <h2>All Pets</h2>
       <table class="listing"
