@@ -69,9 +69,9 @@
             <th>Health</th>
             <th>Speed</th>
             <th>Power</th>
-            <!-- <th>Health (at 25)</th>
+            <th>Health (at 25)</th>
             <th>Speed (at 25)</th>
-            <th>Power (at 25)</th> -->
+            <th>Power (at 25)</th>
           </tr>
         </thead>
         <tbody>
@@ -92,17 +92,19 @@
                 <td tal:content="pet/level"/>
                 <td tal:attributes="class python:quality[ int( pet['qualityId'] ) ]"
                     tal:content="python:quality[ int( pet['qualityId'] ) ]"/>
-                <!-- <td tal:content="pet/qualityId"/> -->
                 <td tal:content="python:breed[ int( pet['breedId'] ) ]"
                     tal:attributes="class python:breedClass.get(breed[ int( pet['breedId'] ) ], 'neutralBreed')"/>
                 <td tal:content="pet/health"/>
                 <td tal:content="pet/speed"/>
                 <td tal:content="pet/power"/>
-                <!-- <td tal:content="pet/maxH"/>
+                <td tal:content="pet/maxH"/>
                 <td tal:content="pet/maxS"/>
-                <td tal:content="pet/maxP"/> -->
+                <td tal:content="pet/maxP"/>
               </tal:battle>
               <tal:nonbattle condition="python:pet['canBattle']!='True'">
+                <td />
+                <td />
+                <td />
                 <td />
                 <td />
                 <td />
