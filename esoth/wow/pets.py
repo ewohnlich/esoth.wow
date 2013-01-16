@@ -49,10 +49,9 @@ class PetUtility():
     for pid in pids:
       url = base_url % pid
       pdata = json.load(urllib2.urlopen(url))
-      rarity = pdata['petQualityId']*.1+1
-      petdata[ str(pdata['speciesId']) ] = {'health': ( pdata['health'] - 100 ) / pdata['level'] / rarity / 5 - breedmap[ str(pdata['breedId']) ]['health'],
-                                            'speed' : pdata['speed'] / pdata['level'] / rarity - breedmap[ str(pdata['breedId']) ]['speed'],
-                                            'power' : pdata['power'] / pdata['level'] / rarity - breedmap[ str(pdata['breedId']) ]['power'], }
+      petdata[ str(pdata['speciesId']) ] = {'health': ( pdata['health'] - 100 ) / 5 - breedmap[ str(pdata['breedId']) ]['health'],
+                                            'speed' : pdata['speed'] - breedmap[ str(pdata['breedId']) ]['speed'],
+                                            'power' : pdata['power'] - breedmap[ str(pdata['breedId']) ]['power'], }
     json.dump(petdata,open(os.path.join(os.path.dirname(__file__),'pets.json'),'wb'))
   
   def getPets(self):
