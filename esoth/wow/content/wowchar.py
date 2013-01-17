@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from zope.interface import implements
 from AccessControl import ClassSecurityInfo
 from Products.ATContentTypes import ATCTMessageFactory as _
 from Products.Archetypes.atapi import Schema
@@ -13,7 +14,7 @@ from Products.DataGridField.DataGridWidget import DataGridWidget
 from Products.DataGridField.Column import Column
 from esoth.wow.config import PROJECTNAME
 from esoth.wow.interfaces import IWoWChar
-from zope.interface import implements
+from esoth.wow.pets import breedmap
 
 WoWCharSchema = ATContentTypeSchema.copy() + Schema((
     StringField('server',
@@ -256,6 +257,7 @@ class WoWChar(ATCTContent):
       import json
       from urllib2 import urlopen
       from DateTime import DateTime
+      proxy=False
       base_url = 'http://us.battle.net/api/wow/character/%s/%s?fields=guild,talents,stats,items,reputation,professions,appearance,companions,mounts,pets,achievements,progression,titles'
       base_image_url = 'http://us.battle.net/static-render/us/'
 
@@ -263,7 +265,11 @@ class WoWChar(ATCTContent):
       charname = self.Title().lower()
 
       url = base_url % (server,charname)
-      _json = json.load(urlopen(url))
+      try:
+        _json = json.load(urlopen(url))
+      except ValueError:
+        proxy=True
+        _json = json.load(urlopen('http://www.esoth.com/proxyw?u='+url))
 
       # general
       self.setCacheDate(DateTime())
@@ -275,7 +281,7 @@ class WoWChar(ATCTContent):
       self.setRace(racemap[str(_json['race'])])
       self.setClass(['none','Warrior','Paladin','Hunter','Rogue','Priest','Death Knight','Shaman','Mage','Warlock','Monk','Druid'][_json['class']])
       self.setGender(_json['gender'] and 'Female' or 'Male')
-      img = urlopen(base_image_url+_json['thumbnail']).read()
+      img = proxy and urlopen('http://www.esoth.com/proxyi?u='+base_image_url+_json['thumbnail']).read() or urlopen(base_image_url+_json['thumbnail']).read()
       self.setAvatar(img)
       self.setPoints(_json['achievementPoints'])
 
@@ -379,6 +385,15 @@ class WoWChar(ATCTContent):
       uniques = {}.fromkeys(names).keys()
       return len( uniques )
 
+    def predictPet(self, petdata, p):
+      leveldiff = 25-int(p['level'])
+      rarity = int(p['qualityId'])*.1+1
+      base = petdata.get( p['speciesId'] )
+      if base:
+        p['maxH'] = int( round( 25 * (base['health'] + breedmap[p['breedId']]['health']) * rarity * 5 + 100 ))
+        p['maxS'] = int( round( 25 * (base['speed'] + breedmap[p['breedId']]['speed']) * rarity ))
+        p['maxP'] = int( round( 25 * (base['power'] + breedmap[p['breedId']]['power']) * rarity ))
+
     security.declarePublic('petData')
     def petData(self):
       data = {'numUnique':0,
@@ -390,27 +405,6 @@ class WoWChar(ATCTContent):
               'uniquePets': []}
       pets = self.getPets()
       data['numTotal'] = len(pets)
-
-      breedmap = {'3' : {'health':0.5,'power':0.5,'speed':0.5},
-                  '13': {'health':0.5,'power':0.5,'speed':0.5},
-                  '4' : {'health':0,  'power':2,  'speed':0},
-                  '14': {'health':0,  'power':2,  'speed':0},
-                  '5' : {'health':0,  'power':0,  'speed':2},
-                  '15': {'health':0,  'power':0,  'speed':2},
-                  '6' : {'health':2,  'power':0,  'speed':0},
-                  '16': {'health':2,  'power':0,  'speed':0},
-                  '7' : {'health':0.9,'power':0.9,'speed':0},
-                  '17': {'health':0.9,'power':0.9,'speed':0},
-                  '8' : {'health':0,  'power':0.9,'speed':0.9},
-                  '18': {'health':0,  'power':0.9,'speed':0.9},
-                  '9' : {'health':0.9,'power':0,  'speed':0.9},
-                  '19': {'health':0.9,'power':0,  'speed':0.9},
-                  '10': {'health':0.4,'power':0.9,'speed':0.4},
-                  '20': {'health':0.4,'power':0.9,'speed':0.4},
-                  '11': {'health':0.4,'power':0.4,'speed':0.9},
-                  '21': {'health':0.4,'power':0.4,'speed':0.9},
-                  '12': {'health':0.9,'power':0.4,'speed':0.4},
-                  '22': {'health':0.9,'power':0.4,'speed':0.4}, }
       uniques = []
       
       #update petdata if needed
@@ -426,26 +420,23 @@ class WoWChar(ATCTContent):
         petu.populate()
         petdata = petu.getPets()
       
+      updates = []
       for p in pets:
+        self.predictPet(petdata,p)
+        if p['level'] == '25':
+          pbase = petdata[ p['speciesId'] ]
+          if p['maxH'] != int(p['health']) or p['maxP'] != int(p['power']) or p['maxS'] != int(p['speed']):
+            #updates.append(p)
+            p['maxH'] = p['health']
+            p['maxP'] = p['power']
+            p['maxS'] = p['speed']
         if p['creatureName'] not in [u['creatureName'] for u in uniques]:
-          leveldiff = 25-int(p['level'])
-          rarity = int(p['qualityId'])*.1+1
-          base = petdata.get( p['speciesId'] )
-          if base:
-            p['maxH'] = int( 25 * (base['health'] + breedmap[p['breedId']]['health']) * rarity * 5 + 100 )
-            p['maxS'] = int( 25 * (base['speed'] + breedmap[p['breedId']]['speed']) * rarity )
-            p['maxP'] = int( 25 * (base['power'] + breedmap[p['breedId']]['power']) * rarity )
           uniques.append( p )
         elif int(p['qualityId']) > int([u['qualityId'] for u in uniques if u['creatureName'] == p['creatureName']][0]):
           uniques = [u for u in uniques if u['name'] != p['name']]
-          leveldiff = 25-int(p['level'])
-          rarity = int(p['qualityId'])*.1+1
-          base = petdata.get( p['speciesId'] )
-          if base:
-            p['maxH'] = int( 25 * (base['health'] + breedmap[p['breedId']]['health']) * rarity * 5 + 100 )
-            p['maxS'] = int( 25 * (base['speed'] + breedmap[p['breedId']]['speed']) * rarity )
-            p['maxP'] = int( 25 * (base['power'] + breedmap[p['breedId']]['power']) * rarity )
           uniques.append( p )
+      #if updates:
+      #  petu.updateBaseStats(updates)
       uniques.sort(lambda x,y: cmp(int(x['level']),int(y['level'])))
       data['numUnique'] = len(uniques)
 
