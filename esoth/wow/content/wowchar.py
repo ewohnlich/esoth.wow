@@ -267,7 +267,7 @@ class WoWChar(ATCTContent):
       url = base_url % (server,charname)
       try:
         _json = json.load(urlopen(url))
-      except ValueError:
+      except:
         proxy=True
         _json = json.load(urlopen('http://www.esoth.com/proxyw?u='+url))
 
