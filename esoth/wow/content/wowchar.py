@@ -347,7 +347,7 @@ class WoWChar(ATCTContent):
                                   'raid':raid['name'],
                                   'boss':boss['name'],
                                   'nkills':str(boss['normalKills']),
-                                  'hkills':str(boss['heroicKills'])})
+                                  'hkills':str(boss.get('heroicKills'))})
       progression.sort(lambda x,y: cmp(x['tier'],y['tier']))
       self.setProgression(progression)
 
