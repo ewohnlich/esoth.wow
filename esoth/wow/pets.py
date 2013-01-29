@@ -25,7 +25,7 @@ breedmap = {'3' : {'health':0.5,'power':0.5,'speed':0.5},
             '11': {'health':0.4,'power':0.4,'speed':0.9},
             '21': {'health':0.4,'power':0.4,'speed':0.9},
             '12': {'health':0.9,'power':0.4,'speed':0.4},
-            '22': {'health':0.9,'power':0.4,'speed':0.4}, }
+            '22': {'health':0.9,'power':0.4,'speed':0.4} }
 
 class PetUtility():
   implements(IPetUtility)
