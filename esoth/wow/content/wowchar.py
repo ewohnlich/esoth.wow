@@ -37,6 +37,14 @@ WoWCharSchema = ATContentTypeSchema.copy() + Schema((
         required = False,
         widget = StringWidget(visible={'edit':'hidden'}),
     ),
+    StringField('averageItemLevel',
+        required = False,
+        widget = StringWidget(visible={'edit':'hidden'}),
+    ),
+    StringField('averageItemLevelEquipped',
+        required = False,
+        widget = StringWidget(visible={'edit':'hidden'}),
+    ),
     StringField('level',
         required = False,
         widget = StringWidget(visible={'edit':'hidden'}),
@@ -284,6 +292,11 @@ class WoWChar(ATCTContent):
       img = proxy and urlopen('http://www.esoth.com/proxyi?u='+base_image_url+_json['thumbnail']).read() or urlopen(base_image_url+_json['thumbnail']).read()
       self.setAvatar(img)
       self.setPoints(_json['achievementPoints'])
+      
+      # ilvl
+      _items = _json['items']
+      self.setAverageItemLevel(_items['averageItemLevel'])
+      self.setAverageItemLevelEquipped(_items['averageItemLevelEquipped'])
 
       # talents
       talents = _json['talents']
@@ -381,7 +394,7 @@ class WoWChar(ATCTContent):
 
     security.declarePublic('numcompanions')
     def numcompanions(self):
-      names = [p.get('creatureName') for p in self.getPets()]
+      names = [p.get('creatureId') for p in self.getPets()]
       uniques = {}.fromkeys(names).keys()
       return len( uniques )
 

@@ -55,6 +55,21 @@
 						  </td>
 						</tr>
 						<tr>
+							<th>Item Level</th>
+							<td>
+							  <table>
+							    <tr>
+							      <td>Total:</td>
+							      <td tal:content="here/getAverageItemLevel"/>
+							    </tr>
+							    <tr>
+							      <td>Equipped:</td>
+							      <td tal:content="here/getAverageItemLevelEquipped"/>
+							    </tr>
+							  </table>
+							</td>
+						</tr>
+						<tr>
 							<th>Server</th>
 							<td tal:content="here/getServer|string:"/>
 						</tr>
