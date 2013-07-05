@@ -1,0 +1,155 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="plone">
+<body>
+
+<metal:main fill-slot="content-core"
+            tal:define="gearmap context/gearMap;
+                        mtool nocall:context/portal_membership;
+                        checkPermission nocall:mtool/checkPermission">
+
+  <table class="vertical listing gearTable">
+    <tal:items define="items gearmap/weapon;
+                       slotName string:Weapon;">
+      <metal:item use-macro="here/gear_macro/macros/item" />
+    </tal:items>
+
+    <tal:items define="items gearmap/head;
+                       slotName string:Head;">
+      <metal:item use-macro="here/gear_macro/macros/item" />
+    </tal:items>
+
+    <tal:items define="items gearmap/neck;
+                       slotName string:Neck;">
+      <metal:item use-macro="here/gear_macro/macros/item" />
+    </tal:items>
+
+    <tal:items define="items gearmap/shoulders;
+                       slotName string:Shoulders;">
+      <metal:item use-macro="here/gear_macro/macros/item" />
+    </tal:items>
+
+    <tal:items define="items gearmap/back;
+                       slotName string:Back;">
+      <metal:item use-macro="here/gear_macro/macros/item" />
+    </tal:items>
+
+    <tal:items define="items gearmap/chest;
+                       slotName string:Chest;">
+      <metal:item use-macro="here/gear_macro/macros/item" />
+    </tal:items>
+
+    <tal:items define="items gearmap/wrists;
+                       slotName string:Wrists;">
+      <metal:item use-macro="here/gear_macro/macros/item" />
+    </tal:items>
+
+    <tal:items define="items gearmap/hands;
+                       slotName string:Hands;">
+      <metal:item use-macro="here/gear_macro/macros/item" />
+    </tal:items>
+
+    <tal:items define="items gearmap/waist;
+                       slotName string:Waist;">
+      <metal:item use-macro="here/gear_macro/macros/item" />
+    </tal:items>
+
+    <tal:items define="items gearmap/legs;
+                       slotName string:Legs;">
+      <metal:item use-macro="here/gear_macro/macros/item" />
+    </tal:items>
+
+    <tal:items define="items gearmap/feet;
+                       slotName string:Feet;">
+      <metal:item use-macro="here/gear_macro/macros/item" />
+    </tal:items>
+
+    <tal:items define="items gearmap/ring;
+                       slotName string:Rings;">
+      <metal:item use-macro="here/gear_macro/macros/item" />
+    </tal:items>
+
+    <tal:items define="items gearmap/trinket;
+                       slotName string:Trinkets;">
+      <metal:item use-macro="here/gear_macro/macros/item" />
+    </tal:items>
+  </table>
+  
+  <script type="text/javascript">
+    jq(document).ready(function() {
+      jq('.equip-link').bind('click',function(event){
+        event.preventDefault();
+        jq.get(this.href,{},function(response){
+          // pass
+        });
+        jq('tr').removeClass('equippedItem');
+        jq(this).closest('tr').toggleClass('equippedItem');
+      });
+      jq('.equip-multiple-link').bind('click',function(event){
+        event.preventDefault();
+        jq.get(this.href,{},function(response){
+          // pass
+        });
+        jq(this).closest('tr').toggleClass('equippedItem');
+      });
+      jq('.acquire-link').bind('click',function(event){
+        event.preventDefault();
+        jq.get(this.href,{},function(response){
+          // pass
+        });
+        jq(this).closest('tr').toggleClass('acquiredItem');
+      });
+      jq('.bis-link').bind('click',function(event){
+        event.preventDefault();
+        jq.get(this.href,{},function(response){
+          // pass
+        });
+        jq(this).closest('tr').toggleClass('bisItem');
+      });
+      jq('.downgrade-link').bind('click',function(event){
+        event.preventDefault();
+        jq.get(this.href,{},function(response){
+          // pass
+        });
+        jq(this).closest('tr').toggleClass('downgradeItem');
+      });
+    });
+  </script>
+    
+  
+  <table class="listing vertical"
+         tal:define="bossNeeds context/bossNeeds;
+                     bosses context/bossOrder">
+    <tr>
+      <th colspan="2">BOSS NEEDS</th>
+    </tr>
+    <tal:boss repeat="boss bosses">
+      <tr>
+        <th tal:content="boss" />
+        <td>
+          <ul>
+            <tal:need repeat="need python:bossNeeds[boss]">
+              <li>
+                <a tal:attributes="href string:http://www.wowhead.com?item=${need/id}"
+                   tal:content="string:${need/name} (${need/slot})" />
+              </li>
+            </tal:need>
+          </ul>
+        </td>   
+      </tr>
+    </tal:boss>
+  </table>
+  <a tal:attributes="href context/absolute_url">refresh</a>
+    
+  <div class="visualClear"><!-- --></div>
+        
+        
+
+</metal:main>
+
+</body>
+</html>

@@ -6,14 +6,13 @@
 
     <five:registerPackage package="." initialize=".initialize" />
 
-    <!-- Include the sub-packages that use their own configure.zcml files. -->
+    <include file="permissions.zcml" />
     <include package=".content" />
     <include package=".browser" />
     
     <utility provides=".interfaces.IPetUtility"
              factory=".pets.PetUtility" />
 
-    <!-- Register the installation GenericSetup extension profile -->
     <genericsetup:registerProfile
       name="default"
       title="esoth.wow"
@@ -21,6 +20,5 @@
       description="progression and stuff"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
-    <!-- -*- extra stuff goes here -*- -->
 
 </configure>

@@ -187,6 +187,9 @@ WoWCharSchema.changeSchemataForField('haste','stats')
 WoWCharSchema.changeSchemataForField('mastery','stats')
 WoWCharSchema.changeSchemataForField('hit','stats')
 
+WoWCharSchema.changeSchemataForField('pets','hidden')
+WoWCharSchema.changeSchemataForField('progression','hidden')
+
 class WoWChar(ATCTContent):
     schema = WoWCharSchema
     implements(IWoWChar)

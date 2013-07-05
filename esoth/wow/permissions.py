@@ -5,3 +5,6 @@ setDefaultRoles(AddWoWChar,('Anonymous','Authenticated'))
 
 AddWoWDisplay='esoth.wow: Add WoW Display'
 setDefaultRoles(AddWoWDisplay,('Manager','Owner'))
+
+AddGearPath='esoth.wow: Add GearPath'
+setDefaultRoles(AddGearPath,('Manager','Owner'))

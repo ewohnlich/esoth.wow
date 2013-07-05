@@ -16,5 +16,7 @@
         permission="zope2.View"
         interface="..interfaces.IWoWDisplay"/>
   </class>
+        
+  <class class=".gearpath.GearPath" />
 
 </configure>

@@ -2,12 +2,19 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
 	  xmlns:zcml="http://namespaces.zope.org/zcml"
-    i18n_domain="esoth.media">
+    i18n_domain="esoth.wow">
 
     <browser:page
         name="find-player"
         for="*"
         class=".find_player.FindPlayer"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        name="gearpath_view"
+        for="*"
+        class=".gearpath.GearPathView"
         permission="zope2.View"
         />
 

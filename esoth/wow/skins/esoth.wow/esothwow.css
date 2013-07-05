@@ -64,3 +64,33 @@ td.Poor { color: #888; }
 contenttype-rbg-item {
     background: url("contenttypes-sprite.png") no-repeat scroll 0 -1292px transparent;
 }
+
+a.slotItem {
+  padding-left: 16px;
+}
+
+.equippedItem {
+  font-weight: bold;
+}
+
+.equippedItem a.slotItem {
+  background: url("bullet_black.png") no-repeat scroll 0 0 transparent;
+}
+
+.acquiredItem {
+  background-color: #FFF2CC;
+}
+
+.bisItem {
+  background-color: #D9EAD3 !important;
+}
+
+.downgradeItem, .downgradeItem a {
+  text-decoration: line-through;
+  color: #D6D6D6;
+}  
+
+.gearTable {
+  float: left;
+  margin-right: 2em !important;
+}

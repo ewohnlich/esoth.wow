@@ -1,0 +1,52 @@
+<metal:item define-macro="item">
+  <tr>
+    <th tal:attributes="rowspan items/count" tal:content="slotName" />
+  </tr>
+  <tr>
+    <th>Name</th>
+    <th>Boss</th>
+    <tal:edit condition="python:checkPermission('Modify portal content',context)">
+      <th colspan="4">actions</th>
+    </tal:edit>
+  </tr>
+  <tal:itm repeat="item items/itms">
+    <tr tal:attributes="class python:' '.join([c for c in [item['equipped'] and 'equippedItem',item['acquired'] and 'acquiredItem',item['bis'] and 'bisItem',item['downgrade'] and 'downgradeItem'] if c])">
+      <td>
+        <a class="slotItem"
+           tal:attributes="href string:http://www.wowhead.com?item=${item/id}"
+           tal:content="item/name"/>
+      </td>
+      <td tal:content="item/boss"/>
+      <tal:edit condition="python:checkPermission('Modify portal content',context)">
+        <td>
+          <a tal:attributes="href string:${context/absolute_url}/@@gearpath_view?action=equip&item=${item/name};
+                             class python:slotName in ['Trinkets','Rings'] and 'equip-multiple-link' or 'equip-link'"
+             title="Equip - you are wearing this">
+            <img tal:attributes="src string:$portal_url/equipped.png" />
+          </a>
+        </td>
+        <td>
+          <a tal:attributes="href string:${context/absolute_url}/@@gearpath_view?action=acquire&item=${item/name}"
+             class="acquire-link"
+             title="Acquire - acquired but not equipped">
+            <img tal:attributes="src string:$portal_url/acquired.png" />
+          </a>
+        </td>
+        <td>
+          <a tal:attributes="href string:${context/absolute_url}/@@gearpath_view?action=bis&item=${item/name}"
+             class="bis-link"
+             title="BIS">
+            <img tal:attributes="src string:$portal_url/bis.png" />
+          </a>
+        </td>
+        <td>
+          <a tal:attributes="href string:${context/absolute_url}/@@gearpath_view?action=downgrade&item=${item/name}"
+             class="downgrade-link"
+             title="Downgrade - downgrade from what is equipped">
+            <img tal:attributes="src string:$portal_url/downgrade.png" />
+          </a>
+        </td>
+      </tal:edit>
+    </tr>
+  </tal:itm>
+</metal:item>

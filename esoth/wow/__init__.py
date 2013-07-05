@@ -14,7 +14,7 @@ from Products.CMFCore.DirectoryView import registerDirectory
 # like _(u"message") will then be extracted by i18n tools for translation.
 import permissions
 
-wowMessageFactory = MessageFactory('esoth.wow')
+_ = MessageFactory('esoth.wow')
 
 def initialize(context):
     registerDirectory('skins', globals())
