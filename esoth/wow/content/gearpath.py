@@ -163,7 +163,7 @@ class GearPath(Item):
       def isequipped(i,s):
         s=s.lower()
         if s in ['trinket','ring']:
-          return i in getattr(self,s+'1') or i in getattr(self,s+'2')
+          return (getattr(self,s+'1') and i in getattr(self,s+'1')) or (getattr(self,s+'2') and i in getattr(self,s+'2'))
         return i == getattr(self,s)
 
       for k in slot.keys():
@@ -186,24 +186,25 @@ class GearPath(Item):
       neededSlots = []
       bossItems = {}
 
-      ignored_items = list(self.acquiredItems)+list(self.downgradeItems)+[self.trinket1,self.trinket2,self.ring1,self.ring2]
+      ignored_items = set(list(self.acquiredItems or [])+list(self.downgradeItems or [])+[self.trinket1,self.trinket2,self.ring1,self.ring2])
 
+      bisItems = self.bisItems or []
       for _k in slot.keys():
         k = _k.lower()
         if k in ['trinket','ring']:
           eq1 = getattr(self,k+'1')
           eq2 = getattr(self,k+'2')
-          if eq1 not in self.bisItems or eq2 not in self.bisItems:
+          if eq1 not in bisItems or eq2 not in bisItems:
             neededSlots.append(_k)
         else:
           eq = getattr(self,k)
-          if eq not in self.bisItems:
+          if eq not in bisItems:
             neededSlots.append(_k)
       for b in boss.keys():
         bossItems[b] = []
         for s in boss[b].keys(): # check each slot
           if s in neededSlots:
-            bossItems[b] = [{'slot':s,'name':i,'id':gear[i]['id']} for i in boss[b][s] if i not in ignored_items ]
+            bossItems[b] += [{'slot':s,'name':i,'id':gear[i]['id']} for i in boss[b][s] if i not in ignored_items ]
       return bossItems
     
     def bossOrder(self):

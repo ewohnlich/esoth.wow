@@ -65,6 +65,14 @@ contenttype-rbg-item {
     background: url("contenttypes-sprite.png") no-repeat scroll 0 -1292px transparent;
 }
 
+#gearTable tr.odd, #gearTable tr.odd td {
+  background-color: transparent;
+}
+
+#gearTable th {
+  text-align: center;
+} 
+
 a.slotItem {
   padding-left: 16px;
 }
@@ -78,16 +86,16 @@ a.slotItem {
 }
 
 .acquiredItem {
-  background-color: #FFF2CC;
+  background-color: #FFF2CC !important;
 }
 
-.bisItem {
+tr.bisItem, table.listing tbody tr.bisItem td {
   background-color: #D9EAD3 !important;
 }
 
 .downgradeItem, .downgradeItem a {
   text-decoration: line-through;
-  color: #D6D6D6;
+  color: #D6D6D6 !important;
 }  
 
 .gearTable {

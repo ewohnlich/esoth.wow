@@ -12,7 +12,7 @@
                         mtool nocall:context/portal_membership;
                         checkPermission nocall:mtool/checkPermission">
 
-  <table class="vertical listing gearTable">
+  <table class="vertical listing gearTable" id="gearTable">
     <tal:items define="items gearmap/weapon;
                        slotName string:Weapon;">
       <metal:item use-macro="here/gear_macro/macros/item" />
@@ -86,7 +86,6 @@
         jq.get(this.href,{},function(response){
           // pass
         });
-        jq('tr').removeClass('equippedItem');
         jq(this).closest('tr').toggleClass('equippedItem');
       });
       jq('.equip-multiple-link').bind('click',function(event){
