@@ -3,18 +3,24 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as _
 from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
 
-from esoth.wow.content.gear import slot, gear, boss
-boss=boss.copy()
-gear=gear.copy()
-slot=slot.copy()
+from esoth.wow.content.gear import getGear
         
 class GearPathView(BrowserView):
-  def __call__(self,action='',item=''):
+  def __call__(self,action='',item='',slot=''):
+    gear = getGear(self.context.spec)[2]
     if action and item:
-      slot = gear[item]['slot']
+      if not slot:
+        slot = gear[item]['slot']
       if action == 'equip':
         slot = slot.lower()
-        setattr(self.context,slot,item)
+        if getattr(self.context,slot) == item:
+          setattr(self.context,slot,'')
+        else:
+          setattr(self.context,slot,item)
+        acquiredItems = self.context.acquiredItems or set([])
+        if item not in acquiredItems:
+          acquiredItems.add(item)
+          self.context.acquiredItems = acquiredItems
       elif action == 'acquire':
         acquiredItems = self.context.acquiredItems or set([])
         if item in acquiredItems:
@@ -39,3 +45,11 @@ class GearPathView(BrowserView):
     
     template = ZopeTwoPageTemplateFile('gearpath.pt')
     return template(self)
+    
+class BossTableView(BrowserView):
+  """ """
+  def bossNeeds(self):
+    return self.context.bossNeeds()
+  
+  def bossOrder(self):
+    return self.context.bossOrder()

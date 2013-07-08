@@ -1,4 +1,5 @@
-<metal:item define-macro="item">
+<metal:item define-macro="item"
+            tal:define="slot slot|string:;">
   <tr>
     <th tal:attributes="rowspan items/count" tal:content="slotName" />
   </tr>
@@ -19,28 +20,28 @@
       <td tal:content="item/boss"/>
       <tal:edit condition="python:checkPermission('Modify portal content',context)">
         <td>
-          <a tal:attributes="href string:${context/absolute_url}/@@gearpath_view?action=equip&item=${item/name};
-                             class python:slotName in ['Trinkets','Rings'] and 'equip-multiple-link' or 'equip-link'"
+          <a tal:attributes="href string:${context/absolute_url}/@@gearpath_view?action=equip&item=${item/name}&slot=${slot};"
+             class="equip-link"
              title="Equip - you are wearing this">
             <img tal:attributes="src string:$portal_url/equipped.png" />
           </a>
         </td>
         <td>
-          <a tal:attributes="href string:${context/absolute_url}/@@gearpath_view?action=acquire&item=${item/name}"
+          <a tal:attributes="href string:${context/absolute_url}/@@gearpath_view?action=acquire&item=${item/name}&slot=${slot}"
              class="acquire-link"
              title="Acquire - acquired but not equipped">
             <img tal:attributes="src string:$portal_url/acquired.png" />
           </a>
         </td>
         <td>
-          <a tal:attributes="href string:${context/absolute_url}/@@gearpath_view?action=bis&item=${item/name}"
+          <a tal:attributes="href string:${context/absolute_url}/@@gearpath_view?action=bis&item=${item/name}&slot=${slot}"
              class="bis-link"
              title="BIS">
             <img tal:attributes="src string:$portal_url/bis.png" />
           </a>
         </td>
         <td>
-          <a tal:attributes="href string:${context/absolute_url}/@@gearpath_view?action=downgrade&item=${item/name}"
+          <a tal:attributes="href string:${context/absolute_url}/@@gearpath_view?action=downgrade&item=${item/name}&slot=${slot}"
              class="downgrade-link"
              title="Downgrade - downgrade from what is equipped">
             <img tal:attributes="src string:$portal_url/downgrade.png" />

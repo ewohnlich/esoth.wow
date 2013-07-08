@@ -7,138 +7,100 @@ from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
 from esoth.wow import _
-from esoth.wow.content.gear import boss, gear, slot as slot
+from esoth.wow.content.gear import getGear
 
-@grok.provider(IContextSourceBinder)
-def choices_weapon(context): return SimpleVocabulary([SimpleTerm(value=_(t), title=_(t)) for t in slot['Weapon']])
-
-@grok.provider(IContextSourceBinder)
-def choices_head(context): return SimpleVocabulary([SimpleTerm(value=_(t), title=_(t)) for t in slot['Head']])
-
-@grok.provider(IContextSourceBinder)
-def choices_neck(context): return SimpleVocabulary([SimpleTerm(value=_(t), title=_(t)) for t in slot['Neck']])
-
-@grok.provider(IContextSourceBinder)
-def choices_shoulders(context): return SimpleVocabulary([SimpleTerm(value=_(t), title=_(t)) for t in slot['Shoulders']])
-
-@grok.provider(IContextSourceBinder)
-def choices_back(context): return SimpleVocabulary([SimpleTerm(value=_(t), title=_(t)) for t in slot['Back']])
-
-@grok.provider(IContextSourceBinder)
-def choices_chest(context): return SimpleVocabulary([SimpleTerm(value=_(t), title=_(t)) for t in slot['Chest']])
-
-@grok.provider(IContextSourceBinder)
-def choices_wrists(context): return SimpleVocabulary([SimpleTerm(value=_(t), title=_(t)) for t in slot['Wrists']])
-
-@grok.provider(IContextSourceBinder)
-def choices_hands(context): return SimpleVocabulary([SimpleTerm(value=_(t), title=_(t)) for t in slot['Hands']])
-
-@grok.provider(IContextSourceBinder)
-def choices_waist(context): return SimpleVocabulary([SimpleTerm(value=_(t), title=_(t)) for t in slot['Waist']])
-
-@grok.provider(IContextSourceBinder)
-def choices_legs(context): return SimpleVocabulary([SimpleTerm(value=_(t), title=_(t)) for t in slot['Legs']])
-
-@grok.provider(IContextSourceBinder)
-def choices_feet(context): return SimpleVocabulary([SimpleTerm(value=_(t), title=_(t)) for t in slot['Feet']])
-
-@grok.provider(IContextSourceBinder)
-def choices_ring(context): return SimpleVocabulary([SimpleTerm(value=_(t), title=_(t)) for t in slot['Ring']])
-
-@grok.provider(IContextSourceBinder)
-def choices_trinket(context): return SimpleVocabulary([SimpleTerm(value=_(t), title=_(t)) for t in slot['Trinket']])
+ 
+specs = SimpleVocabulary(
+    [SimpleTerm(value=u'hunter', title=_(u'Hunter')),
+     SimpleTerm(value=u'elemental-shaman', title=_(u'Elemental Shaman')),]
+    )
 
 class IGearPath(form.Schema):
 
   title = schema.TextLine(title=_(u"Title"))
+  
+  spec = schema.Choice(
+            title=_(u"Spec"),
+            vocabulary=specs,
+        )
 
-  weapon = schema.Choice(
+  weapon = schema.TextLine(
             title=_(u"Weapon"),
-            source=choices_weapon,
+            required=False,
+        )
+  
+  offhand = schema.TextLine(
+            title=_(u"Off Hand"),
             required=False,
         )
 
-  head = schema.Choice(
+  head = schema.TextLine(
             title=_(u"Head"),
-            source=choices_head,
             required=False,
         )
 
-  neck = schema.Choice(
+  neck = schema.TextLine(
             title=_(u"Neck"),
-            source=choices_neck,
             required=False,
         )
 
-  shoulders = schema.Choice(
+  shoulders = schema.TextLine(
             title=_(u"Shoulders"),
-            source=choices_shoulders,
             required=False,
         )
 
-  back = schema.Choice(
+  back = schema.TextLine(
             title=_(u"Back"),
-            source=choices_back,
             required=False,
         )
 
-  chest = schema.Choice(
+  chest = schema.TextLine(
             title=_(u"Chest"),
-            source=choices_chest,
             required=False,
         )
 
-  wrists = schema.Choice(
+  wrists = schema.TextLine(
             title=_(u"Wrists"),
-            source=choices_wrists,
             required=False,
         )
 
-  hands = schema.Choice(
+  hands = schema.TextLine(
             title=_(u"Hands"),
-            source=choices_hands,
             required=False,
         )
 
-  waist = schema.Choice(
+  waist = schema.TextLine(
             title=_(u"Waist"),
-            source=choices_waist,
             required=False,
         )
 
-  legs = schema.Choice(
+  legs = schema.TextLine(
             title=_(u"Legs"),
-            source=choices_legs,
             required=False,
         )
 
-  feet = schema.Choice(
+  feet = schema.TextLine(
             title=_(u"Feet"),
-            source=choices_feet,
             required=False,
         )
 
-  ring1 = schema.Choice(
+  ring1 = schema.TextLine(
             title=_(u"Ring (1)"),
-            source=choices_ring,
             required=False,
         )
 
-  ring2 = schema.Choice(
+  ring2 = schema.TextLine(
             title=_(u"Ring (2)"),
-            source=choices_ring,
             required=False,
         )
 
-  trinket1 = schema.Choice(
+  trinket1 = schema.TextLine(
             title=_(u"Trinket (1)"),
-            source=choices_trinket,
             required=False,
         )
 
-  trinket2 = schema.Choice(
+  trinket2 = schema.TextLine(
             title=_(u"Trinket (2)"),
-            source=choices_trinket,
             required=False,
         )
 
@@ -158,30 +120,28 @@ class GearPath(Item):
     meta_type = 'GearPath'
 
     def gearMap(self):
+      boss,slot,gear = getGear(self.spec)
       _map = {}
 
-      def isequipped(i,s):
-        s=s.lower()
-        if s in ['trinket','ring']:
-          return (getattr(self,s+'1') and i in getattr(self,s+'1')) or (getattr(self,s+'2') and i in getattr(self,s+'2'))
-        return i == getattr(self,s)
-
-      for k in slot.keys():
-        count = len(slot[k])
+      worn_slots = ['Weapon','Off Hand','Head','Neck','Shoulders','Back','Chest','Wrists','Hands','Waist','Legs','Feet','Ring1','Ring2','Trinket1','Trinket2']
+      for k in worn_slots:
+        item_type = k.replace('1','').replace('2','')
+        count = len(slot.get(item_type,[]))
         itms = []
-        for v in slot[k]:
+        for v in slot.get(item_type,[]):
           itm = {'name':v,
                  'id':gear[v]['id'],
                  'boss':gear[v]['boss'],
                  'bis':self.bisItems and v in self.bisItems,
                  'acquired':self.acquiredItems and v in self.acquiredItems,
                  'downgrade':self.downgradeItems and v in self.downgradeItems,
-                 'equipped':isequipped(v,k)}
+                 'equipped':v == getattr(self,k.lower().replace(' ',''))}
           itms.append(itm)
         _map[k.lower()] = {'count':count+2,'itms':itms}
       return _map
 
     def bossNeeds(self):
+      boss,slot,gear = getGear(self.spec)
       # name, slot
       neededSlots = []
       bossItems = {}

@@ -68,85 +68,88 @@
       <metal:item use-macro="here/gear_macro/macros/item" />
     </tal:items>
 
-    <tal:items define="items gearmap/ring;
-                       slotName string:Rings;">
+    <tal:items define="items gearmap/ring1;
+                       slot string:ring1;
+                       slotName string:Ring (1);">
       <metal:item use-macro="here/gear_macro/macros/item" />
     </tal:items>
 
-    <tal:items define="items gearmap/trinket;
-                       slotName string:Trinkets;">
+    <tal:items define="items gearmap/ring2;
+                       slot string:ring2;
+                       slotName string:Ring (2);">
+      <metal:item use-macro="here/gear_macro/macros/item" />
+    </tal:items>
+
+    <tal:items define="items gearmap/trinket1;
+                       slot string:trinket1;
+                       slotName string:Trinket (1);">
+      <metal:item use-macro="here/gear_macro/macros/item" />
+    </tal:items>
+
+    <tal:items define="items gearmap/trinket2;
+                       slot string:trinket2;
+                       slotName string:Trinket (2);">
       <metal:item use-macro="here/gear_macro/macros/item" />
     </tal:items>
   </table>
   
+  <div id="bossNeedContainer"> </div>
+  
   <script type="text/javascript">
     jq(document).ready(function() {
+      jq("#bossNeedContainer").load(window.location+"/@@boss_table",function(responseTxt,statusTxt,xhr){
+         if(statusTxt=="error")
+           alert("Error updating content listing: "+xhr.status+": "+xhr.statusText);
+      });
       jq('.equip-link').bind('click',function(event){
         event.preventDefault();
-        jq.get(this.href,{},function(response){
-          // pass
-        });
+        val = jq(jq(this).closest('tr').children()[0]).text();
         jq(this).closest('tr').toggleClass('equippedItem');
-      });
-      jq('.equip-multiple-link').bind('click',function(event){
-        event.preventDefault();
+        jq("#gearTable tr:contains('"+val+"')").addClass('acquiredItem');
         jq.get(this.href,{},function(response){
-          // pass
+          jq("#bossNeedContainer").load(window.location+"/@@boss_table",function(responseTxt,statusTxt,xhr){
+             if(statusTxt=="error")
+               alert("Error updating content listing: "+xhr.status+": "+xhr.statusText);
+          });
         });
-        jq(this).closest('tr').toggleClass('equippedItem');
       });
       jq('.acquire-link').bind('click',function(event){
         event.preventDefault();
+        val = jq(jq(this).closest('tr').children()[0]).text();
+        jq("#gearTable tr:contains('"+val+"')").toggleClass('acquiredItem');
         jq.get(this.href,{},function(response){
-          // pass
+          jq("#bossNeedContainer").load(window.location+"/@@boss_table",function(responseTxt,statusTxt,xhr){
+             if(statusTxt=="error")
+               alert("Error updating content listing: "+xhr.status+": "+xhr.statusText);
+          });
         });
-        jq(this).closest('tr').toggleClass('acquiredItem');
       });
       jq('.bis-link').bind('click',function(event){
         event.preventDefault();
+        val = jq(jq(this).closest('tr').children()[0]).text();
+        jq("#gearTable tr:contains('"+val+"')").toggleClass('bisItem');
         jq.get(this.href,{},function(response){
-          // pass
+          jq("#bossNeedContainer").load(window.location+"/@@boss_table",function(responseTxt,statusTxt,xhr){
+             if(statusTxt=="error")
+               alert("Error updating content listing: "+xhr.status+": "+xhr.statusText);
+          });
         });
-        jq(this).closest('tr').toggleClass('bisItem');
       });
       jq('.downgrade-link').bind('click',function(event){
         event.preventDefault();
-        jq.get(this.href,{},function(response){
-          // pass
+        val = jq(jq(this).closest('tr').children()[0]).text();
+        jq("#gearTable tr:contains('"+val+"')").toggleClass('downgradeItem');
+        jq.get(this.href,{},function(response){          
+          jq("#bossNeedContainer").load(window.location+"/@@boss_table",function(responseTxt,statusTxt,xhr){
+             if(statusTxt=="error")
+               alert("Error updating content listing: "+xhr.status+": "+xhr.statusText);
+          });
         });
-        jq(this).closest('tr').toggleClass('downgradeItem');
       });
     });
   </script>
-    
-  
-  <table class="listing vertical"
-         tal:define="bossNeeds context/bossNeeds;
-                     bosses context/bossOrder">
-    <tr>
-      <th colspan="2">BOSS NEEDS</th>
-    </tr>
-    <tal:boss repeat="boss bosses">
-      <tr>
-        <th tal:content="boss" />
-        <td>
-          <ul>
-            <tal:need repeat="need python:bossNeeds[boss]">
-              <li>
-                <a tal:attributes="href string:http://www.wowhead.com?item=${need/id}"
-                   tal:content="string:${need/name} (${need/slot})" />
-              </li>
-            </tal:need>
-          </ul>
-        </td>   
-      </tr>
-    </tal:boss>
-  </table>
-  <a tal:attributes="href context/absolute_url">refresh</a>
-    
+        
   <div class="visualClear"><!-- --></div>
-        
-        
 
 </metal:main>
 

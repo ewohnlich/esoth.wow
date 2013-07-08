@@ -1,211 +1,308 @@
-_gear = [
-        {'name': 'Static-Shot Shoulderguards',
+int_dps = set(['elemental-shaman','balance-druid','restoration-druid','shadow-priest','mage','warlock'])
+spi_dps = set(['elemental-shaman','shadow-priest','balance-druid'])
+healer = set(['restoration-shaman','holy-paladin','mistweaver-monk','holy-priest','discipline-priest'])
+agi_dps = set(['hunter','guardian-druid','feral-druid','rogue','brewmaster-monk','windwalker-monk','enhancement-shaman'])
+mail_agi = set(['hunter','enhancement-shaman'])
+leather_agi = set(['rogue','brewmaster-monk','windwalker-monk','guardian-druid','feral-druid'])
+str_dps = set(['retribution-paladin','frost-dk','unholy-dk','fury-warrior','arms-warrior'])
+str_tank = set(['protection-warrior','blood-dk','protection-paladin'])
+tank = set(['protection-warrior','blood-dk','protection-paladin','brewmaster-monk','guardian-druid'])
+int_leather = set(['balance-druid','restoration-druid'])
+int_mail = set(['elemental-shaman','restoration-shaman'])
+
+
+_gear = [{'name': 'Static-Shot Shoulderguards',
          'boss': 'Jin\'rokh',
          'slot': 'Shoulders',
+         'specs':mail_agi,
          'ids': [94725,96000,96372,96744],
          'ilvls': [522,528,535,541]},
         {'name': 'Renataki\'s Soul Charm',
          'boss': 'Jin\'rokh',
          'slot': 'Trinket',
+         'specs':['hunter'],
          'ids': [94512,95997,96369,96471],
          'ilvls': [522,528,535,541]},
         {'name': 'Spearman\'s Jingling Leggings',
          'boss': 'Jin\'rokh',
          'slot': 'Legs',
+         'specs':['hunter'],
          'ids': [94728,95999,96371,96743],
          'ilvls': [522,528,535,541]},
         {'name': 'Sign of the Bloodied God',
          'boss': 'Jin\'rokh',
          'slot': 'Ring',
+         'specs':['hunter'],
          'ids': [95510,95996,96368,96740],
          'ilvls': [522,528,535,541]},
         {'name': 'Talisman of Living Poison',
          'boss': 'Horridon',
          'slot': 'Neck',
+         'specs':['hunter'],
          'ids': [94746,96018,96390,96762],
          'ilvls': [522,528,535,541]},
         {'name': 'Wastewalker\'s Sandblasted Drape',
          'boss': 'Horridon',
          'slot': 'Back',
+         'specs':['hunter'],
          'ids': [94748,96017,96389,96761],
          'ilvls': [522,528,535,541]},
         {'name': 'Sul\'lithuz Sandmail',
          'boss': 'Horridon',
          'slot': 'Chest',
+         'specs':['hunter'],
          'ids': [94741,96021,96393,96765],
          'ilvls': [522,528,535,541]},
         {'name': 'Gaze of Gara\'jal',
          'boss': 'Zandalari Council',
          'slot': 'Head',
+         'specs':['hunter'],
          'ids': [94763,96044,96416,96788],
          'ilvls': [522,528,535,541]},
         {'name': 'Saurok Stalker\'s Gloves',
          'boss': 'Zandalari Council',
          'slot': 'Hands',
+         'specs':['hunter'],
          'ids': [96526,96627],
          'ilvls': [522,535]},
         {'name': 'Bad Juju',
          'boss': 'Zandalari Council',
          'slot': 'Trinket',
+         'specs':['hunter'],
          'ids': [94523,96037,96409,96781],
          'ilvls': [522,528,535,541]},
         {'name': 'Beady-eye Bracers',
          'boss': 'Tortos',
          'slot': 'Wrists',
+         'specs':['hunter'],
          'ids': [94775,96053,96425,96797],
          'ilvls': [522,528,535,541]},
         {'name': 'Quakestompers',
          'boss': 'Tortos',
          'slot': 'Feet',
+         'specs':['hunter'],
          'ids': [94772,96054,96426,96798],
          'ilvls': [522,528,535,541]},
         {'name': 'Shattered Tortoiseshell Longbow',
          'boss': 'Zandalari Council',
          'slot': 'Weapon',
+         'specs':['hunter'],
          'ids': [94769,96050,96422,96794],
          'ilvls': [522,528,535,541]},
         {'name': 'Quadra-Head Brooch',
          'boss': 'Megaera',
          'slot': 'Neck',
+         'specs':['hunter'],
          'ids': [94794,96071,96443,96815],
          'ilvls': [522,528,535,541]},
         {'name': 'Grips of Cinderflesh',
          'boss': 'Megaera',
          'slot': 'Hands',
+         'specs':['hunter'],
          'ids': [94790,96073,96445,96817],
          'ilvls': [522,528,535,541]},
         {'name': 'Pinionfeather Greatcloak',
          'boss': 'Ji-kun',
          'slot': 'Back',
+         'specs':['hunter'],
          'ids': [94812,96089,96461,96833],
          'ilvls': [522,528,535,541]},
         {'name': 'Saurok Stalker\'s Legguards',
          'boss': 'Ji-kun',
          'slot': 'Legs',
+         'specs':['hunter'],
          'ids': [95258,96629],
          'ilvls': [522,535]},
         {'name': 'Aberrant Chestguard of Torment',
          'boss': 'Durumu',
          'slot': 'Chest',
+         'specs':['hunter'],
          'ids': [94818,96103,96475,96847],
          'ilvls': [522,528,535,541]},
         {'name': 'Links of the Disintegrator',
          'boss': 'Durumu',
          'slot': 'Waist',
+         'specs':['hunter'],
          'ids': [94819,96102,96474,96846],
          'ilvls': [522,528,535,541]},
         {'name': 'Durumu\'s Baleful Gaze',
          'boss': 'Durumu',
          'slot': 'Weapon',
+         'specs':['hunter'],
          'ids': [94814,96100,96472,96844],
          'ilvls': [522,528,535,541]},
         {'name': 'Bracers of Mutagenic Fervor',
          'boss': 'Primordius',
          'slot': 'Wrists',
+         'specs':['hunter'],
          'ids': [94940,96122,96494,96866],
          'ilvls': [522,528,535,541]},
         {'name': 'Synapse-String Handguards',
          'boss': 'Primordius',
          'slot': 'Hands',
+         'specs':['hunter'],
          'ids': [94943,96123,96495,96867],
          'ilvls': [522,528,535,541]},
         {'name': 'Talisman of Bloodlust',
          'boss': 'Primordius',
          'slot': 'Trinket',
+         'specs':['hunter'],
          'ids': [94522,96120,96492,96864],
          'ilvls': [522,528,535,541]},
         {'name': 'Saurok Stalker\'s Tunic',
          'boss': 'Dark Animus',
          'slot': 'Chest',
+         'specs':['hunter'],
          'ids': [95255,96626],
          'ilvls': [522,535]},
         {'name': 'Gore-Soaked Gear',
          'boss': 'Dark Animus',
          'slot': 'Ring',
+         'specs':['hunter'],
          'ids': [95961,96141,96513,96885],
          'ilvls': [522,528,535,541]},
         {'name': 'Saurok Stalker\'s Spaulders',
          'boss': 'Iron Qon',
          'slot': 'Shoulders',
+         'specs':['hunter'],
          'ids': [95259,96630],
          'ilvls': [522,535]},
         {'name': 'Voice of the Quilen',
          'boss': 'Iron Qon',
          'slot': 'Weapon',
+         'specs':['hunter'],
          'ids': [94963,96153,96525,96897],
          'ilvls': [522,528,535,541]},
         {'name': 'Saurok Stalker\'s Headguard',
          'boss': 'Twin Consorts',
          'slot': 'Head',
+         'specs':['hunter'],
          'ids': [95257,96628],
          'ilvls': [522,535]},
         {'name': 'Conduit-Breaker Chain Leggings',
          'boss': 'Lei Shen',
          'slot': 'Legs',
+         'specs':['hunter'],
          'ids': [94986,96177,96549,96921],
          'ilvls': [522,528,535,541]},
         {'name': 'Rune of Re-Origination',
          'boss': 'Lei Shen',
          'slot': 'Trinket',
+         'specs':['hunter'],
          'ids': [94532,96174,96546,96918],
          'ilvls': [522,528,535,541]},
         {'name': 'Grey Wind Mistcloak',
          'boss': 'Ra-den',
          'slot': 'Back',
+         'specs':['hunter'],
          'ids': [95015],
          'ilvls': [541]},
         {'name': 'Jingling Fetishgirdle',
          'boss': 'Ra-den',
          'slot': 'Waist',
+         'specs':['hunter'],
          'ids': [95000],
          'ilvls': [541]},
         {'name': 'Sparkstring Chain Leggings',
          'boss': 'Ra-den',
          'slot': 'Legs',
+         'specs':['hunter'],
          'ids': [95026],
          'ilvls': [541]},
         {'name': 'Treads of the Sanguine Volley',
          'boss': 'Ra-den',
          'slot': 'Feet',
+         'specs':['hunter'],
          'ids': [95009],
          'ilvls': [541]},
         {'name': 'Ra-den\'s Swift Seal',
          'boss': 'Ra-den',
          'slot': 'Ring',
+         'specs':['hunter'],
          'ids': [95021],
          'ilvls': [541]},
         {'name': 'Tigerfang Greatcloak',
          'boss': 'Legendary',
          'slot': 'Back',
+         'specs':['hunter'],
          'ids': [98148],
          'ilvls': [600]},
+        {'name': 'Jin\'rokh\'s Dreamshard',
+         'boss': 'Jin\'rokh',
+         'slot': 'Ring',
+         'specs':int_dps.union(healer),
+         'ids': [94738,96010,96382,96754],
+         'ilvls': [522,528,535,541]},
+        {'name': 'Drape of Booming Nights',
+         'boss': 'Jin\'rokh',
+         'slot': 'Back',
+         'specs': healer.union(spi_dps),
+         'ids': [94735,96011,96383,96755],
+         'ilvls': [522,528,535,541]},
+        {'name': 'Dinomancer\'s Spiritbinding Spire',
+         'boss': 'Horridon',
+         'slot': 'Weapon',
+         'specs': int_dps.union(healer),
+         'ids': [94749,96029,96401,96773],
+         'ilvls': [522,528,535,541]},
+        {'name': 'Horridon\'s Tusk Fragment',
+         'boss': 'Horridon',
+         'slot': 'Neck',
+         'specs': healer.union(spi_dps),
+         'ids': [94754,96030,96402,96774],
+         'ilvls': [522,528,535,541]},
+        {'name': 'Legguards of Scintillating Scales',
+         'boss': 'Horridon',
+         'slot': 'Legs',
+         'specs': int_mail,
+         'ids': [94975,96035,96407,96779],
+         'ilvls': [522,528,535,541]},
+        {'name': 'Petrified Eye of the Basilisk',
+         'boss': 'Horridon',
+         'slot': 'Ring',
+         'specs': healer.union(spi_dps),
+         'ids': [95514,96031,96403,96775],
+         'ilvls': [522,528,535,541]},
         ]
 
-boss = {} # boss[bossname][slot]=itemname
-slot = {}
-gear = {}
+""" template
+        {'name': '',
+         'boss': '',
+         'slot': '',
+         'specs':,
+         'ids': [],
+         'ilvls': [522,528,535,541]},
+"""
 
-for g in _gear:
-  for i,_id in zip(g['ilvls'],g['ids']):
-    name = '%s (%d)' % (g['name'],i)
-    if boss.has_key(g['boss']):
-      if boss[ g['boss'] ].has_key(g['slot']):
-        boss[ g['boss'] ][ g['slot'] ].append(name)
-      else:
-        boss[ g['boss'] ][ g['slot'] ] = [name]
-    else:
-      boss[ g['boss'] ] = {g['slot']:[name]}
+def getGear(spec):
+  boss = {} # boss[bossname][slot]=itemname
+  slot = {}
+  gear = {}
+
+  for g in _gear:
+    if spec in g['specs']:
+      for i,_id in zip(g['ilvls'],g['ids']):
+        name = '%s (%d)' % (g['name'],i)
+        if boss.has_key(g['boss']):
+          if boss[ g['boss'] ].has_key(g['slot']):
+            boss[ g['boss'] ][ g['slot'] ].append(name)
+          else:
+            boss[ g['boss'] ][ g['slot'] ] = [name]
+        else:
+          boss[ g['boss'] ] = {g['slot']:[name]}
+        
+        if slot.has_key(g['slot']):
+          slot[ g['slot'] ].append(name)
+        else:
+          slot[ g['slot'] ]=[name]
     
-    if slot.has_key(g['slot']):
-      slot[ g['slot'] ].append(name)
-    else:
-      slot[ g['slot'] ]=[name]
+        item = {'boss':g['boss'],'slot':g['slot'],'id':_id}
+        gear[name] = item
+  
+  _sorter = lambda x,y: cmp(int(x.split('(')[-1].replace(')','')), int(x.split('(')[-1].replace(')','')))
+  for k,v in slot.items():
+    v.sort(_sorter)
+    v.reverse()
+    slot[k]=v
 
-    item = {'boss':g['boss'],'slot':g['slot'],'id':_id}
-    gear[name] = item
-
-_sorter = lambda x,y: cmp(int(x.split('(')[-1].replace(')','')), int(x.split('(')[-1].replace(')','')))
-for k,v in slot.items():
-  v.sort(_sorter)
-  v.reverse()
-  slot[k]=v
+  return (boss,slot,gear)

@@ -1,0 +1,22 @@
+<table class="listing vertical"
+       tal:define="bossNeeds view/bossNeeds;
+                   bosses view/bossOrder">
+  <tr>
+    <th colspan="2">BOSS NEEDS</th>
+  </tr>
+  <tal:boss repeat="boss bosses">
+    <tr>
+      <th tal:content="boss" />
+      <td>
+        <ul>
+          <tal:need repeat="need python:bossNeeds.get(boss,[])">
+            <li>
+              <a tal:attributes="href string:http://www.wowhead.com?item=${need/id}"
+                 tal:content="string:${need/name} (${need/slot})" />
+            </li>
+          </tal:need>
+        </ul>
+      </td>   
+    </tr>
+  </tal:boss>
+</table>

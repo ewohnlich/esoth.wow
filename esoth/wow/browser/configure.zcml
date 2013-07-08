@@ -13,8 +13,16 @@
 
     <browser:page
         name="gearpath_view"
-        for="*"
+        for="esoth.wow.content.gearpath.IGearPath"
         class=".gearpath.GearPathView"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        name="boss_table"
+        for="esoth.wow.content.gearpath.IGearPath"
+        class=".gearpath.BossTableView"
+        template="boss_table.pt"
         permission="zope2.View"
         />
 
