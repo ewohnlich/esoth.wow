@@ -137,7 +137,7 @@ class GearPath(Item):
                  'downgrade':self.downgradeItems and v in self.downgradeItems,
                  'equipped':v == getattr(self,k.lower().replace(' ',''))}
           itms.append(itm)
-        _map[k.lower()] = {'count':count+2,'itms':itms}
+        _map[k.lower().replace(' ','')] = {'count':count+2,'itms':itms}
       return _map
 
     def bossNeeds(self):
@@ -150,7 +150,7 @@ class GearPath(Item):
 
       bisItems = self.bisItems or []
       for _k in slot.keys():
-        k = _k.lower()
+        k = _k.lower().replace(' ','')
         if k in ['trinket','ring']:
           eq1 = getattr(self,k+'1')
           eq2 = getattr(self,k+'2')
@@ -168,4 +168,4 @@ class GearPath(Item):
       return bossItems
     
     def bossOrder(self):
-      return ['Jin\'rokh','Horridon','Zandalari Council','Tortos','Megaera','Ji-kun','Durumu','Primordius','Dark Animus','Iron Qon','Twin Consorts','Lei Shen','Ra-den','Legendary']
+      return ['Jin\'rokh','Horridon','Zandalari Council','Tortos','Megaera','Ji-kun','Durumu','Primordius','Dark Animus','Iron Qon','Twin Consorts','Lei Shen','Ra-den','Shared - Throne of Thunder','Legendary']

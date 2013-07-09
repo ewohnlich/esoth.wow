@@ -1,4 +1,5 @@
 <table class="listing vertical"
+       id="bossNeeds"
        tal:define="bossNeeds view/bossNeeds;
                    bosses view/bossOrder">
   <tr>

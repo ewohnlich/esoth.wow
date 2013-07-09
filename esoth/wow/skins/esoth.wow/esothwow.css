@@ -39,7 +39,7 @@ td.Poor { color: #888; }
 .progressionTable th {
   background-color: White;
 }
-  
+
 .killed {
   background-color:#8CBCD1;
 }
@@ -69,36 +69,55 @@ contenttype-rbg-item {
   background-color: transparent;
 }
 
-#gearTable th {
+#gearTable th,
+#bossNeeds th {
   text-align: center;
-} 
+}
 
 a.slotItem {
-  padding-left: 16px;
+  padding-left: 18px;
 }
 
 .equippedItem {
   font-weight: bold;
-}
-
-.equippedItem a.slotItem {
-  background: url("bullet_black.png") no-repeat scroll 0 0 transparent;
-}
-
-.acquiredItem {
-  background-color: #FFF2CC !important;
-}
-
-tr.bisItem, table.listing tbody tr.bisItem td {
   background-color: #D9EAD3 !important;
+}
+
+.bisItem a.slotItem {
+  background: url("bis.png") no-repeat scroll 0 4px transparent;
+}
+
+.acquiredItem,
+#gearTable tr.acquiredItem {
+  background-color: #FFF2CC;
 }
 
 .downgradeItem, .downgradeItem a {
   text-decoration: line-through;
   color: #D6D6D6 !important;
-}  
+}
 
 .gearTable {
   float: left;
   margin-right: 2em !important;
+}
+
+#content #gearTable dd {
+  margin-left: 0px;
+}
+
+#gearTable dd {
+  padding-top: 0px;
+}
+
+#bossNeedContainer {
+  padding-top: 19px;
+}
+
+.gearTabs {
+}
+
+.gearTab {
+  background-color: white;
+  border: 1px solid #dddddd;
 }

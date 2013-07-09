@@ -11,87 +11,115 @@
             tal:define="gearmap context/gearMap;
                         mtool nocall:context/portal_membership;
                         checkPermission nocall:mtool/checkPermission">
-
-  <table class="vertical listing gearTable" id="gearTable">
-    <tal:items define="items gearmap/weapon;
-                       slotName string:Weapon;">
-      <metal:item use-macro="here/gear_macro/macros/item" />
-    </tal:items>
-
-    <tal:items define="items gearmap/head;
-                       slotName string:Head;">
-      <metal:item use-macro="here/gear_macro/macros/item" />
-    </tal:items>
-
-    <tal:items define="items gearmap/neck;
-                       slotName string:Neck;">
-      <metal:item use-macro="here/gear_macro/macros/item" />
-    </tal:items>
-
-    <tal:items define="items gearmap/shoulders;
-                       slotName string:Shoulders;">
-      <metal:item use-macro="here/gear_macro/macros/item" />
-    </tal:items>
-
-    <tal:items define="items gearmap/back;
-                       slotName string:Back;">
-      <metal:item use-macro="here/gear_macro/macros/item" />
-    </tal:items>
-
-    <tal:items define="items gearmap/chest;
-                       slotName string:Chest;">
-      <metal:item use-macro="here/gear_macro/macros/item" />
-    </tal:items>
-
-    <tal:items define="items gearmap/wrists;
-                       slotName string:Wrists;">
-      <metal:item use-macro="here/gear_macro/macros/item" />
-    </tal:items>
-
-    <tal:items define="items gearmap/hands;
-                       slotName string:Hands;">
-      <metal:item use-macro="here/gear_macro/macros/item" />
-    </tal:items>
-
-    <tal:items define="items gearmap/waist;
-                       slotName string:Waist;">
-      <metal:item use-macro="here/gear_macro/macros/item" />
-    </tal:items>
-
-    <tal:items define="items gearmap/legs;
-                       slotName string:Legs;">
-      <metal:item use-macro="here/gear_macro/macros/item" />
-    </tal:items>
-
-    <tal:items define="items gearmap/feet;
-                       slotName string:Feet;">
-      <metal:item use-macro="here/gear_macro/macros/item" />
-    </tal:items>
-
-    <tal:items define="items gearmap/ring1;
-                       slot string:ring1;
-                       slotName string:Ring (1);">
-      <metal:item use-macro="here/gear_macro/macros/item" />
-    </tal:items>
-
-    <tal:items define="items gearmap/ring2;
-                       slot string:ring2;
-                       slotName string:Ring (2);">
-      <metal:item use-macro="here/gear_macro/macros/item" />
-    </tal:items>
-
-    <tal:items define="items gearmap/trinket1;
-                       slot string:trinket1;
-                       slotName string:Trinket (1);">
-      <metal:item use-macro="here/gear_macro/macros/item" />
-    </tal:items>
-
-    <tal:items define="items gearmap/trinket2;
-                       slot string:trinket2;
-                       slotName string:Trinket (2);">
-      <metal:item use-macro="here/gear_macro/macros/item" />
-    </tal:items>
-  </table>
+                        
+  <fieldset><legend>Key</legend>
+    <span style="padding:0.5em; background-color:#D9EAD3; border: 1px dashed black;"><b>Equipped</b></span>
+    <span style="padding:0.5em; background-color:#FFF2CC; border: 1px dashed black;">Acquired</span>
+    <span style="padding:0.5em; border: 1px dashed black;"><img tal:attributes="src string:${portal_url}/bis.png" /> BiS</span>
+    <span style="padding:0.5em; border: 1px dashed black; text-decoration: line-through; color: #D6D6D6">Downgrade</span>
+  </fieldset>
+  
+  <h2 id="top">Gear Plan</h2>
+  <div class="gearTable">
+    <dl class="enableFormTabbing" id="gearTable">  
+      <tal:items define="items gearmap/weapon;
+                         slot string:weapon;
+                         slotName string:Weapon;">
+        <metal:item use-macro="here/gear_macro/macros/item" />
+      </tal:items>
+      
+      <tal:items define="items gearmap/offhand;
+                         slot string:offhand;
+                         slotName string:Off Hand;"
+                 condition="python:context.spec != 'hunter'">
+        <metal:item use-macro="here/gear_macro/macros/item" />
+      </tal:items>
+  
+      <tal:items define="items gearmap/head;
+                         slot string:head;
+                         slotName string:Head;">
+        <metal:item use-macro="here/gear_macro/macros/item" />
+      </tal:items>
+  
+      <tal:items define="items gearmap/neck;
+                         slot string:neck;
+                         slotName string:Neck;">
+        <metal:item use-macro="here/gear_macro/macros/item" />
+      </tal:items>
+  
+      <tal:items define="items gearmap/shoulders;
+                         slot string:shoulders;
+                         slotName string:Shoulders;">
+        <metal:item use-macro="here/gear_macro/macros/item" />
+      </tal:items>
+  
+      <tal:items define="items gearmap/back;
+                         slot string:back;
+                         slotName string:Back;">
+        <metal:item use-macro="here/gear_macro/macros/item" />
+      </tal:items>
+  
+      <tal:items define="items gearmap/chest;
+                         slot string:chest;
+                         slotName string:Chest;">
+        <metal:item use-macro="here/gear_macro/macros/item" />
+      </tal:items>
+  
+      <tal:items define="items gearmap/wrists;
+                         slot string:wrists;
+                         slotName string:Wrists;">
+        <metal:item use-macro="here/gear_macro/macros/item" />
+      </tal:items>
+  
+      <tal:items define="items gearmap/hands;
+                         slot string:hands;
+                         slotName string:Hands;">
+        <metal:item use-macro="here/gear_macro/macros/item" />
+      </tal:items>
+  
+      <tal:items define="items gearmap/waist;
+                         slot string:waist;
+                         slotName string:Waist;">
+        <metal:item use-macro="here/gear_macro/macros/item" />
+      </tal:items>
+  
+      <tal:items define="items gearmap/legs;
+                         slot string:legs;
+                         slotName string:Legs;">
+        <metal:item use-macro="here/gear_macro/macros/item" />
+      </tal:items>
+  
+      <tal:items define="items gearmap/feet;
+                         slot string:feet;
+                         slotName string:Feet;">
+        <metal:item use-macro="here/gear_macro/macros/item" />
+      </tal:items>
+  
+      <tal:items define="items gearmap/ring1;
+                         slot string:ring1;
+                         slotName string:Ring (1);">
+        <metal:item use-macro="here/gear_macro/macros/item" />
+      </tal:items>
+  
+      <tal:items define="items gearmap/ring2;
+                         slot string:ring2;
+                         slotName string:Ring (2);">
+        <metal:item use-macro="here/gear_macro/macros/item" />
+      </tal:items>
+  
+      <tal:items define="items gearmap/trinket1;
+                         slot string:trinket1;
+                         slotName string:Trinket (1);">
+        <metal:item use-macro="here/gear_macro/macros/item" />
+      </tal:items>
+  
+      <tal:items define="items gearmap/trinket2;
+                         slot string:trinket2;
+                         slotName string:Trinket (2);">
+        <metal:item use-macro="here/gear_macro/macros/item" />
+      </tal:items>
+    </dl>
+  </div>
   
   <div id="bossNeedContainer"> </div>
   
@@ -103,13 +131,16 @@
       });
       jq('.equip-link').bind('click',function(event){
         event.preventDefault();
-        val = jq(jq(this).closest('tr').children()[0]).text();
-        jq(this).closest('tr').toggleClass('equippedItem');
+        slot = jq(this).closest('tr').attr('slot');
+        equipped = jq(jq('tr[slot="'+slot+'"].equippedItem').children()[0]).text().trim() // need this for later
+        jq('tr[slot="'+slot+'"]').removeClass('equippedItem');               // make everything unequipped for this slot
+        val = jq(jq(this).closest('tr').children()[0]).text().trim();        // get the name of the item. Mark this acquired for all slots
         jq("#gearTable tr:contains('"+val+"')").addClass('acquiredItem');
+        if (val != equipped) {
+          jq(this).closest('tr').addClass('equippedItem');                   // equip this item if not already. Can't toggle because we turned all off
+        }
         jq.get(this.href,{},function(response){
           jq("#bossNeedContainer").load(window.location+"/@@boss_table",function(responseTxt,statusTxt,xhr){
-             if(statusTxt=="error")
-               alert("Error updating content listing: "+xhr.status+": "+xhr.statusText);
           });
         });
       });
@@ -119,8 +150,6 @@
         jq("#gearTable tr:contains('"+val+"')").toggleClass('acquiredItem');
         jq.get(this.href,{},function(response){
           jq("#bossNeedContainer").load(window.location+"/@@boss_table",function(responseTxt,statusTxt,xhr){
-             if(statusTxt=="error")
-               alert("Error updating content listing: "+xhr.status+": "+xhr.statusText);
           });
         });
       });
@@ -130,8 +159,6 @@
         jq("#gearTable tr:contains('"+val+"')").toggleClass('bisItem');
         jq.get(this.href,{},function(response){
           jq("#bossNeedContainer").load(window.location+"/@@boss_table",function(responseTxt,statusTxt,xhr){
-             if(statusTxt=="error")
-               alert("Error updating content listing: "+xhr.status+": "+xhr.statusText);
           });
         });
       });
@@ -141,14 +168,12 @@
         jq("#gearTable tr:contains('"+val+"')").toggleClass('downgradeItem');
         jq.get(this.href,{},function(response){          
           jq("#bossNeedContainer").load(window.location+"/@@boss_table",function(responseTxt,statusTxt,xhr){
-             if(statusTxt=="error")
-               alert("Error updating content listing: "+xhr.status+": "+xhr.statusText);
           });
         });
       });
     });
   </script>
-        
+  
   <div class="visualClear"><!-- --></div>
 
 </metal:main>
