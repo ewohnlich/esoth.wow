@@ -1,6 +1,7 @@
 from five import grok
 from plone.dexterity.content import Item
 from plone.directives import form
+from plone.autoform.directives import mode
 from zope import schema
 from zope.interface import implements
 from zope.schema.interfaces import IContextSourceBinder
@@ -12,6 +13,9 @@ from esoth.wow.content.gear import getGear
  
 specs = SimpleVocabulary(
     [SimpleTerm(value=u'hunter', title=_(u'Hunter')),
+     SimpleTerm(value=u'holy-priest', title=_(u'Holy/Discipline Priest')),
+     SimpleTerm(value=u'shadow-priest', title=_(u'Shadow Priest')),
+     SimpleTerm(value=u'rogue', title=_(u'Rogue (NYI)')),
      SimpleTerm(value=u'elemental-shaman', title=_(u'Elemental Shaman')),]
     )
 
@@ -19,86 +23,104 @@ class IGearPath(form.Schema):
 
   title = schema.TextLine(title=_(u"Title"))
   
-  spec = schema.Choice(
-            title=_(u"Spec"),
-            vocabulary=specs,
+  spec = schema.List(
+            title=_(u"Specs"),
+            value_type=schema.Choice(
+              vocabulary=specs,
+            )
         )
 
+  mode(weapon='hidden')
   weapon = schema.TextLine(
             title=_(u"Weapon"),
             required=False,
         )
   
+  mode(offhand='hidden')
   offhand = schema.TextLine(
             title=_(u"Off Hand"),
             required=False,
         )
 
+  mode(head='hidden')
   head = schema.TextLine(
             title=_(u"Head"),
             required=False,
         )
 
+  mode(neck='hidden')
   neck = schema.TextLine(
             title=_(u"Neck"),
             required=False,
         )
 
+  mode(shoulders='hidden')
   shoulders = schema.TextLine(
             title=_(u"Shoulders"),
             required=False,
         )
 
+  mode(back='hidden')
   back = schema.TextLine(
             title=_(u"Back"),
             required=False,
         )
 
+  mode(chest='hidden')
   chest = schema.TextLine(
             title=_(u"Chest"),
             required=False,
         )
 
+  mode(wrists='hidden')
   wrists = schema.TextLine(
             title=_(u"Wrists"),
             required=False,
         )
 
+  mode(hands='hidden')
   hands = schema.TextLine(
             title=_(u"Hands"),
             required=False,
         )
 
+  mode(waist='hidden')
   waist = schema.TextLine(
             title=_(u"Waist"),
             required=False,
         )
 
+  mode(legs='hidden')
   legs = schema.TextLine(
             title=_(u"Legs"),
             required=False,
         )
 
+  mode(feet='hidden')
   feet = schema.TextLine(
             title=_(u"Feet"),
             required=False,
         )
 
+  mode(ring1='hidden')
   ring1 = schema.TextLine(
             title=_(u"Ring (1)"),
             required=False,
         )
 
+  mode(ring2='hidden')
   ring2 = schema.TextLine(
             title=_(u"Ring (2)"),
             required=False,
         )
 
+  mode(trinket1='hidden')
   trinket1 = schema.TextLine(
             title=_(u"Trinket (1)"),
             required=False,
         )
 
+  mode(trinket2='hidden')
   trinket2 = schema.TextLine(
             title=_(u"Trinket (2)"),
             required=False,
@@ -142,6 +164,8 @@ class GearPath(Item):
 
     def bossNeeds(self):
       boss,slot,gear = getGear(self.spec)
+      heroicIlvls = set([535,541])
+      normalIlvls = set([522,528])
       # name, slot
       neededSlots = []
       bossItems = {}
@@ -164,7 +188,13 @@ class GearPath(Item):
         bossItems[b] = []
         for s in boss[b].keys(): # check each slot
           if s in neededSlots:
-            bossItems[b] += [{'slot':s,'name':i,'id':gear[i]['id']} for i in boss[b][s] if i not in ignored_items ]
+            def klass(val):
+              try:
+                ilvl = int(i.split('(')[-1].replace(')',''))
+              except ValueError:
+                ilvl = ''
+              return ilvl in heroicIlvls and 'heroicItem' or ilvl in normalIlvls and 'normalItem'
+            bossItems[b] += [{'slot':s,'name':i,'id':gear[i]['id'],'class':klass(i)} for i in boss[b][s] if i not in ignored_items ]
       return bossItems
     
     def bossOrder(self):

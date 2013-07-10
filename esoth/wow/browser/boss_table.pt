@@ -3,7 +3,15 @@
        tal:define="bossNeeds view/bossNeeds;
                    bosses view/bossOrder">
   <tr>
-    <th colspan="2">BOSS NEEDS</th>
+    <th colspan="2">Boss Needs</th>
+  </tr>
+  <tr>
+    <th colspan="2">
+      <label for="normalItems">normal:</label>
+      <input id="normalItems" name="normalItems" type="checkbox" checked="checked" onclick="jq('.normalItem').toggle()"/> |
+      <label for="heroicItems">heroic:</label>
+      <input id="heroicItems" name="heroicItems" type="checkbox" checked="checked" onclick="jq('.heroicItem').toggle()"/>
+    </th>
   </tr>
   <tal:boss repeat="boss bosses">
     <tr>
@@ -11,7 +19,7 @@
       <td>
         <ul>
           <tal:need repeat="need python:bossNeeds.get(boss,[])">
-            <li>
+            <li tal:attributes="class need/class">
               <a tal:attributes="href string:http://www.wowhead.com?item=${need/id}"
                  tal:content="string:${need/name} (${need/slot})" />
             </li>

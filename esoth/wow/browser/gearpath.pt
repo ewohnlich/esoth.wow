@@ -20,6 +20,8 @@
   </fieldset>
   
   <h2 id="top">Gear Plan</h2>
+  <div id="blackout" style="display: none;"></div>
+  
   <div class="gearTable">
     <dl class="enableFormTabbing" id="gearTable">  
       <tal:items define="items gearmap/weapon;
@@ -120,17 +122,15 @@
       </tal:items>
     </dl>
   </div>
-  
-  <div id="bossNeedContainer"> </div>
+
+  <div id="bossNeedContainer"><a tal:attributes="href string:${context/absolute_url}">reload</a> if table does not appear momentarily</div>
   
   <script type="text/javascript">
     jq(document).ready(function() {
-      jq("#bossNeedContainer").load(window.location+"/@@boss_table",function(responseTxt,statusTxt,xhr){
-         if(statusTxt=="error")
-           alert("Error updating content listing: "+xhr.status+": "+xhr.statusText);
-      });
+      jq("#bossNeedContainer").load(window.location+"/@@boss_table",function(responseTxt,statusTxt,xhr){});
       jq('.equip-link').bind('click',function(event){
         event.preventDefault();
+        jq('#blackout').toggle();
         slot = jq(this).closest('tr').attr('slot');
         equipped = jq(jq('tr[slot="'+slot+'"].equippedItem').children()[0]).text().trim() // need this for later
         jq('tr[slot="'+slot+'"]').removeClass('equippedItem');               // make everything unequipped for this slot
@@ -142,33 +142,40 @@
         jq.get(this.href,{},function(response){
           jq("#bossNeedContainer").load(window.location+"/@@boss_table",function(responseTxt,statusTxt,xhr){
           });
+          jq('#blackout').toggle();
         });
       });
       jq('.acquire-link').bind('click',function(event){
         event.preventDefault();
+        jq('#blackout').toggle();
         val = jq(jq(this).closest('tr').children()[0]).text();
         jq("#gearTable tr:contains('"+val+"')").toggleClass('acquiredItem');
         jq.get(this.href,{},function(response){
           jq("#bossNeedContainer").load(window.location+"/@@boss_table",function(responseTxt,statusTxt,xhr){
           });
+          jq('#blackout').toggle();
         });
       });
       jq('.bis-link').bind('click',function(event){
         event.preventDefault();
+        jq('#blackout').toggle();
         val = jq(jq(this).closest('tr').children()[0]).text();
         jq("#gearTable tr:contains('"+val+"')").toggleClass('bisItem');
         jq.get(this.href,{},function(response){
           jq("#bossNeedContainer").load(window.location+"/@@boss_table",function(responseTxt,statusTxt,xhr){
           });
+          jq('#blackout').toggle();
         });
       });
       jq('.downgrade-link').bind('click',function(event){
         event.preventDefault();
+        jq('#blackout').toggle();
         val = jq(jq(this).closest('tr').children()[0]).text();
         jq("#gearTable tr:contains('"+val+"')").toggleClass('downgradeItem');
         jq.get(this.href,{},function(response){          
           jq("#bossNeedContainer").load(window.location+"/@@boss_table",function(responseTxt,statusTxt,xhr){
           });
+          jq('#blackout').toggle();
         });
       });
     });
