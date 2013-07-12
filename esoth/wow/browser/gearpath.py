@@ -2,8 +2,39 @@ from Products.Five.browser import BrowserView
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as _
 from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
+from Products.statusmessages.interfaces import IStatusMessage
+from urllib import urlopen
+import json
 
 from esoth.wow.content.gear import getGear
+
+class GearUpdate(BrowserView):
+  def __call__(self):
+    url = 'http://us.battle.net/api/wow/character/%s/%s?fields=items' % (self.context.server,self.context.title.lower())
+    equipped = set([])
+    try:
+      data = json.load(urlopen(url))
+    except:
+      url = 'http://www.esoth.com/proxyw?u='+url
+      data = json.load(urlopen(url))
+      gear = data['items']
+      for k,v in gear.items():
+        if isinstance(v,dict):
+          name = v['name']
+          ilvl = v['itemLevel']
+          try:
+            iupgrade = v['tooltipParams']['upgrade']['itemLevelIncrement']
+          except KeyError:
+            iupgrade = 0
+          equipped.add('%s (%d)' % (name,ilvl-iupgrade))
+    _acquired = self.context.acquiredItems or set([])
+    self.context.acquiredItems = _acquired.union(equipped)
+    
+    from datetime import datetime
+    self.context.lastupdated = datetime.now()
+    
+    IStatusMessage(self.request).addStatusMessage(_(u"Acquired items updated"),"info")
+    self.request.response.redirect(self.context.absolute_url())
         
 class GearPathView(BrowserView):
   def __call__(self,action='',item='',slot=''):

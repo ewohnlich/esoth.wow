@@ -12,14 +12,23 @@
                         mtool nocall:context/portal_membership;
                         checkPermission nocall:mtool/checkPermission">
                         
-  <fieldset><legend>Key</legend>
+  <fieldset><legend>Legend</legend>
     <span style="padding:0.5em; background-color:#D9EAD3; border: 1px dashed black;"><b>Equipped</b></span>
     <span style="padding:0.5em; background-color:#FFF2CC; border: 1px dashed black;">Acquired</span>
     <span style="padding:0.5em; border: 1px dashed black;"><img tal:attributes="src string:${portal_url}/bis.png" /> BiS</span>
-    <span style="padding:0.5em; border: 1px dashed black; text-decoration: line-through; color: #D6D6D6">Downgrade</span>
+    <span style="padding:0.5em; border: 1px dashed black; text-decoration: line-through; color: #D6D6D6">Downgrade</span><br/>
   </fieldset>
   
-  <h2 id="top">Gear Plan</h2>
+  <div>
+    <form style="display:inline;" tal:attributes="action string:${context/absolute_url}/@@gear">
+      <input type="submit" value="Update from armory"/>
+      <span class="discreet">(last updated: <span tal:content="python:context.lastupdated and context.lastupdated.strftime('%b %d, %Y %I:%M %p') or ''"/>)</span>
+    </form>
+    <a id="gearhelp"
+       tal:condition="python:checkPermission('Modify portal content',context)"
+       tal:attributes="href string:${context/absolute_url}/gear-help">How do I use this?</a>
+  </div><br/>
+  
   <div id="blackout" style="display: none;"></div>
   
   <div class="gearTable">
@@ -127,6 +136,7 @@
   
   <script type="text/javascript">
     jq(document).ready(function() {
+      jq('#gearhelp').prepOverlay({subtype:'ajax'});
       jq("#bossNeedContainer").load(window.location+"/@@boss_table",function(responseTxt,statusTxt,xhr){});
       jq('.equip-link').bind('click',function(event){
         event.preventDefault();

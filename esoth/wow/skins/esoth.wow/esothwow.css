@@ -132,3 +132,18 @@ a.slotItem {
   z-index: 10;
   background: url("spinner.gif") no-repeat fixed center center #eee;
 }
+
+#formfield-form-widgets-acquiredItems,
+#formfield-form-widgets-bisItems,
+#formfield-form-widgets-downgradeItems {
+  display: none;
+}
+
+.gearlisting li{
+  display: list-item;
+  padding-bottom:0.25em;
+}
+
+.gearlisting {
+  margin-bottom: 1em;
+}

@@ -19,12 +19,25 @@ specs = SimpleVocabulary(
      SimpleTerm(value=u'elemental-shaman', title=_(u'Elemental Shaman')),]
     )
 
+from urllib import urlopen
+import json
+try:
+  realms = json.load(urlopen('http://us.battle.net/api/wow/realm/status'))['realms']
+except:
+  realms = json.load(urlopen('http://www.esoth.com/proxyw?u=http://us.battle.net/api/wow/realm/status'))['realms']
+servers = SimpleVocabulary([SimpleTerm(value=r['slug'], title=_('%s (US)' % r['name'])) for r in realms])
+
 class IGearPath(form.Schema):
 
-  title = schema.TextLine(title=_(u"Title"))
+  title = schema.TextLine(title=_(u"Character name"))
+
+  server = schema.Choice(title=_(u"Server"),
+          vocabulary=servers,
+        )
   
   spec = schema.List(
             title=_(u"Specs"),
+            description=_(u"Choose one or more specs. The available choices will be a union of all gear associated with those specs. For instance if you just select Restoration Shaman you will not see agi gear"), 
             value_type=schema.Choice(
               vocabulary=specs,
             )
@@ -125,6 +138,9 @@ class IGearPath(form.Schema):
             title=_(u"Trinket (2)"),
             required=False,
         )
+
+  mode(lastupdated='hidden')
+  lastupdated = schema.Date(title=_(u"Last updated"),required=False)
 
   acquiredItems = schema.Set(title=_(u"Acquired"),
                              value_type=schema.TextLine(),

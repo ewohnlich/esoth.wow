@@ -1,0 +1,38 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="plone">
+<body>
+
+<metal:main fill-slot="content">
+
+  <h1>How Do I Use This?</h1>
+                        
+  <p>
+    This tool is intended to help you keep track of what gear you still need to obtain for your character on a per boss basis. Periodic updates from the WoW Web API (armory)
+    can help automate what gear you have acquired, but it is otherwise up to you to use the action icons to mark gear as "equipped", "best in slot (BIS)",
+    "acquired" or "downgrade"
+  </p>
+  
+  <hr/><br/>
+  <ul class="gearlisting">
+    <li><img tal:attributes="src string:${portal_url}/equipped.png" /> <b>Equipped</b> - This is the gear you are currently using. One per slot.</li>
+    <li><img tal:attributes="src string:${portal_url}/acquired.png" /> <b>Acquired</b> - You have acquired this gear but may not be using it until you
+      get another tier piece or something. You can have multiple per slot.</li>
+    <li><img tal:attributes="src string:${portal_url}/bis.png" /> <b>BiS</b> - These items (can be multiple per slot) are your goal for that slot.</li>
+    <li><img tal:attributes="src string:${portal_url}/downgrade.png" /> <b>Downgrade</b> - This item is worse than what you already have equipped and/or acquired.</li>
+  </ul>
+  <hr/><br/>
+  
+  <p>
+    Go through each slot via the drop down and use these actions. The rightmost table shows you what you still have left to acquire. This is meant to be the
+    primary purpose of the tool - which bosses do I need in for, for the purpose of loot?
+  </p>
+
+</metal:main>
+
+</body>
+</html>

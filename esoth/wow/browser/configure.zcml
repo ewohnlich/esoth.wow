@@ -19,6 +19,20 @@
         />
 
     <browser:page
+        name="gear"
+        for="esoth.wow.content.gearpath.IGearPath"
+        class=".gearpath.GearUpdate"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        name="gear-help"
+        for="esoth.wow.content.gearpath.IGearPath"
+        template="help.pt"
+        permission="zope2.View"
+        />
+
+    <browser:page
         name="boss_table"
         for="esoth.wow.content.gearpath.IGearPath"
         class=".gearpath.BossTableView"
