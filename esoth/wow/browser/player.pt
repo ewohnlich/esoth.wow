@@ -11,22 +11,15 @@
     <metal:content-core define-macro="content-core"
                         tal:define="kssClassesView context/@@kss_field_decorator_view;
                                     getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
-                                    templateId string:@@player-view;
+                                    templateId string:player-view;
                                     toLocalizedTime nocall:context/@@plone/toLocalizedTime;
-                                    server python:here.getServer().lower().replace('\'','');
-                                    charname python:here.Title().lower();
-                                    dummy here/autoUpdateData;">
-      <h1 tal:condition="here/getGuild" tal:content="string:${here/Title} <${here/getGuild}>"/>
-      <h1 tal:condition="not:here/getGuild" tal:content="string:${here/Title}"/>
-                                    
-      <div class="updateData">
-        <form tal:attributes="action string:${here/absolute_url}/update_data_script">
-          <input type="submit" class="context" value="update" />
-          <span class="discreet" tal:content="python:'last cached: ' + toLocalizedTime(here.getCacheDate(),long_format=1)"/>
-        </form>
-      </div>
+                                    server context/server;
+                                    charname context/title">
+      <h1 tal:condition="context/guild" tal:content="string:${context/Title} <${context/guild}>"/>
+      <h1 tal:condition="not:context/guild" tal:content="string:${context/Title}"/>
+      <div metal:use-macro="here/gear_macro/macros/char_header" />
+      
       <div>
-
         <div class="wowcharinfo">
           <table class="vertical listing">
 						<tr>
@@ -36,11 +29,11 @@
 							     tal:attributes="href string:http://us.battle.net/wow/en/character/${server}/${charname}/advanced"/>
 							</td>
 						</tr>
-						<tr tal:condition="here/getGuild">
+						<tr tal:condition="context/guild">
 							<th>Guild</th>
 							<td>
-							  <a tal:content="string:http://us.battle.net/wow/en/guild/${server}/${here/getGuild}/"
-							     tal:attributes="href string:http://us.battle.net/wow/en/guild/${server}/${here/getGuild}/"/>
+							  <a tal:content="string:http://us.battle.net/wow/en/guild/${server}/${context/guild}/"
+							     tal:attributes="href string:http://us.battle.net/wow/en/guild/${server}/${context/guild}/"/>
 						</tr>
 						<tr>
 						  <th>WowWProgress</th>
@@ -60,65 +53,66 @@
 							  <table>
 							    <tr>
 							      <td>Total:</td>
-							      <td tal:content="here/getAverageItemLevel"/>
+							      <td tal:content="context/averageItemLevel"/>
 							    </tr>
 							    <tr>
 							      <td>Equipped:</td>
-							      <td tal:content="here/getAverageItemLevelEquipped"/>
+							      <td tal:content="context/averageItemLevelEquipped"/>
 							    </tr>
 							  </table>
 							</td>
 						</tr>
 						<tr>
 							<th>Server</th>
-							<td tal:content="here/getServer|string:"/>
+							<td tal:content="context/serverTitle" />
 						</tr>
 						<tr>
 							<th>Class</th>
-							<td tal:content="here/getClass|string:"/>
+							<td tal:content="context/klass|string:"/>
 						</tr>
 						<tr>
 							<th>Race</th>
-							<td tal:content="here/getRace|string:"/>
+							<td tal:content="context/race|string:"/>
 						</tr>
 						<tr>
 						  <th>Gender</th>
-						  <td tal:content="here/getGender|string:"/>
+						  <td tal:content="context/gender|string:"/>
 						</tr>
 						<tr>
 						  <th>Level</th>
-						  <td tal:content="here/getLevel|string:"/>
+						  <td tal:content="context/level|string:"/>
 						</tr>
 						<tr>
 						  <th>Titles</th>
-						  <td tal:content="here/getTitles"/>
+						  <td tal:content="context/titles"/>
 						</tr>
 						<tr>
 						  <th>Pets (unique)</th>
 						  <td>
-						    <a tal:attributes="href string:${here/absolute_url}/pets_view">
+						    <a tal:attributes="href string:${context/absolute_url}/@@pets-view">
 						      <img src="beast.png"/>
-						      <span tal:content="here/numcompanions"/> (click for more details)
+						      <span tal:content="context/numcompanions"/> (click for more details)
 						    </a>
 						  </td>
 						</tr>
 						<tr>
 						  <th>Mounts</th>
-						  <td tal:content="here/getMounts"/>
+						  <td tal:content="context/mounts"/>
 						</tr>
           </table>
         </div>
 
         <div class="avatarFrame">
-          <div tal:condition="here/getAvatar">
-          	<img tal:replace="structure python:context.tag(scale='thumb', css_class='mediaImage')" src="" alt="" /><br/>
+          <div tal:condition="context/avatar">
+            <img tal:define="scale context/@@images"
+                 tal:replace="structure python: scale.scale('avatar',scale='thumb').tag()" /><br/>
           </div>
-          <span tal:content="here/getPoints"/> achievement points.
+          <span tal:content="context/points"/> achievement points.
             
-          <div tal:condition="python:len(here.getSpecs())>0">
-            <h3>Main Spec: <span tal:content="python:here.getSpecs()[0]['name']"/></h3>
+          <div tal:condition="python:len(context.specs)>0">
+            <h3>Main Spec: <span tal:content="python:context.specs[0]['name']"/></h3>
             <ul class="visualNoMarker">
-              <tal:talent repeat="talent here/getMainTalents">
+              <tal:talent repeat="talent context/mainTalents">
                 <li>
                   <span tal:content="python:(int(talent['tier'])+1)*15"/>:
                   <img tal:attributes="src string:http://wow.zamimg.com/images/wow/icons/small/${talent/icon}.jpg"/>
@@ -129,10 +123,10 @@
             </ul>
           </div>
             
-          <div tal:condition="python:len(here.getSpecs())>1">
-            <h3>Second Spec: <span tal:content="python:here.getSpecs()[1]['name']"/></h3>
+          <div tal:condition="python:len(context.specs)>1">
+            <h3>Second Spec: <span tal:content="python:context.specs[1]['name']"/></h3>
             <ul class="visualNoMarker">
-              <tal:talent repeat="talent here/getSecondTalents">
+              <tal:talent repeat="talent context/secondTalents">
                 <li>
                   <span tal:content="python:(int(talent['tier'])+1)*15"/>:
                   <img tal:attributes="src string:http://wow.zamimg.com/images/wow/icons/small/${talent/icon}.jpg"/>
@@ -147,46 +141,46 @@
         
        <h2>Stats</h2>
         <table class="listing verticle">
-          <tr tal:condition="python:int(here.getAgility()) > int(here.getIntellect()) and int(here.getAgility()) > int(here.getStrength())">
+          <tr tal:condition="python:int(context.agility) > int(context.intellect) and int(context.agility) > int(context.strength)">
             <th>Agility</th>
-            <td tal:content="here/getAgility|string:;"/>
+            <td tal:content="context/agility|string:;"/>
             <th>Stamina</th>
-            <td tal:content="here/getStamina|string:;"/>
+            <td tal:content="context/stamina|string:;"/>
           </tr>
-          <tr tal:condition="python:int(here.getStrength()) > int(here.getAgility()) and int(here.getStrength()) > int(here.getIntellect())">
+          <tr tal:condition="python:int(context.strength) > int(context.agility) and int(context.strength) > int(context.intellect)">
             <th>Strength</th>
-            <td tal:content="here/getStrength|string:;"/>
+            <td tal:content="context/strength|string:;"/>
             <th>Stamina</th>
-            <td tal:content="here/getStamina|string:;"/>
+            <td tal:content="context/stamina|string:;"/>
           </tr>
-          <tr tal:condition="python:int(here.getIntellect()) > int(here.getAgility()) and int(here.getIntellect()) > int(here.getAgility())">
+          <tr tal:condition="python:int(context.intellect) > int(context.agility) and int(context.intellect) > int(context.agility)">
             <th>Intellect</th>
-            <td tal:content="here/getIntellect|string:;"/>
+            <td tal:content="context/intellect|string:;"/>
             <th>Stamina</th>
-            <td tal:content="here/getStamina|string:;"/>
+            <td tal:content="context/stamina|string:;"/>
           </tr>
           <tr>
             <th>Hit</th>
-            <td tal:content="here/getHit|string:;"/>
+            <td tal:content="context/hit|string:;"/>
             <th>Crit</th>
-            <td tal:content="here/getCrit|string:;"/>
+            <td tal:content="context/crit|string:;"/>
           </tr>
           <tr>
             <th>Haste</th>
-            <td tal:content="here/getHaste|string:;"/>
+            <td tal:content="context/haste|string:;"/>
             <th>Mastery</th>
-            <td tal:content="here/getMastery|string:;"/>
+            <td tal:content="context/mastery|string:;"/>
           </tr>
-          <tr tal:condition="python:int(here.getSpirit())>500">
+          <tr tal:condition="python:int(context.spirit)>500">
             <th>Spirit</th>
-            <td tal:content="here/getSpirit|string:;"/>
+            <td tal:content="context/spirit|string:;"/>
             <th/><td/>
           </tr>
         </table>
         <div class="visualClear"> </div>
         
         <h2>Progression</h2>
-        <tal:tier repeat="tier here/progressionDisplay">
+        <tal:tier repeat="tier context/progressionDisplay">
           <h3 tal:content="tier/tier"/>
           <tal:raid repeat="raid tier/raids">
             <table class="progressionTable">

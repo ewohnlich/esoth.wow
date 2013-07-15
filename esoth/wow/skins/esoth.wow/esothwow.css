@@ -147,3 +147,7 @@ a.slotItem {
 .gearlisting {
   margin-bottom: 1em;
 }
+
+#selectedGearTab {
+  background-color: white;
+}

@@ -11,19 +11,14 @@
     <metal:content-core define-macro="content-core"
                         tal:define="kssClassesView context/@@kss_field_decorator_view;
                                     getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
-                                    templateId template/getId;
+                                    templateId string:@@pets-view;
                                     toLocalizedTime nocall:context/@@plone/toLocalizedTime;
+                                    dummy here/autoUpdateData;
                                     petData here/petData">
       <h1 tal:content="string:${here/Title} Pets"/>
-        
-      <a tal:attributes="href here/absolute_url">Go back to full character page</a>
-                                    
-      <div class="updateData">
-        <form tal:attributes="action string:${here/absolute_url}/update_data_script">
-          <input type="submit" class="context" value="update" />
-          <span class="discreet" tal:content="python:'last cached: ' + toLocalizedTime(here.getCacheDate(),long_format=1)"/>
-        </form>
-      </div>
+
+      <div metal:use-macro="here/gear_macro/macros/char_header" />
+      
       <div>
       
       <table class="vertical listing">

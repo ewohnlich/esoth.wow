@@ -1,3 +1,24 @@
+<metal:header define-macro="char_header">
+  <table class="listing" id="char_header"
+         tal:define="dummy here/autoUpdateData;">
+    <tr>
+      <td tal:attributes="id python:templateId == '@@player-view' and 'selectedGearTab'">
+        <a tal:attributes="href string:${context/absolute_url}/@@player-view">Character</a>
+      </td>
+      <td tal:attributes="id python:templateId == '@@gearpath-view' and 'selectedGearTab'">
+        <a tal:attributes="href string:${context/absolute_url}/@@gearpath-view">Gear Path</a>
+      </td>
+      <td tal:attributes="id python:templateId == '@@pets-view' and 'selectedGearTab'">
+        <a tal:attributes="href string:${context/absolute_url}/@@pets-view">Battle Pets</a>
+      </td>
+      <td>
+        <a tal:attributes="href string:${context/absolute_url}/@@armory">Update from Blizzard</a>
+        <span class="discreet">(last updated: <span tal:content="context/displaylastupdated"/>)</span>
+      </td>
+    </tr>
+  </table>
+</metal:header>
+
 <metal:item define-macro="item"
             tal:define="slot slot|string:;">
   <dt tal:attributes="id string:fieldsetlegend-${slot}"
@@ -22,28 +43,28 @@
           <td tal:content="item/boss"/>
           <tal:edit condition="python:checkPermission('Modify portal content',context)">
             <td>
-              <a tal:attributes="href string:${context/absolute_url}/@@gearpath_view?action=equip&item=${item/name}&slot=${slot};"
+              <a tal:attributes="href string:${context/absolute_url}/@@gearpath-view?action=equip&item=${item/name}&slot=${slot};"
                  class="equip-link"
                  title="Equip - you are wearing this">
                 <img tal:attributes="src string:$portal_url/equipped.png" />
               </a>
             </td>
             <td>
-              <a tal:attributes="href string:${context/absolute_url}/@@gearpath_view?action=acquire&item=${item/name}&slot=${slot}"
+              <a tal:attributes="href string:${context/absolute_url}/@@gearpath-view?action=acquire&item=${item/name}&slot=${slot}"
                  class="acquire-link"
                  title="Acquire - acquired but not equipped">
                 <img tal:attributes="src string:$portal_url/acquired.png" />
               </a>
             </td>
             <td>
-              <a tal:attributes="href string:${context/absolute_url}/@@gearpath_view?action=bis&item=${item/name}&slot=${slot}"
+              <a tal:attributes="href string:${context/absolute_url}/@@gearpath-view?action=bis&item=${item/name}&slot=${slot}"
                  class="bis-link"
                  title="BIS">
                 <img tal:attributes="src string:$portal_url/bis.png" />
               </a>
             </td>
             <td>
-              <a tal:attributes="href string:${context/absolute_url}/@@gearpath_view?action=downgrade&item=${item/name}&slot=${slot}"
+              <a tal:attributes="href string:${context/absolute_url}/@@gearpath-view?action=downgrade&item=${item/name}&slot=${slot}"
                  class="downgrade-link"
                  title="Downgrade - downgrade from what is equipped">
                 <img tal:attributes="src string:$portal_url/downgrade.png" />

@@ -10,120 +10,119 @@
 <metal:main fill-slot="content-core"
             tal:define="gearmap context/gearMap;
                         mtool nocall:context/portal_membership;
+                        templateId string:@@gearpath-view;
                         checkPermission nocall:mtool/checkPermission">
-                        
+
+  <div metal:use-macro="here/gear_macro/macros/char_header" />
+
   <fieldset><legend>Legend</legend>
     <span style="padding:0.5em; background-color:#D9EAD3; border: 1px dashed black;"><b>Equipped</b></span>
     <span style="padding:0.5em; background-color:#FFF2CC; border: 1px dashed black;">Acquired</span>
     <span style="padding:0.5em; border: 1px dashed black;"><img tal:attributes="src string:${portal_url}/bis.png" /> BiS</span>
     <span style="padding:0.5em; border: 1px dashed black; text-decoration: line-through; color: #D6D6D6">Downgrade</span><br/>
   </fieldset>
-  
+
   <div>
-    <form style="display:inline;" tal:attributes="action string:${context/absolute_url}/@@gear">
-      <input type="submit" value="Update from armory"/>
-      <span class="discreet">(last updated: <span tal:content="python:context.lastupdated and context.lastupdated.strftime('%b %d, %Y %I:%M %p') or ''"/>)</span>
-    </form>
     <a id="gearhelp"
        tal:condition="python:checkPermission('Modify portal content',context)"
        tal:attributes="href string:${context/absolute_url}/gear-help">How do I use this?</a>
   </div><br/>
-  
+
   <div id="blackout" style="display: none;"></div>
-  
+
   <div class="gearTable">
-    <dl class="enableFormTabbing" id="gearTable">  
+    <dl class="enableFormTabbing" id="gearTable">
       <tal:items define="items gearmap/weapon;
                          slot string:weapon;
                          slotName string:Weapon;">
         <metal:item use-macro="here/gear_macro/macros/item" />
       </tal:items>
-      
+
       <tal:items define="items gearmap/offhand;
                          slot string:offhand;
                          slotName string:Off Hand;"
                  condition="python:context.spec != 'hunter'">
         <metal:item use-macro="here/gear_macro/macros/item" />
       </tal:items>
-  
+
       <tal:items define="items gearmap/head;
                          slot string:head;
                          slotName string:Head;">
         <metal:item use-macro="here/gear_macro/macros/item" />
       </tal:items>
-  
+
       <tal:items define="items gearmap/neck;
                          slot string:neck;
                          slotName string:Neck;">
         <metal:item use-macro="here/gear_macro/macros/item" />
       </tal:items>
-  
+
       <tal:items define="items gearmap/shoulders;
                          slot string:shoulders;
                          slotName string:Shoulders;">
         <metal:item use-macro="here/gear_macro/macros/item" />
       </tal:items>
-  
+
       <tal:items define="items gearmap/back;
                          slot string:back;
                          slotName string:Back;">
         <metal:item use-macro="here/gear_macro/macros/item" />
       </tal:items>
-  
+
       <tal:items define="items gearmap/chest;
                          slot string:chest;
                          slotName string:Chest;">
         <metal:item use-macro="here/gear_macro/macros/item" />
       </tal:items>
-  
+
       <tal:items define="items gearmap/wrists;
                          slot string:wrists;
                          slotName string:Wrists;">
         <metal:item use-macro="here/gear_macro/macros/item" />
       </tal:items>
-  
+
       <tal:items define="items gearmap/hands;
                          slot string:hands;
                          slotName string:Hands;">
         <metal:item use-macro="here/gear_macro/macros/item" />
       </tal:items>
-  
+
       <tal:items define="items gearmap/waist;
                          slot string:waist;
                          slotName string:Waist;">
         <metal:item use-macro="here/gear_macro/macros/item" />
       </tal:items>
-  
+
       <tal:items define="items gearmap/legs;
                          slot string:legs;
                          slotName string:Legs;">
         <metal:item use-macro="here/gear_macro/macros/item" />
       </tal:items>
-  
+
       <tal:items define="items gearmap/feet;
                          slot string:feet;
                          slotName string:Feet;">
         <metal:item use-macro="here/gear_macro/macros/item" />
       </tal:items>
-  
+
       <tal:items define="items gearmap/ring1;
                          slot string:ring1;
                          slotName string:Ring (1);">
         <metal:item use-macro="here/gear_macro/macros/item" />
       </tal:items>
-  
+
       <tal:items define="items gearmap/ring2;
                          slot string:ring2;
                          slotName string:Ring (2);">
         <metal:item use-macro="here/gear_macro/macros/item" />
       </tal:items>
-  
+
       <tal:items define="items gearmap/trinket1;
                          slot string:trinket1;
                          slotName string:Trinket (1);">
         <metal:item use-macro="here/gear_macro/macros/item" />
       </tal:items>
-  
+
       <tal:items define="items gearmap/trinket2;
                          slot string:trinket2;
                          slotName string:Trinket (2);">
@@ -132,12 +131,14 @@
     </dl>
   </div>
 
-  <div id="bossNeedContainer"><a tal:attributes="href string:${context/absolute_url}">reload</a> if table does not appear momentarily</div>
-  
+  <div id="bossNeedContainer"><a tal:attributes="href string:${context/absolute_url}/@@gearpath-view">reload</a> if table does not appear momentarily</div>
+
+  <input type="hidden" name="boss_table" id="boss_table"
+         tal:attributes="value string:${context/absolute_url}/@@boss_table" />
   <script type="text/javascript">
     jq(document).ready(function() {
       jq('#gearhelp').prepOverlay({subtype:'ajax'});
-      jq("#bossNeedContainer").load(window.location+"/@@boss_table",function(responseTxt,statusTxt,xhr){});
+      jq("#bossNeedContainer").load(jq('#boss_table').val(),function(responseTxt,statusTxt,xhr){});
       jq('.equip-link').bind('click',function(event){
         event.preventDefault();
         jq('#blackout').toggle();
@@ -182,7 +183,7 @@
         jq('#blackout').toggle();
         val = jq(jq(this).closest('tr').children()[0]).text();
         jq("#gearTable tr:contains('"+val+"')").toggleClass('downgradeItem');
-        jq.get(this.href,{},function(response){          
+        jq.get(this.href,{},function(response){
           jq("#bossNeedContainer").load(window.location+"/@@boss_table",function(responseTxt,statusTxt,xhr){
           });
           jq('#blackout').toggle();
@@ -190,7 +191,7 @@
       });
     });
   </script>
-  
+
   <div class="visualClear"><!-- --></div>
 
 </metal:main>

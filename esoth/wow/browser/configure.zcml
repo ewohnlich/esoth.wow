@@ -12,14 +12,28 @@
         />
 
     <browser:page
-        name="gearpath_view"
+        name="player-view"
+        for="esoth.wow.content.gearpath.IGearPath"
+        template="player.pt"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        name="pets-view"
+        for="esoth.wow.content.gearpath.IGearPath"
+        template="pets.pt"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        name="gearpath-view"
         for="esoth.wow.content.gearpath.IGearPath"
         class=".gearpath.GearPathView"
         permission="zope2.View"
         />
 
     <browser:page
-        name="gear"
+        name="armory"
         for="esoth.wow.content.gearpath.IGearPath"
         class=".gearpath.GearUpdate"
         permission="zope2.View"
