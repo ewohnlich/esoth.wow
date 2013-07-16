@@ -110,8 +110,9 @@
   
           <div class="avatarFrame">
             <div tal:condition="context/avatar">
-              <img tal:define="scale context/@@images"
-                   tal:replace="structure python: scale.scale('avatar',scale='thumb').tag()" /><br/>
+              <img tal:define="scale context/@@images;
+                               img python:scale.scale('avatar',scale='thumb')"
+                   tal:replace="structure python:img and img.tag()" /><br/>
             </div>
             <span tal:content="context/points"/> achievement points.
               

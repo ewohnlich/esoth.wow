@@ -19,11 +19,30 @@ from esoth.wow.pets import breedmap
 
  
 specs = SimpleVocabulary(
-    [SimpleTerm(value=u'hunter', title=_(u'Hunter')),
-     SimpleTerm(value=u'holy-priest', title=_(u'Holy/Discipline Priest')),
-     SimpleTerm(value=u'shadow-priest', title=_(u'Shadow Priest')),
-     SimpleTerm(value=u'rogue', title=_(u'Rogue (NYI)')),
-     SimpleTerm(value=u'elemental-shaman', title=_(u'Elemental Shaman')),]
+    [SimpleTerm(value=u'blood-dk', title=_(u'Death Knight (Blood)')),
+     SimpleTerm(value=u'frost-dk', title=_(u'Death Knight (Frost/Unholy)')),
+     SimpleTerm(value=u'guardian-druid', title=_(u'Druid (Guardian)')),
+     SimpleTerm(value=u'feral-druid', title=_(u'Druid (Feral)')),
+     SimpleTerm(value=u'balance-druid', title=_(u'Druid (Balance)')),
+     SimpleTerm(value=u'restoration-druid', title=_(u'Druid (Restoration)')),
+     SimpleTerm(value=u'hunter', title=_(u'Hunter')),
+     SimpleTerm(value=u'mage', title=_(u'Mage')),
+     SimpleTerm(value=u'mistweaver-monk', title=_(u'Monk (Mistweaver)')),
+     SimpleTerm(value=u'brewmaster-monk', title=_(u'Monk (Brewmaster)')),
+     SimpleTerm(value=u'windwalker-monk', title=_(u'Monk (Windwalker)')),
+     SimpleTerm(value=u'holy-paladin', title=_(u'Paladin (Holy)')),
+     SimpleTerm(value=u'protection-paladin', title=_(u'Paladin (Protection)')),
+     SimpleTerm(value=u'retribution-paladin', title=_(u'Paladin (Retribution)')),
+     SimpleTerm(value=u'holy-priest', title=_(u'Priest (Holy/Discipline)')),
+     SimpleTerm(value=u'shadow-priest', title=_(u'Priest (Shadow)')),
+     SimpleTerm(value=u'rogue', title=_(u'Rogue')),
+     SimpleTerm(value=u'elemental-shaman', title=_(u'Shaman (Elemental)')),
+     SimpleTerm(value=u'enhancement-shaman', title=_(u'Shaman (Enhancement)')),
+     SimpleTerm(value=u'restoration-shaman', title=_(u'Shaman (Restoration)')),
+     SimpleTerm(value=u'warlock', title=_(u'Warlock')),
+     SimpleTerm(value=u'arms-warrior', title=_(u'Warrior (Arms)')),
+     SimpleTerm(value=u'fury-warrior', title=_(u'Warrior (Fury)')),
+     SimpleTerm(value=u'protection-warrior', title=_(u'Warrior (Protection)')),]
     )
 
 from urllib import urlopen

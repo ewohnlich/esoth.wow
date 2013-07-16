@@ -3,15 +3,18 @@ spi_dps = set(['elemental-shaman','shadow-priest','balance-druid'])
 healer = set(['restoration-shaman','holy-paladin','mistweaver-monk','holy-priest','discipline-priest'])
 agi_dps = set(['hunter','guardian-druid','feral-druid','rogue','brewmaster-monk','windwalker-monk','enhancement-shaman'])
 mail_agi = set(['hunter','enhancement-shaman'])
-leather_agi = set(['rogue','brewmaster-monk','windwalker-monk','guardian-druid','feral-druid'])
+agi_leather = set(['rogue','brewmaster-monk','windwalker-monk','guardian-druid','feral-druid'])
 str_dps = set(['retribution-paladin','frost-dk','unholy-dk','fury-warrior','arms-warrior'])
 str_tank = set(['protection-warrior','blood-dk','protection-paladin'])
 tank = set(['protection-warrior','blood-dk','protection-paladin','brewmaster-monk','guardian-druid'])
-int_leather = set(['balance-druid','restoration-druid'])
+int_leather = set(['balance-druid','restoration-druid','mistweaver-monk'])
 int_mail = set(['elemental-shaman','restoration-shaman'])
 cloth = set(['mage','warlock','holy-priest','discipline-priest','shadow-priest'])
 cloth_dps = set(['mage','warlock','shadow-priest'])
 spi_cloth = set(['holy-priest','discipline-priest','shadow-priest'])
+str_1h = set(['fury-warrior','unholy-dk','frost-dk','protection-warrior','protection-paladin'])
+agi_1h = set(['rogue','windwalker-monk','brewmaster-monk','enhancement-shaman'])
+agi_2h = set(['guardian-druid','feral-druid','brewmaster-monk','windwalker-monk'])
 
 
 _gear = [{'name': 'Static-Shot Shoulderguards',
@@ -950,6 +953,60 @@ _gear = [{'name': 'Static-Shot Shoulderguards',
          'specs': cloth_dps,
          'ids': [94996],
          'ilvls': [541]},
+        {'name': 'Bracers of Constant Implosion',
+         'boss': 'Jin\'rokh',
+         'slot': 'Wrists',
+         'specs': str_dps.union(tank),
+         'ids': [94727,96003,96375,96747],
+         'ilvls': [522,528,535,541]},
+        {'name': 'Chestplate of Violent Detonation',
+         'boss': 'Jin\'rokh',
+         'slot': 'Chest',
+         'specs': str_dps.union(tank),
+         'ids': [94723,96002,96374,96746],
+         'ilvls': [522,528,535,541]},
+        {'name': 'Cloudbreaker Greatbelt',
+         'boss': 'Jin\'rokh',
+         'slot': 'Waist',
+         'specs': str_dps.union(tank),
+         'ids': [94726,96001,96373,96745],
+         'ilvls': [522,528,535,541]},
+        {'name': 'Infinitely Conducting Bracers',
+         'boss': 'Jin\'rokh',
+         'slot': 'Wrists',
+         'specs': int_leather,
+         'ids': [94732,96014,96386,96758],
+         'ilvls': [522,528,535,541]},
+        {'name': 'Ionized Yojamban Carapace',
+         'boss': 'Jin\'rokh',
+         'slot': 'Chest',
+         'specs': ['holy-paladin'],
+         'ids': [94734,96016,96388,96760],
+         'ilvls': [522,528,535,541]},
+        {'name': 'Jin\'rokh\'s Soulcrystal',
+         'boss': 'Jin\'rokh',
+         'slot': 'Ring',
+         'specs': str_tank,
+         'ids': [94729,96005,96377,96749],
+         'ilvls': [522,528,535,541]},
+        {'name': 'Lightning-Eye Hood',
+         'boss': 'Jin\'rokh',
+         'slot': 'Head',
+         'specs': agi_leather,
+         'ids': [94724,95998,96370,96742],
+         'ilvls': [522,528,535,541]},
+        {'name': 'Soulblade of the Breaking Storm',
+         'boss': 'Jin\'rokh',
+         'slot': 'Weapon',
+         'specs': spi_cloth.union(set(['holy-paladin','mistweaver-monk'])),
+         'ids': [94730,96012,96384,96756],
+         'ilvls': [522,528,535,541]},
+        {'name': 'Worldbreaker\'s Stormscythe',
+         'boss': 'Jin\'rokh',
+         'slot': 'Weapon',
+         'specs': str_1h,
+         'ids': [94722,0,96367,96748],
+         'ilvls': [522,528,535,541]},
         ]
 
 """ template
