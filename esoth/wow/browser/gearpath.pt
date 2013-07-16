@@ -152,7 +152,7 @@
             jq(this).closest('tr').addClass('equippedItem');                   // equip this item if not already. Can't toggle because we turned all off
           }
           jq.get(this.href,{},function(response){
-            jq("#bossNeedContainer").load(window.location+"/@@boss_table",function(responseTxt,statusTxt,xhr){
+            jq("#bossNeedContainer").load(jq('#boss_table').val(),function(responseTxt,statusTxt,xhr){
             });
             jq('#blackout').toggle();
           });
@@ -163,7 +163,7 @@
           val = jq(jq(this).closest('tr').children()[0]).text();
           jq("#gearTable tr:contains('"+val+"')").toggleClass('acquiredItem');
           jq.get(this.href,{},function(response){
-            jq("#bossNeedContainer").load(window.location+"/@@boss_table",function(responseTxt,statusTxt,xhr){
+            jq("#bossNeedContainer").load(jq('#boss_table').val(),function(responseTxt,statusTxt,xhr){
             });
             jq('#blackout').toggle();
           });
@@ -174,7 +174,7 @@
           val = jq(jq(this).closest('tr').children()[0]).text();
           jq("#gearTable tr:contains('"+val+"')").toggleClass('bisItem');
           jq.get(this.href,{},function(response){
-            jq("#bossNeedContainer").load(window.location+"/@@boss_table",function(responseTxt,statusTxt,xhr){
+            jq("#bossNeedContainer").load(jq('#boss_table').val(),function(responseTxt,statusTxt,xhr){
             });
             jq('#blackout').toggle();
           });
@@ -185,7 +185,7 @@
           val = jq(jq(this).closest('tr').children()[0]).text();
           jq("#gearTable tr:contains('"+val+"')").toggleClass('downgradeItem');
           jq.get(this.href,{},function(response){
-            jq("#bossNeedContainer").load(window.location+"/@@boss_table",function(responseTxt,statusTxt,xhr){
+            jq("#bossNeedContainer").load(jq('#boss_table').val(),function(responseTxt,statusTxt,xhr){
             });
             jq('#blackout').toggle();
           });
