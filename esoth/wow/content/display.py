@@ -10,14 +10,6 @@ from esoth.wow.interfaces import IWoWDisplay
 from zope.interface import implements
 
 WoWDisplaySchema = ATContentTypeSchema.copy() + Schema((
-    BooleanField('infolder',
-        widget = BooleanWidget(
-            label= u'Folder only'),
-    ),
-    BooleanField('alts',
-        widget = BooleanWidget(
-            label= u'Allow Alts'),
-    ),
     LinesField('group',
         widget = LinesWidget(
             label= u'Group'),
@@ -40,14 +32,10 @@ class WoWDisplay(ATCTContent):
     
     def players(self):
       cat = getToolByName(self, 'portal_catalog')
-      infolder = self.getInfolder()
       group = self.getGroup()
       guild = self.getGuild()
       server = self.getServer()
-      alts = self.getAlts()
-      sfilter = {'portal_type':'WoWChar','sort_on':'sortable_title'}
-      if infolder:
-        sfilter['path'] = {'query':'/'.join(self.getPhysicalPath()),'depth':1}
+      sfilter = {'object_provides':'esoth.wow.content.gearpath.IGearPath','sort_on':'sortable_title'}
       if group:
         sfilter['groups'] = group
       if guild:
@@ -55,8 +43,6 @@ class WoWDisplay(ATCTContent):
       if server:
         sfilter['server'] = server
       results = cat(sfilter)
-      if not alts:
-        results = [r for r in results if not r.alt]
       return results
     
     security.declarePublic('updateDisplay')

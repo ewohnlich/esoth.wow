@@ -135,7 +135,7 @@ a.slotItem {
 
 #formfield-form-widgets-acquiredItems,
 #formfield-form-widgets-bisItems,
-#formfield-form-widgets-downgradeItems {
+#formfield-form-widgets-downgradeItems, {
   display: none;
 }
 
@@ -148,6 +148,75 @@ a.slotItem {
   margin-bottom: 1em;
 }
 
-#selectedGearTab {
+#char_header #selectedGearTab {
   background-color: white;
+}
+
+#char_header td {
+  background-color: #eee;
+  border: 1px solid #ddd;
+  padding: 0.5em 1em;
+  vertical-align: top;
+}
+
+#char_header #border-left,
+#char_header #border-right {
+    background-image: url(dot.png);
+    background-color: white;
+    background-repeat: repeat-x;
+    background-position: 0% 50%;
+    border-style: none;
+}
+
+#char_header #border-left {
+  width: 30px;
+}
+
+#char_header #border-right {
+  width: 250px;
+}
+
+#char_header td:hover.link {
+  background-color: #205C90;
+  cursor: pointer;
+}
+
+#char_header td:hover .discreet {
+  color: #ccc;
+}
+
+#char_header td:hover a{
+ color: #fff !important;
+}
+
+#char_header td a:hover{
+ color: #fff !important;
+}
+
+#char_header #selectedGearTab:hover {
+  background-color: #205C90;
+}
+
+#find-player-header {
+  text-align: center;
+}
+
+#find-player {
+  width: 500px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+#find-player-text {
+  width: 900px;
+  margin: 0 auto;
+}
+
+#player_listing ul {
+  list-style-type: none;
+}
+
+#player_listing li {
+  margin-bottom: 0.50em;
+  list-style-type: none;
 }

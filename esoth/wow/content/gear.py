@@ -967,6 +967,7 @@ def getGear(specs):
   gear = {}
 
   for g in _gear:
+   if specs:
     for spec in specs:
       if spec in g['specs']:
         for i,_id in zip(g['ilvls'],g['ids']):

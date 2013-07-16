@@ -6,8 +6,13 @@
  <index name="server" meta_type="FieldIndex">
   <indexed_attr value="server"/>
  </index>
+ <index name="groups" meta_type="KeywordIndex">
+  <indexed_attr value="groups"/>
+ </index>
  <column value="guild"/>
  <column value="hasAvatar"/>
  <column value="server"/>
  <column value="class"/>
+ <column value="averageItemLevel"/>
+ <column value="averageItemLevelEquipped"/>
 </object>

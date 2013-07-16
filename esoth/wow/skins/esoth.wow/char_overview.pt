@@ -59,16 +59,16 @@
                 </td>
                 <td>
                   <tal:avatar condition="char/hasAvatar">
-                    <img tal:attributes="src string:${char/getURL}/avatar_icon"/>
+                    <img tal:attributes="src string:${char/getURL}/@@images/avatar/icon"/>
                   </tal:avatar>
                 </td>
-                <td tal:content="char/server"/>
+                <td tal:content="char/serverTitle"/>
                 <td>
                   <tal:guild condition="char/guild">
                     &lt;<span tal:omit-tag="" tal:content="char/guild"/>&gt;
                   </tal:guild>
                 </td>
-                <td tal:content="char/class"/>
+                <td tal:content="char/klass"/>
                 <td tal:content="char/points"/>
                 <td tal:content="char/mounts"/>
                 <td tal:content="char/numcompanions"/>

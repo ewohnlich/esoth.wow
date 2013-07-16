@@ -14,21 +14,35 @@
           <dd tal:content="request/errors"/>
         </dl>
         
-        <div style="text-align:center">Find a player</div><br/>
+        <h1 id="find-player-header">Find a Player</h1>
+        
+        <p id="find-player-text">
+          Anyone can use this form to find a character. If that character is not already on this site, it will be created - however, you will not
+          have the ability to edit it! If you want to create a character that you can edit (so that you can use the gear path tool), you will
+          need to first <a tal:attributes="href string:${portal_url}/@@register">register an account</a>. You will then be able to
+          <a tal:attributes="href string:${context/absolute_url}/++add++GearPath">add your
+          character</a>
+        </p>
 
-        <form actions="find-player" style="width:50%; margin-left:25%;">
-          <label for="server">Server:</label>
-          <select name="server">
-            <tal:server repeat="server view/servers">
-              <option tal:attributes="selected python:request.get('server')==server and 'selected'"       tal:content="server"/>
-            </tal:server>
-          </select>&nbsp;&nbsp;
-
-          <label for="character">Character:</label>
-          <input type="text" name="character" tal:attributes="value request/character|string:"/>
-
-          <input type="submit" class="context" value="Get it!" name="form.actions.go"/>
-        </form>
+        <div id="find-player">
+          <form tal:attributes="action string:${context/absolute_url}/find-player">
+            <label for="server">Server:</label>
+            <select name="server">
+              <tal:server repeat="server view/servers">
+                <option tal:attributes="selected python:request.get('server')==server['id'] and 'selected';
+                                        value server/id"
+                        tal:content="server/title"/>
+              </tal:server>
+            </select>&nbsp;&nbsp;
+  
+            <label for="character">Character:</label>
+            <input type="text" name="character" tal:attributes="value request/character|string:"/>
+  
+            <input type="submit" class="context" value="Get it!" name="form.actions.go"/><br/><br/>
+            or <a tal:attributes="href string:${context/absolute_url}/player_listing">View all characters</a>
+          </form>
+        </div>
+        
 
 </metal:main>
 

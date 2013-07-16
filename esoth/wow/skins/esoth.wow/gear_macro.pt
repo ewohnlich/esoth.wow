@@ -1,22 +1,38 @@
 <metal:header define-macro="char_header">
-  <table class="listing" id="char_header"
+  <table id="char_header"
          tal:define="dummy here/autoUpdateData;">
     <tr>
-      <td tal:attributes="id python:templateId == '@@player-view' and 'selectedGearTab'">
+      <td id="border-left" href="#"/>
+      <td class="link"
+          tal:attributes="id python:templateId == '@@player-view' and 'selectedGearTab';
+                          href string:${context/absolute_url}/@@player-view">
         <a tal:attributes="href string:${context/absolute_url}/@@player-view">Character</a>
       </td>
-      <td tal:attributes="id python:templateId == '@@gearpath-view' and 'selectedGearTab'">
+      <td class="link"
+          tal:attributes="id python:templateId == '@@gearpath-view' and 'selectedGearTab';
+                          href string:${context/absolute_url}/@@gearpath-view">
         <a tal:attributes="href string:${context/absolute_url}/@@gearpath-view">Gear Path</a>
       </td>
-      <td tal:attributes="id python:templateId == '@@pets-view' and 'selectedGearTab'">
+      <td class="link"
+          tal:attributes="id python:templateId == '@@pets-view' and 'selectedGearTab';
+                          href string:${context/absolute_url}/@@pets-view">
         <a tal:attributes="href string:${context/absolute_url}/@@pets-view">Battle Pets</a>
       </td>
-      <td>
+      <td class="link"
+          tal:attributes="href string:${context/absolute_url}/@@armory">
         <a tal:attributes="href string:${context/absolute_url}/@@armory">Update from Blizzard</a>
         <span class="discreet">(last updated: <span tal:content="context/displaylastupdated"/>)</span>
       </td>
+      <td id="border-right" href="#"/>
     </tr>
   </table>
+  <script type="text/javascript">
+    jq(document).ready(function() {
+      jq('#char_header td.link').click(function() {
+        top.location = jq(this).attr('href');
+      });
+    });
+  </script>
 </metal:header>
 
 <metal:item define-macro="item"

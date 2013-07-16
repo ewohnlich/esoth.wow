@@ -67,8 +67,7 @@ class IProgressionSchema(Interface):
   nkills = schema.TextLine(title=_(u"Normal Kills"))
   hkills = schema.TextLine(title=_(u"Heroic Kills"))
 
-class IGearPath(form.Schema):    
-  form.fieldset(u"pets", label="Pet Info", fields=['pets'], layout='concise')
+class IGearPath(form.Schema):
 
   title = schema.TextLine(title=_(u"Character name"))
 
@@ -195,7 +194,7 @@ class IGearPath(form.Schema):
                               
   ### begin old wowchar fields
   groups = schema.List(title=_(u"Groups"),
-                       description=_(u"This is used to group a bunch of people together, such as <Something Wicked>'s roster"),
+                       description=_(u"This is used to group a bunch of people together, such as &lt;Something Wicked&gt;'s roster"),
                        value_type=schema.TextLine(required=False),
                        required=False,
            )
@@ -215,33 +214,28 @@ class IGearPath(form.Schema):
   mode(mounts='hidden')
   mounts = schema.TextLine(required=False)
   
-  mode(progression='hidden')
   progression = schema.List(title=u"Progression",
                             value_type=DictRow(title=u"progrow", schema=IProgressionSchema),
                             required=False
                 )
   
-  mode(pets='hidden')
   pets = schema.List(title=u"Pets",
                      value_type=DictRow(title=u"petrow", schema=IPetSchema),
                      required=False
          )
   
-  mode(specs='hidden')
   specs = schema.List(title=u"Specs",
                      value_type=DictRow(title=u"specrow", schema=ISpecSchema),
                      required=False
          )
          
   
-  mode(mainTalents='hidden')
   mainTalents = schema.List(title=u"Main Talents",
                      value_type=DictRow(title=u"maintalentrow", schema=ITalentSchema),
                      required=False
          )
          
   
-  mode(secondTalents='hidden')
   secondTalents = schema.List(title=u"Secondary Talents",
                      value_type=DictRow(title=u"secondtalentrow", schema=ITalentSchema),
                      required=False
@@ -259,7 +253,6 @@ class IGearPath(form.Schema):
   mode(guild='hidden')
   guild = schema.TextLine(required=False)
   
-  mode(avatar='hidden')
   avatar = NamedImage(title=u"Avatar",required=False)
   
   mode(points='hidden')
@@ -302,6 +295,8 @@ class GearPath(Item):
     security = ClassSecurityInfo()
     
     def gearMap(self):
+      if not self.spec:
+        return {}
       boss,slot,gear = getGear(self.spec)
       _map = {}
 
@@ -370,7 +365,10 @@ class GearPath(Item):
       except:
         url = 'http://www.esoth.com/proxyw?u='+url
         data = json.load(urlopen(url))
-      gear = data['items']
+      try:
+        gear = data['items']
+      except KeyError:
+        return 'bad'
       
       for k,v in gear.items():
         if isinstance(v,dict):
@@ -549,7 +547,13 @@ class GearPath(Item):
       return data
       
     def serverTitle(self):
-      return servers.getTerm(self.server).title
+      if self.server: # won't exist yet on creation
+        return servers.getTerm(self.server).title
+      
+    security.declarePublic('hasAvatar')
+    def hasAvatar(self):
+      """ check this before making an image tag """
+      return bool(self.avatar)
 
     security.declarePublic('numcompanions')
     def numcompanions(self):
@@ -629,12 +633,26 @@ class GearPath(Item):
       from datetime import datetime
       now = datetime.now()
       if not self.lastupdated or now >= self.lastupdated+timedelta(days=1):
-        self.updateData()
+        return self.updateData()
     
     def displaylastupdated(self):
       return self.lastupdated and self.lastupdated.strftime('%b %d, %Y %I:%M %p') or ''
     
-class EditForm(dexterity.EditForm):
+class Edit(dexterity.EditForm):
     grok.context(IGearPath)
-    fields = field.Fields(IGearPath)
-    fields['pets'].widgetFactory = DataGridFieldFactory
+    
+    def updateFields(self):
+      super(Edit, self).updateFields()
+      for f in ['pets','mainTalents','secondTalents','specs','progression','acquiredItems','bisItems','downgradeItems','lastupdated']:
+        if f in self.fields.keys():
+          del self.fields[f]
+
+class Add(dexterity.AddForm):
+    grok.context(IGearPath)
+    grok.name('GearPath')
+    
+    def updateFields(self):
+      super(Add, self).updateFields()
+      for f in ['pets','mainTalents','secondTalents','specs','progression','acquiredItems','bisItems','downgradeItems','lastupdated']:
+        if f in self.fields.keys():
+          del self.fields[f]
