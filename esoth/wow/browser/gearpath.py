@@ -1,12 +1,16 @@
+from five import grok
+from plone.directives import form
 from Products.Five.browser import BrowserView
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as _
-from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
+from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile, ViewPageTemplateFile
 from Products.statusmessages.interfaces import IStatusMessage
+from z3c.form import button
 from urllib import urlopen
 import json
 
 from esoth.wow.content.gear import getGear
+from esoth.wow.content.gearpath import IGearPath
 
 class GearUpdate(BrowserView):
   def __call__(self):
@@ -63,3 +67,45 @@ class BossTableView(BrowserView):
   
   def bossOrder(self):
     return self.context.bossOrder()
+    
+class ICharacterVerifySchema(form.Schema):
+  """ """
+    
+class CharacterVerify(form.SchemaForm):
+  """ Verify that you own a character """
+  grok.context(IGearPath)
+  grok.require('zope2.View')
+  grok.name('character-verify')
+  template = ViewPageTemplateFile('verify.pt')
+  
+  schema = ICharacterVerifySchema
+  
+  def getSlotsToRemove(self):
+    # check if these variables are assigned. If not, get three random slots
+    memb = getToolByName(self.context,'portal_membership').getAuthenticatedMember()
+    if not memb.getId():
+      return []
+    current_user = memb.getId()
+    if self.context.slotToBlank1 and self.context.verifier == current_user:
+      one = self.context.slotToBlank1
+      two = self.context.slotToBlank2
+      three = self.context.slotToBlank3
+    else:
+      import random
+      from datetime import datetime
+      random.seed(datetime.now())
+      self.context.verifier = current_user
+      slots = ['Weapon','Helm','Neck','Back','Chest','Wrists','Hands','Waist','Legs','Feet']
+      one = slots.pop(slots.index(random.choice(slots)))
+      self.context.slotToBlank1 = one
+      two = slots.pop(slots.index(random.choice(slots)))
+      self.context.slotToBlank2 = two
+      three = slots.pop(slots.index(random.choice(slots)))
+      self.context.slotToBlank3 = three
+    return (one,two,three)
+  
+  @button.buttonAndHandler(u'Verify')
+  def verify(self, action):
+    data, errors = self.extractData()
+    current_user = getToolByName(self.context,'portal_membership').getAuthenticatedMember().getId()
+    return 'NYI...'

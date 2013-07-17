@@ -101,6 +101,15 @@ class IGearPath(form.Schema):
               vocabulary=specs,
             )
         )
+        
+  mode(slotToBlank1='hidden')
+  slotToBlank1 = schema.TextLine(required=False)
+  mode(slotToBlank2='hidden')
+  slotToBlank2 = schema.TextLine(required=False)
+  mode(slotToBlank3='hidden')
+  slotToBlank3 = schema.TextLine(required=False)
+  mode(slotToBlank3='verifier')
+  verifier = schema.TextLine(required=False)
 
   mode(weapon='hidden')
   weapon = schema.TextLine(
