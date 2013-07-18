@@ -15,6 +15,7 @@
 <body>
     <div metal:fill-slot="body" id="content"
          tal:define="slots view/getSlotsToRemove">
+      NYI! NYI!
       
       <div tal:condition="slots">
         <p>

@@ -381,7 +381,7 @@ class GearPath(Item):
       return bossItems
     
     def bossOrder(self):
-      return ['Jin\'rokh','Horridon','Zandalari Council','Tortos','Megaera','Ji-kun','Durumu','Primordius','Dark Animus','Iron Qon','Twin Consorts','Lei Shen','Ra-den','Shared - Throne of Thunder','Legendary']
+      return ['Jin\'rokh','Horridon','Zandalari Council','Tortos','Megaera','Ji-Kun','Durumu','Primordius','Dark Animus','Iron Qon','Twin Consorts','Lei Shen','Ra-den','Shared - Throne of Thunder','Legendary']
 
        
     def updateData(self):
