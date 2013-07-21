@@ -95,7 +95,7 @@ class CharacterVerify(form.SchemaForm):
       from datetime import datetime
       random.seed(datetime.now())
       self.context.verifier = current_user
-      slots = ['Weapon','Helm','Neck','Back','Chest','Wrists','Hands','Waist','Legs','Feet']
+      slots = ['Head','Neck','Shoulders','Back','Chest','Wrists','Hands','Waist','Legs','Feet','Ring1','Ring2','Trinket1','Trinket2']
       one = slots.pop(slots.index(random.choice(slots)))
       self.context.slotToBlank1 = one
       two = slots.pop(slots.index(random.choice(slots)))
@@ -107,5 +107,38 @@ class CharacterVerify(form.SchemaForm):
   @button.buttonAndHandler(u'Verify')
   def verify(self, action):
     data, errors = self.extractData()
-    current_user = getToolByName(self.context,'portal_membership').getAuthenticatedMember().getId()
-    return 'NYI...'
+    current_user = getToolByName(self.context,'portal_membership').getAuthenticatedMember()
+    user_id = current_user.getId()
+    
+    if user_id != self.context.verifier:
+      IStatusMessage(self.request).addStatusMessage(_(u"Your verifying character is invalid"),"error")
+      self.request.response.redirect(self.context.absolute_url()+'/@@character-verify')
+    
+    base_url = 'http://us.battle.net/api/wow/character/%s/%s?fields=items'
+    url = base_url % (self.context.server,self.context.title)
+    try:
+      data = json.load(urlopen(url))
+    except ValueError:
+      data = json.load(urlopen('http://www.esoth.com/proxyw?u='+url))
+    gear = data['items']
+    blankslots = (self.context.slotToBlank1,self.context.slotToBlank2,self.context.slotToBlank3)
+    
+    check_slots = ['Head','Neck','Shoulders','Back','Chest','Wrists','Hands','Waist','Legs','Feet','Ring1','Ring2','Trinket1','Trinket2']
+    for sl in check_slots:
+      if sl in blankslots:
+        if gear.get(sl.lower().replace('ring','finger').replace('shoulders','shoulder').replace('wrists','wrist')):
+          IStatusMessage(self.request).addStatusMessage(_(u"Validation failed - check you only unequipped these slots"),"error")
+          self.request.response.redirect(self.context.absolute_url()+'/@@character-verify')
+          return
+      else:
+        if not gear.get(sl.lower().replace('ring','finger').replace('shoulders','shoulder').replace('wrists','wrist')):
+          IStatusMessage(self.request).addStatusMessage(_(u"Validation failed - check you only unequipped these slots"),"error")
+          self.request.response.redirect(self.context.absolute_url()+'/@@character-verify')
+          return
+    # success
+    self.context.manage_setLocalRoles(user_id, ['Editor'])
+    self.slotToBlank1 = ''
+    self.slotToBlank2 = ''
+    self.slotToBlank3 = ''
+    IStatusMessage(self.request).addStatusMessage(_(u"You can now edit this character"),"info")
+    self.request.response.redirect(self.context.absolute_url()+'/@@gearpath-view')
