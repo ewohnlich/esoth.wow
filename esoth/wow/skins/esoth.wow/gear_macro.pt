@@ -27,9 +27,9 @@
     </tr>
   </table>
   <script type="text/javascript">
-    jq(document).ready(function() {
-      jq('#char_header td.link').click(function() {
-        top.location = jq(this).attr('href');
+    $(document).ready(function() {
+      $('#char_header td.link').click(function() {
+        top.location = $(this).attr('href');
       });
     });
   </script>

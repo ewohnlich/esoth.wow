@@ -141,11 +141,11 @@
           <metal:item use-macro="here/gear_macro/macros/item" />
         </tal:items>
       </dl>
-      <a href="javascript:void(0);" onclick="jq('.downgradeItem').show(); jq('.downgradeFlip').toggle(); jq('#flipped').val(1)"
+      <a href="javascript:void(0);" onclick="$('.downgradeItem').show(); $('.downgradeFlip').toggle(); $('#flipped').val(1)"
          class="downgradeFlip">
         Show downgraded items
       </a>
-      <a href="javascript:void(0);" onclick="jq('.downgradeItem').hide(); jq('.downgradeFlip').toggle(); jq('#flipped').val(0)"
+      <a href="javascript:void(0);" onclick="$('.downgradeItem').hide(); $('.downgradeFlip').toggle(); $('#flipped').val(0)"
          style="display: none;"
          class="downgradeFlip">
         Hide downgraded items
@@ -158,64 +158,64 @@
     <input type="hidden" name="boss_table" id="boss_table"
            tal:attributes="value string:${context/absolute_url}/@@boss_table" />
     <script type="text/javascript">
-      jq(document).ready(function() {
-        jq('.downgradeItem').hide();
-        jq('#verify').prepOverlay({subtype:'ajax'});
-        jq('#gearhelp').prepOverlay({subtype:'ajax'});
-        jq("#bossNeedContainer").load(jq('#boss_table').val(),function(responseTxt,statusTxt,xhr){});
-        jq('.equip-link').bind('click',function(event){
+      $(document).ready(function() {
+        $('.downgradeItem').hide();
+        $('#verify').prepOverlay({subtype:'ajax'});
+        $('#gearhelp').prepOverlay({subtype:'ajax'});
+        $("#bossNeedContainer").load($('#boss_table').val(),function(responseTxt,statusTxt,xhr){});
+        $('.equip-link').bind('click',function(event){
           event.preventDefault();
-          jq('#blackout').toggle();
-          slot = jq(this).closest('tr').attr('slot');
-          equipped = jq(jq('tr[slot="'+slot+'"].equippedItem').children()[0]).text().trim() // need this for later
-          jq('tr[slot="'+slot+'"]').removeClass('equippedItem');               // make everything unequipped for this slot
-          val = jq(jq(this).closest('tr').children()[0]).text().trim();        // get the name of the item. Mark this acquired for all slots
-          jq("#gearTable tr:contains('"+val+"')").addClass('acquiredItem');
+          $('#blackout').toggle();
+          slot = $(this).closest('tr').attr('slot');
+          equipped = $($('tr[slot="'+slot+'"].equippedItem').children()[0]).text().trim() // need this for later
+          $('tr[slot="'+slot+'"]').removeClass('equippedItem');               // make everything unequipped for this slot
+          val = $($(this).closest('tr').children()[0]).text().trim();        // get the name of the item. Mark this acquired for all slots
+          $("#gearTable tr:contains('"+val+"')").addClass('acquiredItem');
           if (val != equipped) {
-            jq(this).closest('tr').addClass('equippedItem');                   // equip this item if not already. Can't toggle because we turned all off
+            $(this).closest('tr').addClass('equippedItem');                   // equip this item if not already. Can't toggle because we turned all off
           }
           jq.get(this.href,{},function(response){
-            jq("#bossNeedContainer").load(jq('#boss_table').val(),function(responseTxt,statusTxt,xhr){
+            $("#bossNeedContainer").load($('#boss_table').val(),function(responseTxt,statusTxt,xhr){
             });
-            jq('#blackout').toggle();
+            $('#blackout').toggle();
           });
         });
-        jq('.acquire-link').bind('click',function(event){
+        $('.acquire-link').bind('click',function(event){
           event.preventDefault();
-          jq('#blackout').toggle();
-          val = jq(jq(this).closest('tr').children()[0]).text();
-          jq("#gearTable tr:contains('"+val+"')").toggleClass('acquiredItem');
+          $('#blackout').toggle();
+          val = $($(this).closest('tr').children()[0]).text();
+          $("#gearTable tr:contains('"+val+"')").toggleClass('acquiredItem');
           jq.get(this.href,{},function(response){
-            jq("#bossNeedContainer").load(jq('#boss_table').val(),function(responseTxt,statusTxt,xhr){
+            $("#bossNeedContainer").load($('#boss_table').val(),function(responseTxt,statusTxt,xhr){
             });
-            jq('#blackout').toggle();
+            $('#blackout').toggle();
           });
         });
-        jq('.bis-link').bind('click',function(event){
+        $('.bis-link').bind('click',function(event){
           event.preventDefault();
-          jq('#blackout').toggle();
-          val = jq(jq(this).closest('tr').children()[0]).text();
-          jq("#gearTable tr:contains('"+val+"')").toggleClass('bisItem');
+          $('#blackout').toggle();
+          val = $($(this).closest('tr').children()[0]).text();
+          $("#gearTable tr:contains('"+val+"')").toggleClass('bisItem');
           jq.get(this.href,{},function(response){
-            jq("#bossNeedContainer").load(jq('#boss_table').val(),function(responseTxt,statusTxt,xhr){
+            $("#bossNeedContainer").load($('#boss_table').val(),function(responseTxt,statusTxt,xhr){
             });
-            jq('#blackout').toggle();
+            $('#blackout').toggle();
           });
         });
-        jq('.downgrade-link').bind('click',function(event){
+        $('.downgrade-link').bind('click',function(event){
           event.preventDefault();
-          jq('#blackout').toggle();
-          val = jq(jq(this).closest('tr').children()[0]).text();
-          jq("#gearTable tr:contains('"+val+"')").toggleClass('downgradeItem');
+          $('#blackout').toggle();
+          val = $($(this).closest('tr').children()[0]).text();
+          $("#gearTable tr:contains('"+val+"')").toggleClass('downgradeItem');
           jq.get(this.href,{},function(response){
-            jq("#bossNeedContainer").load(jq('#boss_table').val(),function(responseTxt,statusTxt,xhr){
+            $("#bossNeedContainer").load($('#boss_table').val(),function(responseTxt,statusTxt,xhr){
             });
-            jq('#blackout').toggle();
-            if (jq('#flipped').val() == 0) {
-              jq('.downgradeItem').hide();
+            $('#blackout').toggle();
+            if ($('#flipped').val() == 0) {
+              $('.downgradeItem').hide();
             }
             else {
-              jq('.downgradeItem').show();
+              $('.downgradeItem').show();
             }
           });
         });
