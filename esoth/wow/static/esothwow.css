@@ -1,0 +1,222 @@
+.progressionTable {
+  border-collapse: collapse;
+}
+
+.progressionTable th.raidName {
+  background-color: #205c90;
+}
+
+.goodBreed {
+  background-color: #e4f3d3 !important;
+  text-align: center;
+}
+.neutralBreed {
+  background-color: #ffffbf !important;
+  text-align: center;
+}
+.badBreed {
+  background-color: #ffbfbf !important;
+  text-align: center;
+}
+
+td.Legendary { color: #f70; }
+td.Epic { color: #c444ee; }
+td.Rare { color: #1c8eee; }
+td.Uncommon { color: #10b807; }
+td.Common { color: #f; }
+td.Poor { color: #888; }
+
+.progressionTable th,
+.progressionTable td {
+  width: 90px;
+  height: 25px;
+  border: 1px solid black;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1em;
+}
+
+.progressionTable th {
+  background-color: White;
+}
+
+.killed {
+  background-color:#8CBCD1;
+}
+
+.notKilled {
+  background-color:#dddddd;
+}
+
+.wowcharinfo {
+  float: right;
+  margin-right: 1em;
+}
+
+.avatarFrame {
+  font-weight: bold;
+  border: 1px solid black;
+  padding: 1em;
+  width: 400px;
+  background-color: #dddddd;
+}
+
+contenttype-rbg-item {
+    background: url("contenttypes-sprite.png") no-repeat scroll 0 -1292px transparent;
+}
+
+#gearTable tr.odd, #gearTable tr.odd td {
+  background-color: transparent;
+}
+
+#gearTable th,
+#bossNeeds th {
+  text-align: center;
+}
+
+a.slotItem {
+  padding-left: 18px;
+}
+
+.equippedItem {
+  font-weight: bold;
+  background-color: #D9EAD3 !important;
+}
+
+.bisItem a.slotItem {
+  background: url("bis.png") no-repeat scroll 0 4px transparent;
+}
+
+.acquiredItem,
+#gearTable tr.acquiredItem {
+  background-color: #FFF2CC;
+}
+
+.downgradeItem, .downgradeItem a {
+  text-decoration: line-through;
+  color: #D6D6D6 !important;
+}
+
+.gearTable {
+  float: left;
+  margin-right: 2em !important;
+}
+
+#content #gearTable dd {
+  margin-left: 0px;
+}
+
+#gearTable dd {
+  padding-top: 0px;
+}
+
+#bossNeedContainer {
+  padding-top: 19px;
+}
+
+.gearTabs {
+}
+
+.gearTab {
+  background-color: white;
+  border: 1px solid #dddddd;
+}
+
+#blackout {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+  z-index: 10;
+  background: url("spinner.gif") no-repeat fixed center center #eee;
+}
+
+#formfield-form-widgets-acquiredItems,
+#formfield-form-widgets-bisItems,
+#formfield-form-widgets-downgradeItems, {
+  display: none;
+}
+
+.gearlisting li{
+  display: list-item;
+  padding-bottom:0.25em;
+}
+
+.gearlisting {
+  margin-bottom: 1em;
+}
+
+#char_header #selectedGearTab {
+  background-color: white;
+}
+
+#char_header td {
+  background-color: #eee;
+  border: 1px solid #ddd;
+  padding: 0.5em 1em;
+  vertical-align: top;
+}
+
+#char_header #border-left,
+#char_header #border-right {
+    background-image: url(dot.png);
+    background-color: white;
+    background-repeat: repeat-x;
+    background-position: 0% 50%;
+    border-style: none;
+}
+
+#char_header #border-left {
+  width: 30px;
+}
+
+#char_header #border-right {
+  width: 250px;
+}
+
+#char_header td:hover.link {
+  background-color: #205C90;
+  cursor: pointer;
+}
+
+#char_header td:hover .discreet {
+  color: #ccc;
+}
+
+#char_header td:hover a{
+ color: #fff !important;
+}
+
+#char_header td a:hover{
+ color: #fff !important;
+}
+
+#char_header #selectedGearTab:hover {
+  background-color: #205C90;
+}
+
+#find-player-header {
+  text-align: center;
+}
+
+#find-player {
+  width: 500px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+#find-player-text {
+  width: 900px;
+  margin: 0 auto;
+}
+
+#player_listing ul {
+  list-style-type: none;
+}
+
+#player_listing li {
+  margin-bottom: 0.50em;
+  list-style-type: none;
+}
