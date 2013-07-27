@@ -10,7 +10,7 @@
     <grok:grok package="." />
   
     <browser:resourceDirectory
-                  name="esoth.family"
+                  name="esoth.wow"
                   directory="static"
                   />
 
