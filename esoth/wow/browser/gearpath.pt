@@ -174,7 +174,7 @@
           if (val != equipped) {
             $(this).closest('tr').addClass('equippedItem');                   // equip this item if not already. Can't toggle because we turned all off
           }
-          jq.get(this.href,{},function(response){
+          $.get(this.href,{},function(response){
             $("#bossNeedContainer").load($('#boss_table').val(),function(responseTxt,statusTxt,xhr){
             });
             $('#blackout').toggle();
@@ -185,7 +185,7 @@
           $('#blackout').toggle();
           val = $($(this).closest('tr').children()[0]).text();
           $("#gearTable tr:contains('"+val+"')").toggleClass('acquiredItem');
-          jq.get(this.href,{},function(response){
+          $.get(this.href,{},function(response){
             $("#bossNeedContainer").load($('#boss_table').val(),function(responseTxt,statusTxt,xhr){
             });
             $('#blackout').toggle();
@@ -196,7 +196,7 @@
           $('#blackout').toggle();
           val = $($(this).closest('tr').children()[0]).text();
           $("#gearTable tr:contains('"+val+"')").toggleClass('bisItem');
-          jq.get(this.href,{},function(response){
+          $.get(this.href,{},function(response){
             $("#bossNeedContainer").load($('#boss_table').val(),function(responseTxt,statusTxt,xhr){
             });
             $('#blackout').toggle();
@@ -207,7 +207,7 @@
           $('#blackout').toggle();
           val = $($(this).closest('tr').children()[0]).text();
           $("#gearTable tr:contains('"+val+"')").toggleClass('downgradeItem');
-          jq.get(this.href,{},function(response){
+          $.get(this.href,{},function(response){
             $("#bossNeedContainer").load($('#boss_table').val(),function(responseTxt,statusTxt,xhr){
             });
             $('#blackout').toggle();
