@@ -4,6 +4,7 @@ from urllib import urlopen
 from five import grok
 from plone.dexterity.content import Item
 from plone.directives import dexterity
+from plone.namedfile.file import NamedImage as NamedImageFile
 from zope.component import getUtility
 from zope.interface import implements, Interface
 
@@ -360,7 +361,7 @@ class Edit(dexterity.EditForm):
     
     def updateFields(self):
       super(Edit, self).updateFields()
-      for f in ['pets','mainTalents','secondTalents','specs','progression','acquiredItems','bisItems','downgradeItems','lastupdated']:
+      for f in ['pets','mountDetails','mainTalents','secondTalents','specs','progression','acquiredItems','bisItems','downgradeItems','lastupdated']:
         if f in self.fields.keys():
           del self.fields[f]
 
@@ -370,6 +371,6 @@ class Add(dexterity.AddForm):
     
     def updateFields(self):
       super(Add, self).updateFields()
-      for f in ['pets','mainTalents','secondTalents','specs','progression','acquiredItems','bisItems','downgradeItems','lastupdated']:
+      for f in ['pets','mountDetails','mainTalents','secondTalents','specs','progression','acquiredItems','bisItems','downgradeItems','lastupdated']:
         if f in self.fields.keys():
           del self.fields[f]
