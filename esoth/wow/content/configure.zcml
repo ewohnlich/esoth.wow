@@ -4,19 +4,8 @@
     i18n_domain="esoth.wow">
 
   <!-- configure your content components here -->
-  
-  <!-- -*- extra stuff goes here -*- -->
-  <class class=".wowchar.WoWChar">
-    <require
-        permission="zope2.View"
-        interface="..interfaces.IWoWChar"/>
-  </class>
-  <class class=".display.WoWDisplay">
-    <require
-        permission="zope2.View"
-        interface="..interfaces.IWoWDisplay"/>
-  </class>
         
+  <class class=".display.WoWDisplay" />
   <class class=".gearpath.GearPath" />
 
 </configure>

@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<object name="portal_skins" meta_type="CMF Skins Tool">
- <object name="esoth.wow" meta_type="Filesystem Directory View"
-    directory="esoth.wow:skins/esoth.wow"/>
- <skin-path name="*">
-  <layer name="esoth.wow" insert-after="custom"/>
- </skin-path>
-</object>

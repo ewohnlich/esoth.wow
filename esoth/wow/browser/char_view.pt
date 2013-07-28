@@ -97,7 +97,7 @@
 						  <th>Pets (unique)</th>
 						  <td>
 						    <a tal:attributes="href string:${here/absolute_url}/pets_view">
-						      <img src="beast.png"/>
+						      <img tal:attributes="src string:${portal_url}/++resource++esoth.wow/beast.png"/>
 						      <span tal:content="here/numcompanions"/> (click for more details)
 						    </a>
 						  </td>

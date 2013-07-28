@@ -13,8 +13,6 @@
                   name="esoth.wow"
                   directory="static"
                   />
-
-    <five:registerPackage package="." initialize=".initialize" />
     
     <include file="permissions.zcml" />
     <include package=".content" />

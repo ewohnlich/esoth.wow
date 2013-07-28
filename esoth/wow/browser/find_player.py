@@ -17,7 +17,7 @@ class FindPlayer(BrowserView):
   def __call__(self,character='',server=''):
     if character and server:
       catalog = getToolByName(self.context,'portal_catalog')
-      results = catalog(object_provides='esoth.wow.content.gearpath.IGearPath',Title=character,server=server)
+      results = catalog(object_provides='esoth.wow.interfaces.IGearPath',Title=character,server=server)
       
       if results:
         self.request.response.redirect(results[0].getURL())

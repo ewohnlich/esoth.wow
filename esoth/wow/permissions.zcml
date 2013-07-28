@@ -7,4 +7,9 @@
         title="esoth.wow: Add GearPath"
         />
 
+    <permission
+        id="esoth.wow.AddCharDisplay"
+        title="esoth.wow: Add Character Display"
+        />
+
 </configure>
