@@ -19,7 +19,7 @@
     <fieldset><legend>Legend</legend>
       <span style="padding:0.5em; background-color:#D9EAD3; border: 1px dashed black;"><b>Equipped</b></span>
       <span style="padding:0.5em; background-color:#FFF2CC; border: 1px dashed black;">Acquired</span>
-      <span style="padding:0.5em; border: 1px dashed black;"><img tal:attributes="src string:${portal_url}/bis.png" /> BiS</span>
+      <span style="padding:0.5em; border: 1px dashed black;"><img tal:attributes="src string:${portal_url}/++resource++esoth.wow/bis.png" /> BiS</span>
       <span style="padding:0.5em; border: 1px dashed black; text-decoration: line-through; color: #D6D6D6">Downgrade</span>
       <span style="padding:0.5em;">
         <a id="gearhelp"
