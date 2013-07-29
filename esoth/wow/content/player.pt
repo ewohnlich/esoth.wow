@@ -123,7 +123,7 @@
               <tal:talent repeat="talent context/mainTalents">
                 <li>
                   <span tal:content="python:(int(talent['tier'])+1)*15"/>:
-                  <img tal:attributes="src string:http://wow.zamimg.com/images/wow/icons/small/${talent/icon}.jpg"/>
+                  <img tal:attributes="src string:http://us.media.blizzard.com/wow/icons/18/${talent/icon}.jpg"/>
                   <a tal:attributes="href string:http://www.wowhead.com?spell=${talent/id}"
                      tal:content="talent/name"/>
                 </li>
@@ -137,7 +137,7 @@
               <tal:talent repeat="talent context/secondTalents">
                 <li>
                   <span tal:content="python:(int(talent['tier'])+1)*15"/>:
-                  <img tal:attributes="src string:http://wow.zamimg.com/images/wow/icons/small/${talent/icon}.jpg"/>
+                  <img tal:attributes="src string:http://us.media.blizzard.com/wow/icons/18/${talent/icon}.jpg"/>
                   <a tal:attributes="href string:http://www.wowhead.com?spell=${talent/id}"
                      tal:content="talent/name"/>
                 </li>

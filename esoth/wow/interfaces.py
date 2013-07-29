@@ -60,10 +60,12 @@ class IMountSchema(Interface):
   creatureId = schema.TextLine(title=_(u"Creature ID"))
   itemId = schema.TextLine(title=_(u"Item ID"))
   icon = schema.TextLine(title=_(u"Icon"))
-  isGround = schema.TextLine(title=_(u"isGround"))
-  isFlying = schema.TextLine(title=_(u"isFlying"))
-  isAquatic = schema.TextLine(title=_(u"isAquatic"))
-  isJumping = schema.TextLine(title=_(u"isJumping"))
+  source = schema.TextLine(title=_(u"Source"))
+  isCollected = schema.Bool(title=_(u"isCollected"))
+  isGround = schema.Bool(title=_(u"isGround"))
+  isFlying = schema.Bool(title=_(u"isFlying"))
+  isAquatic = schema.Bool(title=_(u"isAquatic"))
+  isJumping = schema.Bool(title=_(u"isJumping"))
 
 class IPetSchema(Interface):
   name = schema.TextLine(title=_(u"Name"))

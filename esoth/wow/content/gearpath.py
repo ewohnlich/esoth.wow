@@ -196,6 +196,20 @@ class GearPath(Item):
                                   'hkills':str(boss.get('heroicKills',0))})
       progression.sort(lambda x,y: cmp(x['tier'],y['tier']))
       self.progression = progression
+      
+      #
+      _mounts = []
+      for mount in data['mounts']['collected']:
+        _mounts.append({'name':mount['name'],
+                        'creatureId':mount['creatureId'],
+                        'itemId':mount['itemId'],
+                        'icon':mount['icon'],
+                        'isCollected': True,
+                        'isGround':mount['isGround'],
+                        'isFlying':mount['isFlying'],
+                        'isAquatic':mount['isAquatic'],
+                        'isJumping':mount['isJumping']})
+      self.mountDetails = _mounts
 
       # companions
       pets = data['pets']

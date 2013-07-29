@@ -26,6 +26,13 @@
         />
 
     <browser:page
+        name="mounts-view"
+        for="esoth.wow.interfaces.IGearPath"
+        template="mounts.pt"
+        permission="zope2.View"
+        />
+
+    <browser:page
         name="gearpath-view"
         for="esoth.wow.interfaces.IGearPath"
         class=".gearpath.GearPathView"
@@ -69,23 +76,9 @@
         />
 
     <browser:page
-        name="char_view"
-        for="esoth.wow.interfaces.IGearPath"
-        template="char_view.pt"
-        permission="zope2.View"
-        />
-
-    <browser:page
         name="gear_macro"
         for="esoth.wow.interfaces.IGearPath"
         template="gear_macro.pt"
-        permission="zope2.View"
-        />
-
-    <browser:page
-        name="pets_view"
-        for="esoth.wow.interfaces.IGearPath"
-        template="pets_view.pt"
         permission="zope2.View"
         />
 
