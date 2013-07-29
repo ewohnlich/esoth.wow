@@ -8,9 +8,9 @@
   <tr>
     <th colspan="2">
       <label for="normalItems">normal:</label>
-      <input id="normalItems" name="normalItems" type="checkbox" checked="checked" onclick="jq('.normalItem').toggle()"/> |
+      <input id="normalItems" name="normalItems" type="checkbox" checked="checked" onclick="$('.normalItem').toggle()"/> |
       <label for="heroicItems">heroic:</label>
-      <input id="heroicItems" name="heroicItems" type="checkbox" checked="checked" onclick="jq('.heroicItem').toggle()"/>
+      <input id="heroicItems" name="heroicItems" type="checkbox" checked="checked" onclick="$('.heroicItem').toggle()"/>
     </th>
   </tr>
   <tal:boss repeat="boss bosses">

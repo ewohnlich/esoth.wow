@@ -9,10 +9,15 @@
  <index name="groups" meta_type="KeywordIndex">
   <indexed_attr value="groups"/>
  </index>
+ <column value="serverTitle"/>
  <column value="guild"/>
  <column value="hasAvatar"/>
  <column value="server"/>
- <column value="class"/>
+ <column value="klass"/>
+ <column value="points"/>
+ <column value="mounts"/>
+ <column value="numcompanions"/>
+ <column value="titles"/>
  <column value="averageItemLevel"/>
  <column value="averageItemLevelEquipped"/>
 </object>

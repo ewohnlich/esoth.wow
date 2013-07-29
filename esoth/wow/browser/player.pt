@@ -96,14 +96,19 @@
   						  <th>Pets (unique)</th>
   						  <td>
   						    <a tal:attributes="href string:${context/absolute_url}/@@pets-view">
-  						      <img src="beast.png"/>
+  						      <img tal:attributes="src string:${portal_url}/++resource++esoth.wow/beast.png"/>
   						      <span tal:content="context/numcompanions"/> (click for more details)
   						    </a>
   						  </td>
   						</tr>
   						<tr>
   						  <th>Mounts</th>
-  						  <td tal:content="context/mounts"/>
+  						  <td>
+  						    <a tal:attributes="href string:${context/absolute_url}/@@mounts-view">
+  						      <img tal:attributes="src string:${portal_url}/++resource++esoth.wow/ability_mount_ridinghorse.jpg"/>
+  						      <span tal:content="context/mounts"/> (click for more details)
+  						    </a>
+  						  </td>
   						</tr>
             </table>
           </div>
@@ -122,7 +127,7 @@
                 <tal:talent repeat="talent context/mainTalents">
                   <li>
                     <span tal:content="python:(int(talent['tier'])+1)*15"/>:
-                    <img tal:attributes="src string:http://wow.zamimg.com/images/wow/icons/small/${talent/icon}.jpg"/>
+                    <img tal:attributes="src string:http://us.media.blizzard.com/wow/icons/18/${talent/icon}.jpg"/>
                     <a tal:attributes="href string:http://www.wowhead.com?spell=${talent/id}"
                        tal:content="talent/name"/>
                   </li>
@@ -136,7 +141,7 @@
                 <tal:talent repeat="talent context/secondTalents">
                   <li>
                     <span tal:content="python:(int(talent['tier'])+1)*15"/>:
-                    <img tal:attributes="src string:http://wow.zamimg.com/images/wow/icons/small/${talent/icon}.jpg"/>
+                    <img tal:attributes="src string:http://us.media.blizzard.com/wow/icons/18/${talent/icon}.jpg"/>
                     <a tal:attributes="href string:http://www.wowhead.com?spell=${talent/id}"
                        tal:content="talent/name"/>
                   </li>

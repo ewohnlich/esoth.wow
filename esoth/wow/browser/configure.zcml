@@ -13,44 +13,79 @@
 
     <browser:page
         name="player-view"
-        for="esoth.wow.content.gearpath.IGearPath"
+        for="esoth.wow.interfaces.IGearPath"
         template="player.pt"
         permission="zope2.View"
         />
 
     <browser:page
         name="pets-view"
-        for="esoth.wow.content.gearpath.IGearPath"
+        for="esoth.wow.interfaces.IGearPath"
         template="pets.pt"
         permission="zope2.View"
         />
 
     <browser:page
+        name="mounts-view"
+        for="esoth.wow.interfaces.IGearPath"
+        template="mounts.pt"
+        permission="zope2.View"
+        />
+
+    <browser:page
         name="gearpath-view"
-        for="esoth.wow.content.gearpath.IGearPath"
+        for="esoth.wow.interfaces.IGearPath"
         class=".gearpath.GearPathView"
         permission="zope2.View"
         />
 
     <browser:page
         name="armory"
-        for="esoth.wow.content.gearpath.IGearPath"
+        for="esoth.wow.interfaces.IGearPath"
         class=".gearpath.GearUpdate"
         permission="zope2.View"
         />
 
     <browser:page
         name="gear-help"
-        for="esoth.wow.content.gearpath.IGearPath"
+        for="esoth.wow.interfaces.IGearPath"
         template="help.pt"
         permission="zope2.View"
         />
 
     <browser:page
         name="boss_table"
-        for="esoth.wow.content.gearpath.IGearPath"
+        for="esoth.wow.interfaces.IGearPath"
         class=".gearpath.BossTableView"
         template="boss_table.pt"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        name="progbox"
+        for="esoth.wow.interfaces.IGearPath"
+        template="progbox.pt"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        name="char_overview"
+        for="esoth.wow.interfaces.ICharDisplay"
+        template="char_overview.pt"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        name="gear_macro"
+        for="esoth.wow.interfaces.IGearPath"
+        template="gear_macro.pt"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        name="player_listing"
+        for="*"
+        template="player_listing.pt"
         permission="zope2.View"
         />
 

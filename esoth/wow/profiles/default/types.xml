@@ -8,9 +8,6 @@
   -->
 <object name="portal_types" meta_type="Plone Types Tool">
   <!-- -*- extra stuff goes here -*- -->
-  <object name="WoWChar"
-    meta_type="Factory-based Type Information with dynamic views" />
-  <object name="WoWDisplay"
-    meta_type="Factory-based Type Information with dynamic views" />
+  <object name="WoWDisplay" meta_type="Dexterity FTI" />
   <object name="GearPath" meta_type="Dexterity FTI" />
 </object>

@@ -19,6 +19,11 @@
         <a tal:attributes="href string:${context/absolute_url}/@@pets-view">Battle Pets</a>
       </td>
       <td class="link"
+          tal:attributes="id python:templateId == '@@mounts-view' and 'selectedGearTab';
+                          href string:${context/absolute_url}/@@mounts-view">
+        <a tal:attributes="href string:${context/absolute_url}/@@mounts-view">Mounts</a>
+      </td>
+      <td class="link"
           tal:attributes="href string:${context/absolute_url}/@@armory">
         <a tal:attributes="href string:${context/absolute_url}/@@armory">Update from Blizzard</a>
         <span class="discreet">(last updated: <span tal:content="context/displaylastupdated"/>)</span>
@@ -27,9 +32,9 @@
     </tr>
   </table>
   <script type="text/javascript">
-    jq(document).ready(function() {
-      jq('#char_header td.link').click(function() {
-        top.location = jq(this).attr('href');
+    $(document).ready(function() {
+      $('#char_header td.link').click(function() {
+        top.location = $(this).attr('href');
       });
     });
   </script>
@@ -62,28 +67,28 @@
               <a tal:attributes="href string:${context/absolute_url}/@@gearpath-view?action=equip&item=${item/name}&slot=${slot};"
                  class="equip-link"
                  title="Equip - you are wearing this">
-                <img tal:attributes="src string:$portal_url/equipped.png" />
+                <img tal:attributes="src string:$portal_url/++resource++esoth.wow/equipped.png" />
               </a>
             </td>
             <td>
               <a tal:attributes="href string:${context/absolute_url}/@@gearpath-view?action=acquire&item=${item/name}&slot=${slot}"
                  class="acquire-link"
                  title="Acquire - acquired but not equipped">
-                <img tal:attributes="src string:$portal_url/acquired.png" />
+                <img tal:attributes="src string:$portal_url/++resource++esoth.wow/acquired.png" />
               </a>
             </td>
             <td>
               <a tal:attributes="href string:${context/absolute_url}/@@gearpath-view?action=bis&item=${item/name}&slot=${slot}"
                  class="bis-link"
                  title="BIS">
-                <img tal:attributes="src string:$portal_url/bis.png" />
+                <img tal:attributes="src string:$portal_url/++resource++esoth.wow/bis.png" />
               </a>
             </td>
             <td>
               <a tal:attributes="href string:${context/absolute_url}/@@gearpath-view?action=downgrade&item=${item/name}&slot=${slot}"
                  class="downgrade-link"
                  title="Downgrade - downgrade from what is equipped">
-                <img tal:attributes="src string:$portal_url/downgrade.png" />
+                <img tal:attributes="src string:$portal_url/++resource++esoth.wow/downgrade.png" />
               </a>
             </td>
           </tal:edit>

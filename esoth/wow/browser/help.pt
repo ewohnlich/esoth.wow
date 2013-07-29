@@ -19,11 +19,11 @@
   
   <hr/><br/>
   <ul class="gearlisting">
-    <li><img tal:attributes="src string:${portal_url}/equipped.png" /> <b>Equipped</b> - This is the gear you are currently using. One per slot.</li>
-    <li><img tal:attributes="src string:${portal_url}/acquired.png" /> <b>Acquired</b> - You have acquired this gear but may not be using it until you
+    <li><img tal:attributes="src string:${portal_url}/++resource++esoth.wow/equipped.png" /> <b>Equipped</b> - This is the gear you are currently using. One per slot.</li>
+    <li><img tal:attributes="src string:${portal_url}/++resource++esoth.wow/acquired.png" /> <b>Acquired</b> - You have acquired this gear but may not be using it until you
       get another tier piece or something. You can have multiple per slot.</li>
-    <li><img tal:attributes="src string:${portal_url}/bis.png" /> <b>BiS</b> - These items (can be multiple per slot) are your goal for that slot.</li>
-    <li><img tal:attributes="src string:${portal_url}/downgrade.png" /> <b>Downgrade</b> - This item is worse than what you already have equipped and/or acquired.</li>
+    <li><img tal:attributes="src string:${portal_url}/++resource++esoth.wow/bis.png" /> <b>BiS</b> - These items (can be multiple per slot) are your goal for that slot.</li>
+    <li><img tal:attributes="src string:${portal_url}/++resource++esoth.wow/downgrade.png" /> <b>Downgrade</b> - This item is worse than what you already have equipped and/or acquired.</li>
   </ul>
   <hr/><br/>
   

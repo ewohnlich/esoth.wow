@@ -84,7 +84,7 @@ a.slotItem {
 }
 
 .bisItem a.slotItem {
-  background: url("bis.png") no-repeat scroll 0 4px transparent;
+  background: url("++resource++esoth.wow/bis.png") no-repeat scroll 0 4px transparent;
 }
 
 .acquiredItem,
@@ -161,7 +161,7 @@ a.slotItem {
 
 #char_header #border-left,
 #char_header #border-right {
-    background-image: url(dot.png);
+    background-image: url('++resource++esoth.wow/dot.png');
     background-color: white;
     background-repeat: repeat-x;
     background-position: 0% 50%;
