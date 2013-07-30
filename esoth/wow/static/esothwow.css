@@ -220,3 +220,48 @@ a.slotItem {
   margin-bottom: 0.50em;
   list-style-type: none;
 }
+
+.obtainedMountHidden, .unobtainedMountHidden,
+.isFlyingHidden, .notisFlyingHidden,
+.allianceMountHidden, .hordeMountHidden,
+.bothMountHidden,
+.obtainableMountHidden, .unobtainableMountHidden {
+  display: none;
+}
+
+#mount-table {
+  border: 1px solid #ddd;
+}
+
+#mount-table td, #mount-table th {
+  padding: 0.5em 1em;
+  border-style: none;
+}
+
+#mount-table th.header {
+  background-color: #dddddd;
+  background-image: url("++resource++esoth.wow/bg.png");
+  background-position: right center !important;
+  background-repeat: no-repeat !important;
+  color: #666666;
+  cursor: pointer;
+  text-align: center;
+  white-space:nowrap;
+  padding-right: 20px;
+  margin: 0;
+  border-style: none;
+}
+
+#mount-table th.headerSortUp {
+  background-image: url("++resource++esoth.wow/asc.png");
+  cursor: pointer;
+}
+
+#mount-table th.headerSortDown {
+  background-image: url("++resource++esoth.wow/desc.png");
+  cursor: pointer;
+}
+
+#mount-table tbody tr.odd td {
+    background: none repeat scroll 0 0 #EEEEEE;
+}

@@ -15,40 +15,58 @@
       <h1 tal:content="string:${here/Title} Mounts"/>
 
       <div metal:use-macro="here/gear_macro/macros/char_header" />
-      
-      <div>
-      
-      <p><span tal:replace="python:len([m for m in mounts if m['isCollected']])" /> out of <span tal:replace="python:len(mounts)" /> mounts collected</p>
         
       <table class="listing">
         <thead>
-          <th colspan="2">Filters</th>
+          <th colspan="5">Filters</th>
         </thead>
         <tbody>
           <tr>
             <td>
+              <input type="checkbox" checked="checked" name="collected" id="collected"/>
               <label for="collected">Collected</label>
-              <input type="checkbox" checked="checked" name="collected" id="collected" onclick="$('.obtainedMount').toggle()" />
             </td>
             <td>
+              <input type="checkbox" checked="checked" name="flying" id="flying"/>
               <label for="flying">Flying</label>
-              <input type="checkbox" checked="checked" name="flying" id="flying" />
+            </td>
+            <td>
+              <input type="checkbox" checked="checked" name="obtainable" id="obtainable"/>
+              <label for="obtainable">Obtainable</label>
+            </td>
+            <td>
+              <input type="checkbox" checked="checked" name="alliance" id="alliance"/>
+              <label for="alliance">Alliance</label>
+            </td>
+            <td rowspan="2">
+              <input type="checkbox" checked="checked" name="bothmount" id="bothmount"/>
+              <label for="bothmount">Both Factions</label>
             </td>
           </tr>
           <tr>
             <td>
-              <label for="collected">Not Collected</label>
-              <input type="checkbox" name="notcollected" id="notcollected" onclick="$('.unobtainedMount').toggle()" />
+              <input type="checkbox" checked="checked" name="notcollected" id="notcollected"/>
+              <label for="notcollected">Not Collected</label>
             </td>
             <td>
-              <label for="flying">Not Flying</label>
-              <input type="checkbox" checked="checked" name="notflying" id="notflying" />
+              <input type="checkbox" checked="checked" name="notflying" id="notflying"/>
+              <label for="notflying">Not Flying</label>
+            </td>
+            <td>
+              <input type="checkbox" checked="checked" name="unobtainable" id="unobtainable"/>
+              <label for="unobtainable">Not Obtainable</label>
+            </td>
+            <td>
+              <input type="checkbox" checked="checked" name="horde" id="horde"/>
+              <label for="horde">Horde</label>
             </td>
           </tr>
         </tbody>
       </table>
-      </div>
-      <table class="listing">
+      
+      <p><span id="mount-counter" tal:content="python:len([m for m in mounts if m['isCollected']])" /> out of <span tal:replace="python:len(mounts)" /> mounts showing</p>
+
+      <table class="tablesorter" id="mount-table">
         <thead>
           <tr>
             <th>Mount Name</th>
@@ -58,6 +76,7 @@
             <th>Aquatic</th>
             <th>Jumping</th>
             <th>Faction</th>
+            <th>Obtainable</th>
           </tr>
         </thead>
         <tbody>
@@ -83,6 +102,7 @@
                 <span tal:condition="mount/isJumping">&#10004;</span>
               </td>
               <td tal:content="python:mount['faction'] == 'A' and 'Alliance' or mount['faction'] == 'H' and 'Horde' or 'Both'" />
+              <td tal:content="mount/obtainable"/>
             </tr>
           </tal:mount>
         </tbody>
@@ -90,7 +110,20 @@
       
       <script type="text/javascript">
         $(document).ready(function() {
-          $('.unobtainedMount').hide();
+          $('#collected').click(function() {$('.obtainedMount').toggleClass('obtainedMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);});
+          $('#notcollected').click(function() {$('.unobtainedMount').toggleClass('unobtainedMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);});
+          $('#flying').click(function() {$('.isFlying').toggleClass('obtainedMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);});
+          $('#notflying').click(function() {$('.notisFlying').toggleClass('notisFlyingHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);});
+          $('#obtainable').click(function() {$('.obtainableMount').toggleClass('obtainableMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);});
+          $('#unobtainable').click(function() {$('.unobtainableMount').toggleClass('unobtainableMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);});
+          $('#alliance').click(function() {$('.allianceMount').toggleClass('allianceMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);});
+          $('#horde').click(function() {$('.hordeMount').toggleClass('hordeMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);});
+          $('#bothmount').click(function() {$('.bothMount').toggleClass('bothMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);});
+          $('#mount-table tr:odd').addClass("odd");
+          $('#mount-table').tablesorter().bind("sortEnd", function(){
+              $('#mount-table tr:odd').addClass("odd");
+              $('#mount-table tr:even').removeClass("odd");
+          });
         });
 
     </metal:content-core>

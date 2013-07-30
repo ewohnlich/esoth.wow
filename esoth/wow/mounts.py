@@ -10,8 +10,8 @@ class MountUtility:
     faction = default_faction == 'Alliance' and 'A' or 'H'
     obtainable = 'Y'
     klass.append(m.get('isCollected') and 'obtainedMount' or 'unobtainedMount')
-    klass.append(m.get('faction',faction) == 'A' and 'allianceMount' or m['faction'] == 'H' and 'hordeMount' or 'bothMount')
-    klass.append(m.get('obtainable',obtainable) == 'Y' and 'obtainableMount' or 'unobtainableMount')
+    klass.append(m.get('faction',faction).lower() == 'a' and 'allianceMount' or m['faction'] == 'H' and 'hordeMount' or 'bothMount')
+    klass.append(m.get('obtainable',obtainable).lower() == 'y' and 'obtainableMount' or 'unobtainableMount')
     klass.append(' '.join([m.get(k) and k or 'not'+k for k in ('isJumping','isGround','isFlying','isAquatic',)]))
     m = m.copy()
     m['classes'] = ' '.join(klass)
