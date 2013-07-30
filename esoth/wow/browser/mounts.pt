@@ -11,14 +11,43 @@
     <metal:content-core define-macro="content-core"
                         tal:define="templateId string:@@mounts-view;
                                     dummy here/autoUpdateData;
-                                    mounts context/mountDetails">
+                                    mounts context/mountData">
       <h1 tal:content="string:${here/Title} Mounts"/>
 
       <div metal:use-macro="here/gear_macro/macros/char_header" />
       
       <div>
       
-      <h2>Mounts</h2>
+      <p><span tal:replace="python:len([m for m in mounts if m['isCollected']])" /> out of <span tal:replace="python:len(mounts)" /> mounts collected</p>
+        
+      <table class="listing">
+        <thead>
+          <th colspan="2">Filters</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <label for="collected">Collected</label>
+              <input type="checkbox" checked="checked" name="collected" id="collected" onclick="$('.obtainedMount').toggle()" />
+            </td>
+            <td>
+              <label for="flying">Flying</label>
+              <input type="checkbox" checked="checked" name="flying" id="flying" />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="collected">Not Collected</label>
+              <input type="checkbox" name="notcollected" id="notcollected" onclick="$('.unobtainedMount').toggle()" />
+            </td>
+            <td>
+              <label for="flying">Not Flying</label>
+              <input type="checkbox" checked="checked" name="notflying" id="notflying" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
       <table class="listing">
         <thead>
           <tr>
@@ -28,18 +57,19 @@
             <th>Flying</th>
             <th>Aquatic</th>
             <th>Jumping</th>
+            <th>Faction</th>
           </tr>
         </thead>
         <tbody>
           <tal:mount repeat="mount mounts">
-            <tr>
+            <tr tal:attributes="class mount/classes">
               <td>
-                <a tal:attributes="href string:http://www.wowhead.com/npc=${mount/creatureId}">
-                  <img tal:attributes="src string:http://us.media.blizzard.com/wow/icons/18/${mount/icon}.jpg" />
+                <a tal:attributes="href string:http://www.wowhead.com/item=${mount/itemId}">
+                  <img tal:condition="mount/icon" tal:attributes="src string:http://us.media.blizzard.com/wow/icons/18/${mount/icon}.jpg" />
                   <span tal:omit-tag="" tal:content="mount/name"/>
                 </a>
               </td>
-              <td tal:content="string:unknown" />
+              <td tal:content="mount/location" />
               <td>
                 <span tal:condition="mount/isCollected">&#10004;</span>
               </td>
@@ -52,10 +82,16 @@
               <td>
                 <span tal:condition="mount/isJumping">&#10004;</span>
               </td>
+              <td tal:content="python:mount['faction'] == 'A' and 'Alliance' or mount['faction'] == 'H' and 'Horde' or 'Both'" />
             </tr>
           </tal:mount>
         </tbody>
       </table>
+      
+      <script type="text/javascript">
+        $(document).ready(function() {
+          $('.unobtainedMount').hide();
+        });
 
     </metal:content-core>
 </metal:content-core>

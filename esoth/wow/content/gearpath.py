@@ -10,7 +10,7 @@ from zope.interface import implements, Interface
 
 from esoth.wow import _
 from esoth.wow.content.gear import getGear
-from esoth.wow.interfaces import IGearPath, IPetUtility, servers
+from esoth.wow.interfaces import IGearPath, IPetUtility, IMountUtility, servers
 from esoth.wow.pets import breedmap
 
 class GearPath(Item):
@@ -93,6 +93,11 @@ class GearPath(Item):
         gear = data['items']
       except KeyError:
         return 'bad'
+      
+      if 'Ironforge' in [r['name'] for r in data['reputation']]:
+        self.faction = 'Alliance'
+      else:
+        self.faction = 'Horde'
       
       for k,v in gear.items():
         if isinstance(v,dict):
@@ -306,6 +311,13 @@ class GearPath(Item):
         p['maxH'] = int( round( 25 * (base['health'] + breedmap[p['breedId']]['health']) * rarity * 5 + 100 ))
         p['maxS'] = int( round( 25 * (base['speed'] + breedmap[p['breedId']]['speed']) * rarity ))
         p['maxP'] = int( round( 25 * (base['power'] + breedmap[p['breedId']]['power']) * rarity ))
+    
+    def mountData(self):
+      utility = getUtility(IMountUtility)
+      _mounts = {}
+      for m in self.mountDetails:
+        _mounts[str(m['itemId'])] = m
+      return utility.mountData(_mounts, self.faction)
 
     def petData(self):
       data = {'numUnique':0,

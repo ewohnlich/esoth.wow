@@ -20,6 +20,9 @@
     
     <utility provides=".interfaces.IPetUtility"
              factory=".pets.PetUtility" />
+    
+    <utility provides=".interfaces.IMountUtility"
+             factory=".mounts.MountUtility" />
 
     <genericsetup:registerProfile
       name="default"

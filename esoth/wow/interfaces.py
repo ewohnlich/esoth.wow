@@ -13,6 +13,9 @@ from esoth.wow import _
 class IPetUtility(Interface):
   """ Pet data utility"""
   
+class IMountUtility(Interface):
+  """ Mount data utility"""
+  
 specs = SimpleVocabulary(
     [SimpleTerm(value=u'blood-dk', title=_(u'Death Knight (Blood)')),
      SimpleTerm(value=u'frost-dk', title=_(u'Death Knight (Frost/Unholy)')),
@@ -116,6 +119,11 @@ class IGearPath(form.Schema):
             )
         )
         
+  mode(faction='hidden')
+  faction = schema.TextLine(
+            title=_(u"Faction"),
+            required=False,
+        )
   mode(slotToBlank1='hidden')
   slotToBlank1 = schema.TextLine(required=False)
   mode(slotToBlank2='hidden')

@@ -17,16 +17,16 @@ def update_json_from_csv():
   with open('mount_source.csv') as csvfile:
     reader = csv.reader(csvfile, delimiter=',', quotechar='|')
     for row in reader:
-      name,obtainable,faction,location,creatureId = row
+      name,obtainable,faction,location,itemId = row
       import_val = {'name':name,'obtainable':obtainable,'faction':faction,'location':location}
       try:
-        creatureId = int(creatureId)
+        itemId = int(itemId)
       except ValueError:
-        creatureId = None
-      if creatureId and creatureId not in data:
-        data[creatureId] = import_val
-      elif creatureId:
-        mismatch = ['%s (%s,%s)' % (k,data[creatureId],import_val[k]) for k in data[creatureId].keys() if data[creatureId][k] != import_val[k]]
+        itemId = None
+      if itemId and itemId not in data:
+        data[itemId] = import_val
+      elif itemId:
+        mismatch = ['%s (%s,%s)' % (k,data[itemId],import_val[k]) for k in data[itemId].keys() if data[itemId][k] != import_val[k]]
         print '%d mismatch on keys %s' % '; '.join(mismatch)
   f = open('mounts.json','w')
   json.dump(data,f); f.close()

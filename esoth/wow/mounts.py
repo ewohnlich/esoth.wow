@@ -1,56 +1,66 @@
 from zope.interface import implements
-from zope.component import getUtility
-from Products.CMFCore.interfaces import ISiteRoot
-from Products.CMFCore.utils import getToolByName
-from persistent.mapping import PersistentMapping
-from interfaces import IPetUtility
+from interfaces import IMountUtility
 import json, os
 
-class MountUtility():
+class MountUtility:
   implements(IMountUtility)
   
-  def __init__(self):
-    self.petdata = PersistentMapping()
+  def applyClasses(self, m, default_faction):
+    klass = []
+    faction = default_faction == 'Alliance' and 'A' or 'H'
+    obtainable = 'Y'
+    klass.append(m.get('isCollected') and 'obtainedMount' or 'unobtainedMount')
+    klass.append(m.get('faction',faction) == 'A' and 'allianceMount' or m['faction'] == 'H' and 'hordeMount' or 'bothMount')
+    klass.append(m.get('obtainable',obtainable) == 'Y' and 'obtainableMount' or 'unobtainableMount')
+    klass.append(' '.join([m.get(k) and k or 'not'+k for k in ('isJumping','isGround','isFlying','isAquatic',)]))
+    m = m.copy()
+    m['classes'] = ' '.join(klass)
+    return m
   
-  def populate(self):
-    # populates from current pets in portal
-    
-    petids = []
-    portal = getUtility(ISiteRoot)
-    for b in getToolByName(portal,'portal_catalog')(portal_type='WoWChar'):
-      pets = [p['speciesId'] for p in b.pets if p.get('speciesId') and p['speciesId'] not in petids and p['speciesId'] != '0']
-      petids.extend(pets)
-    
-    self.addPetsById(petids)
+  def mountData(self, mounts, default_faction):
+    """ Combine json info on all mounts with collected mount info
+    """
+    data = json.load(open(os.path.join(os.path.dirname(__file__),'mounts.json')))
+    _mounts = []
+    for id,info in data.items():
+      _mount = {'icon':'','isCollected':False,'isGround':False,'isFlying':False,'isAquatic':False,'isJumping':False,
+                'itemId':id,
+                'name':info['name'],
+                'location':info['location'],
+                'obtainable':info['obtainable'],
+                'faction':info['faction']}
+      mkeys = mounts.keys()
+      mkeys.sort()
         
-  def addPetsById(self, pids):
-    petdata = self.getPets()
-    base_url = 'http://us.battle.net/api/wow/battlePet/stats/%s?qualityId=0'
-    for pid in pids:
-      url = base_url % pid
-      try:
-        pdata = json.load(urllib2.urlopen(url))
-      except ValueError:
-        pdata = json.load(urllib2.urlopen('http://www.esoth.com/proxyw?u='+url))
-      petdata[ str(pdata['speciesId']) ] = {'health': ( pdata['health'] - 100 ) / 5 - breedmap[ str(pdata['breedId']) ]['health'],
-                                            'speed' : pdata['speed'] - breedmap[ str(pdata['breedId']) ]['speed'],
-                                            'power' : pdata['power'] - breedmap[ str(pdata['breedId']) ]['power'], }
-    json.dump(petdata,open(os.path.join(os.path.dirname(__file__),'pets.json'),'wb'))
-    
-  def updateBaseStats(self, updates):
-    """ Update our base stat based on real level 25 pets that conflict with it """
-    petdata = self.getPets()
-    for upd in updates:
-      rarity = int(upd['qualityId'])*.1+1
-      health = ( float(upd['health']) - 100 ) / 25 / rarity / 5 - breedmap[ upd['breedId'] ]['health']
-      speed = float(upd['speed']) / 25 / rarity - breedmap[ upd['breedId'] ]['speed']
-      power = float(upd['power']) / 25 / rarity - breedmap[ upd['breedId'] ]['power']
-      
-      petdata[ upd['speciesId'] ] = {'health': health,
-                                     'speed' : speed,
-                                     'power' : power, }
-    json.dump(petdata,open(os.path.join(os.path.dirname(__file__),'pets.json'),'wb'))
-  
-  def getPets(self):
-    petdata = json.load(open(os.path.join(os.path.dirname(__file__),'pets.json')))
-    return petdata
+      if id in mounts:
+        _mount.update({'isCollected':True,
+                       'icon':mounts[id]['icon'],
+                       'name':mounts[id]['name'],
+                       'isGround':mounts[id]['isGround'],
+                       'isFlying':mounts[id]['isFlying'],
+                       'isAquatic':mounts[id]['isAquatic'],
+                       'isJumping':mounts[id]['isJumping']})
+      _mounts.append(self.applyClasses(_mount,default_faction))
+    _flag = False
+    for id in mounts.keys():
+      # we don't have any data on this one
+      if id not in data:
+        #import pdb; pdb.set_trace()
+        _flag = True
+        print 'Added ' + id + ' to mounts'
+        data[id] = {'name':mounts[id]['name'],'faction':'U','obtainable':'U','location':'unknown'}
+        _mounts.append(self.applyClasses({'isCollected':True,
+                        'icon':mounts[id]['icon'],
+                        'location':'unknown',
+                        'faction':'U',
+                        'obtainable':'U',
+                        'itemId':id,
+                        'name':mounts[id]['name'],
+                        'isGround':mounts[id]['isGround'],
+                        'isFlying':mounts[id]['isFlying'],
+                        'isAquatic':mounts[id]['isAquatic'],
+                        'isJumping':mounts[id]['isJumping']},default_faction))
+                   
+    if _flag:
+      json.dump(data,open(os.path.join(os.path.dirname(__file__),'mounts.json'),'w'))       
+    return _mounts

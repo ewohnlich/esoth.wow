@@ -35,14 +35,15 @@ class PetUtility():
   
   def populate(self):
     # populates from current pets in portal
+    pass
     
-    petids = []
-    portal = getUtility(ISiteRoot)
-    for b in getToolByName(portal,'portal_catalog')(portal_type='WoWChar'):
-      pets = [p['speciesId'] for p in b.pets if p.get('speciesId') and p['speciesId'] not in petids and p['speciesId'] != '0']
-      petids.extend(pets)
-    
-    self.addPetsById(petids)
+#    petids = []
+#    portal = getUtility(ISiteRoot)
+#    for b in getToolByName(portal,'portal_catalog')(portal_type='WoWChar'):
+#      pets = [p['speciesId'] for p in b.pets if p.get('speciesId') and p['speciesId'] not in petids and p['speciesId'] != '0']
+#      petids.extend(pets)
+#    
+#    self.addPetsById(petids)
         
   def addPetsById(self, pids):
     petdata = self.getPets()
