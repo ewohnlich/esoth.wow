@@ -12,6 +12,6 @@
              cookable="True"
              enabled="True"
              expression=""
-             id="++resource++ims.dataexchange/jquery.tablesorter.min.js"
+             id="++resource++esoth.wow/jquery.tablesorter.min.js"
              inline="False"/>
 </object>
