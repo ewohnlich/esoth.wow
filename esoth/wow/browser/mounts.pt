@@ -64,7 +64,7 @@
         </tbody>
       </table>
       
-      <p><span id="mount-counter" tal:content="python:len([m for m in mounts if m['isCollected']])" /> out of <span tal:replace="python:len(mounts)" /> mounts showing</p>
+      <p><span id="mount-counter" tal:content="string:0" /> out of <span tal:replace="python:len(mounts)" /> mounts showing</p>
 
       <table class="tablesorter" id="mount-table">
         <thead>
@@ -119,8 +119,9 @@
           $('#alliance').click(function() {$('.allianceMount').toggleClass('allianceMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);});
           $('#horde').click(function() {$('.hordeMount').toggleClass('hordeMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);});
           $('#bothmount').click(function() {$('.bothMount').toggleClass('bothMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);});
+          $('#mount-counter').html($('#mount-table tr:visible').length-1);
           $('#mount-table tr:odd').addClass("odd");
-          $('#mount-table').tablesorter().bind("sortEnd", function(){
+          $('#mount-table').tablesorter({sortList: [[0,0]]}).bind("sortEnd", function(){
               $('#mount-table tr:odd').addClass("odd");
               $('#mount-table tr:even').removeClass("odd");
           });
