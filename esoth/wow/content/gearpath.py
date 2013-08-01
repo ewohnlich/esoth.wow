@@ -207,6 +207,7 @@ class GearPath(Item):
       for mount in data['mounts']['collected']:
         _mounts.append({'name':mount['name'],
                         'creatureId':mount['creatureId'],
+                        'spellId':mount['spellId'],
                         'itemId':mount['itemId'],
                         'icon':mount['icon'],
                         'isCollected': True,
@@ -316,7 +317,7 @@ class GearPath(Item):
       utility = getUtility(IMountUtility)
       _mounts = {}
       for m in self.mountDetails:
-        _mounts[str(m['itemId'])] = m
+        _mounts[str(m['spellId'])] = m
       return utility.mountData(_mounts, self.faction)
 
     def petData(self):

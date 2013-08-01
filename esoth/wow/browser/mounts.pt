@@ -83,10 +83,10 @@
           <tal:mount repeat="mount mounts">
             <tr tal:attributes="class mount/classes">
               <td>
-                <a tal:attributes="href string:http://www.wowhead.com/item=${mount/itemId}">
+                <a tal:attributes="href string:http://www.wowhead.com/spell=${mount/spellId}">
                   <img tal:condition="mount/icon" tal:attributes="src string:http://us.media.blizzard.com/wow/icons/18/${mount/icon}.jpg" />
                   <span tal:omit-tag="" tal:content="mount/name"/>
-                </a>
+                </a>                  
               </td>
               <td tal:content="mount/location" />
               <td>

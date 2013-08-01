@@ -62,6 +62,7 @@ class IMountSchema(Interface):
   name = schema.TextLine(title=_(u"Name"))
   creatureId = schema.TextLine(title=_(u"Creature ID"))
   itemId = schema.TextLine(title=_(u"Item ID"))
+  spellId = schema.TextLine(title=_(u"Spell ID"))
   icon = schema.TextLine(title=_(u"Icon"))
   source = schema.TextLine(title=_(u"Source"))
   isCollected = schema.Bool(title=_(u"isCollected"))
