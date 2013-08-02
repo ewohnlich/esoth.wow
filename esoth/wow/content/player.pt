@@ -28,6 +28,10 @@
 
         <div class="wowcharinfo">
           <table class="vertical listing">
+            <tr>
+              <th>Faction</th>
+              <td tal:content="context/faction" />
+            </tr>
 						<tr>
 							<th>Armory link</th>
 							<td>

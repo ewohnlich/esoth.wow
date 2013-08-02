@@ -35,7 +35,7 @@
               <label for="obtainable">Obtainable</label>
             </td>
             <td>
-              <input type="checkbox" checked="checked" name="alliance" id="alliance"/>
+              <input type="checkbox" tal:attributes="checked python:context.faction == 'Alliance' and 'checked'" name="alliance" id="alliance"/>
               <label for="alliance">Alliance</label>
             </td>
             <td rowspan="2">
@@ -57,14 +57,14 @@
               <label for="unobtainable">Not Obtainable</label>
             </td>
             <td>
-              <input type="checkbox" checked="checked" name="horde" id="horde"/>
+              <input type="checkbox" tal:attributes="checked python:context.faction == 'Horde' and 'checked'" name="horde" id="horde"/>
               <label for="horde">Horde</label>
             </td>
           </tr>
         </tbody>
       </table>
       
-      <p><span id="mount-counter" tal:content="string:0" /> out of <span tal:replace="python:len(mounts)" /> mounts showing</p>
+      <p>Collected <span tal:replace="context/mounts" /> mounts. Showing <span id="mount-counter" tal:content="string:0" /> out of <span tal:replace="python:len(mounts)" />.</p>
 
       <table class="tablesorter" id="mount-table">
         <thead>
@@ -85,6 +85,7 @@
               <td>
                 <a tal:attributes="href string:http://www.wowhead.com/spell=${mount/spellId}">
                   <img tal:condition="mount/icon" tal:attributes="src string:http://us.media.blizzard.com/wow/icons/18/${mount/icon}.jpg" />
+                  <img tal:condition="not:mount/icon" tal:attributes="src string:${portal_url}/++resource++esoth.wow/inv_misc_questionmark.jpg"/>
                   <span tal:omit-tag="" tal:content="mount/name"/>
                 </a>                  
               </td>
@@ -108,22 +109,31 @@
         </tbody>
       </table>
       
+      <input name="hideFaction" id="hideFaction" type="hidden" tal:attributes="value python:context.faction == 'Alliance' and 'horde'"/>
       <script type="text/javascript">
         $(document).ready(function() {
-          $('#collected').click(function() {$('.obtainedMount').toggleClass('obtainedMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);});
-          $('#notcollected').click(function() {$('.unobtainedMount').toggleClass('unobtainedMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);});
-          $('#flying').click(function() {$('.isFlying').toggleClass('obtainedMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);});
-          $('#notflying').click(function() {$('.notisFlying').toggleClass('notisFlyingHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);});
-          $('#obtainable').click(function() {$('.obtainableMount').toggleClass('obtainableMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);});
-          $('#unobtainable').click(function() {$('.unobtainableMount').toggleClass('unobtainableMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);});
-          $('#alliance').click(function() {$('.allianceMount').toggleClass('allianceMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);});
-          $('#horde').click(function() {$('.hordeMount').toggleClass('hordeMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);});
-          $('#bothmount').click(function() {$('.bothMount').toggleClass('bothMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);});
+          if ($('#hideFaction').val() == 'horde') {
+            $('.hordeMount').toggleClass('hordeMountHidden');
+          }
+          else {
+            $('.allianceMount').toggleClass('allianceMountHidden');
+          }
+          $('#mount-counter').html($('#mount-table tr:visible').length-1);
+          $('#mount-table tr:visible:odd').addClass("odd");$('#mount-table tr:visible:even').removeClass("odd");
+          $('#collected').click(function() {$('.obtainedMount').toggleClass('obtainedMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);$('#mount-table tr:visible:odd').addClass("odd");$('#mount-table tr:visible:even').removeClass("odd");});
+          $('#notcollected').click(function() {$('.unobtainedMount').toggleClass('unobtainedMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);$('#mount-table tr:visible:odd').addClass("odd");$('#mount-table tr:visible:even').removeClass("odd");});
+          $('#flying').click(function() {$('.isFlying').toggleClass('obtainedMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);$('#mount-table tr:visible:odd').addClass("odd");$('#mount-table tr:visible:even').removeClass("odd");});
+          $('#notflying').click(function() {$('.notisFlying').toggleClass('notisFlyingHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);$('#mount-table tr:visible:odd').addClass("odd");$('#mount-table tr:visible:even').removeClass("odd");});
+          $('#obtainable').click(function() {$('.obtainableMount').toggleClass('obtainableMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);$('#mount-table tr:visible:odd').addClass("odd");$('#mount-table tr:visible:even').removeClass("odd");});
+          $('#unobtainable').click(function() {$('.unobtainableMount').toggleClass('unobtainableMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);$('#mount-table tr:visible:odd').addClass("odd");$('#mount-table tr:visible:even').removeClass("odd");});
+          $('#alliance').click(function() {$('.allianceMount').toggleClass('allianceMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);$('#mount-table tr:visible:odd').addClass("odd");$('#mount-table tr:visible:even').removeClass("odd");});
+          $('#horde').click(function() {$('.hordeMount').toggleClass('hordeMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);$('#mount-table tr:visible:odd').addClass("odd");$('#mount-table tr:visible:even').removeClass("odd");});
+          $('#bothmount').click(function() {$('.bothMount').toggleClass('bothMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);$('#mount-table tr:visible:odd').addClass("odd");$('#mount-table tr:visible:even').removeClass("odd");});
           $('#mount-counter').html($('#mount-table tr:visible').length-1);
           $('#mount-table tr:odd').addClass("odd");
           $('#mount-table').tablesorter({sortList: [[0,0]]}).bind("sortEnd", function(){
-              $('#mount-table tr:odd').addClass("odd");
-              $('#mount-table tr:even').removeClass("odd");
+              $('#mount-table tr:visible:odd').addClass("odd");
+              $('#mount-table tr:visible:even').removeClass("odd");
           });
         });
 
