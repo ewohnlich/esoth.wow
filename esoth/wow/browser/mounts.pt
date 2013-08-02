@@ -38,7 +38,7 @@
               <input type="checkbox" tal:attributes="checked python:context.faction == 'Alliance' and 'checked'" name="alliance" id="alliance"/>
               <label for="alliance">Alliance</label>
             </td>
-            <td rowspan="2">
+            <td>
               <input type="checkbox" checked="checked" name="bothmount" id="bothmount"/>
               <label for="bothmount">Both Factions</label>
             </td>
@@ -53,12 +53,16 @@
               <label for="notflying">Not Flying</label>
             </td>
             <td>
-              <input type="checkbox" checked="checked" name="unobtainable" id="unobtainable"/>
+              <input type="checkbox" name="unobtainable" id="unobtainable"/>
               <label for="unobtainable">Not Obtainable</label>
             </td>
             <td>
               <input type="checkbox" tal:attributes="checked python:context.faction == 'Horde' and 'checked'" name="horde" id="horde"/>
               <label for="horde">Horde</label>
+            </td>
+            <td>
+              <input type="checkbox" id="restriction" name="restriction" />
+              <label for="restriction">Class Restricted</label>
             </td>
           </tr>
         </tbody>
@@ -77,6 +81,7 @@
             <th>Jumping</th>
             <th>Faction</th>
             <th>Obtainable</th>
+            <th>Class</th>
           </tr>
         </thead>
         <tbody>
@@ -104,6 +109,7 @@
               </td>
               <td tal:content="python:mount['faction'] == 'A' and 'Alliance' or mount['faction'] == 'H' and 'Horde' or 'Both'" />
               <td tal:content="mount/obtainable"/>
+              <td tal:content="mount/restriction"/>
             </tr>
           </tal:mount>
         </tbody>
@@ -120,6 +126,7 @@
           }
           $('#mount-counter').html($('#mount-table tr:visible').length-1);
           $('#mount-table tr:visible:odd').addClass("odd");$('#mount-table tr:visible:even').removeClass("odd");
+          $('#restriction').click(function() {$('.restriction').toggleClass('restrictionHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);$('#mount-table tr:visible:odd').addClass("odd");$('#mount-table tr:visible:even').removeClass("odd");});
           $('#collected').click(function() {$('.obtainedMount').toggleClass('obtainedMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);$('#mount-table tr:visible:odd').addClass("odd");$('#mount-table tr:visible:even').removeClass("odd");});
           $('#notcollected').click(function() {$('.unobtainedMount').toggleClass('unobtainedMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);$('#mount-table tr:visible:odd').addClass("odd");$('#mount-table tr:visible:even').removeClass("odd");});
           $('#flying').click(function() {$('.isFlying').toggleClass('obtainedMountHidden');$('#mount-counter').html($('#mount-table tr:visible').length-1);$('#mount-table tr:visible:odd').addClass("odd");$('#mount-table tr:visible:even').removeClass("odd");});

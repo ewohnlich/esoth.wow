@@ -225,17 +225,18 @@ a.slotItem {
 .isFlyingHidden, .notisFlyingHidden,
 .allianceMountHidden, .hordeMountHidden,
 .bothMountHidden,
-.obtainableMountHidden, .unobtainableMountHidden {
+.obtainableMountHidden, .unobtainableMountHidden,
+.restrictionHidden {
   display: none;
 }
 
 #mount-table {
-  border: 1px solid #ddd;
+  border: 1px solid #aaa;
 }
 
 #mount-table td, #mount-table th {
   padding: 0.5em 1em;
-  border-style: none;
+  border: 1px solid #aaa;
 }
 
 #mount-table th.header {
@@ -249,7 +250,6 @@ a.slotItem {
   white-space:nowrap;
   padding-right: 20px;
   margin: 0;
-  border-style: none;
 }
 
 #mount-table th.headerSortUp {

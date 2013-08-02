@@ -17,10 +17,7 @@ def update_json_from_csv():
   with open('mount_source.csv') as csvfile:
     reader = csv.reader(csvfile, delimiter=',', quotechar='|')
     for row in reader:
-      try:
-        name,obtainable,faction,location,spellId,restriction = row
-      except:
-        import pdb; pdb.set_trace()
+      name,obtainable,faction,location,spellId,restriction = row
       import_val = {'name':name,'obtainable':obtainable,'faction':faction,'location':location,'restriction':restriction}
       try:
         spellId = int(spellId)

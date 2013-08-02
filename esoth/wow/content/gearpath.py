@@ -318,7 +318,7 @@ class GearPath(Item):
       _mounts = {}
       for m in self.mountDetails:
         _mounts[str(m['spellId'])] = m
-      return utility.mountData(_mounts, self.faction)
+      return utility.mountData(_mounts, self.faction, self.klass)
 
     def petData(self):
       data = {'numUnique':0,
