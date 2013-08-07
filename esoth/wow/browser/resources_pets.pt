@@ -1,0 +1,57 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="esoth.wow">
+
+<body>
+  
+<metal:title fill-slot="content-title">
+  <h1>Pet Resources</h1>
+</metal:title>
+
+<metal:content-core fill-slot="content-core"
+                    tal:define="pets view/pets;">
+
+  <a tal:attributes="href string:${context/absolute_url}/@@update-pets">Add Pet</a> |
+  <a tal:attributes="href string:${context/absolute_url}/@@export-resources">Export Resources</a>
+  
+  <div metal:use-macro="context/batch_macros/macros/navigation" />
+  <table class="tablesorter" id="pet-table">
+    <thead>
+      <tr>
+        <th>Species Id</th>
+        <th>Health</th>
+        <th>Power</th>
+        <th>Speed</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tal:mount repeat="pet pets">
+        <tr>
+          <td tal:content="pet/speciesId" />
+          <td tal:content="pet/health" />
+          <td tal:content="pet/power" />
+          <td tal:content="pet/speed" />
+        </tr>
+      </tal:mount>
+    </tbody>
+  </table>
+
+  <div metal:use-macro="context/batch_macros/macros/navigation" />
+  
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('#pet-table').tablesorter({sortList: [[0,0]]}).bind("sortEnd", function(){
+          $('#pet-table tr:visible:odd').addClass("odd");
+          $('#pet-table tr:visible:even').removeClass("odd");
+      });
+    });
+  </script>
+  
+</metal:content-core>
+
+</body>
+</html>

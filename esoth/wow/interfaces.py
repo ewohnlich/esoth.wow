@@ -1,4 +1,4 @@
-from collective.z3cform.datagridfield import DictRow
+from collective.z3cform.datagridfield import DictRow, DataGridFieldFactory
 import json
 from plone.autoform.directives import mode
 from plone.directives import form
@@ -57,34 +57,99 @@ class ICharDisplay(form.Schema):
                              required=False,)
   guild = schema.TextLine(title=_(u"Guild"),required=False)
   server = schema.TextLine(title=_(u"Server"),required=False)
+
+class IGearSchema(form.Schema):
+  name = schema.TextLine(title=_(u"Name"),required=False)
+  source = schema.TextLine(title=_(u"Source"),required=False)
+  itemIds = schema.List(title=_(u"Item IDs"),
+                  value_type=schema.TextLine(),required=False,
+            )
+  ilvls = schema.List(title=_(u"Ilvls"),
+                  value_type=schema.TextLine(),required=False,
+            )
+  klass = schema.TextLine(title=_(u"Class Restriction"),required=False)
+  slot = schema.TextLine(title=_(u"Slot"),required=False)
+  armorClass = schema.TextLine(title=_(u"Armor Class"),required=False)
+  icon = schema.TextLine(title=_(u"Icon"),required=False)
+  agility = schema.Bool(title=_(u"Agi"),required=False)
+  strength = schema.Bool(title=_(u"Strength"),required=False)
+  intellect = schema.Bool(title=_(u"Intellect"),required=False)
+  spirit = schema.Bool(title=_(u"Spirit"),required=False)
+  dodge = schema.Bool(title=_(u"Dodge"),required=False)
+  parry = schema.Bool(title=_(u"Parry"),required=False)
+  dps_flag = schema.Bool(title=_(u"DPS explicit"),required=False)
+  healer_flag = schema.Bool(title=_(u"Healer explicit"),required=False)
+  weaponType = schema.TextLine(title=_(u"Weapon Type"),required=False)
+
+class IMountResourceSchema(Interface):
+  """ Mount info from armory will actually be stored on each character
+      This is just external information """
+  spellId = schema.TextLine(title=_(u"Spell ID"),required=False)
+  restriction = schema.TextLine(title=_(u"Class Restriction"),required=False)
+  name = schema.TextLine(title=_(u"Name"),required=False)
+  icon = schema.TextLine(title=_(u"Icon"),required=False)
+  faction = schema.TextLine(title=_(u"Faction"),required=False)
+  isGround = schema.Bool(title=_(u"Ground"),required=False)
+  isAquatic = schema.Bool(title=_(u"Aquatic"),required=False)
+  isFlying = schema.Bool(title=_(u"Flying"),required=False)
+  isJumping = schema.Bool(title=_(u"Jumping"),required=False)
+  obtainable = schema.TextLine(title=_(u"Obtainable"),required=False)
+  location = schema.TextLine(title=_(u"Location"),required=False)
   
 class IMountSchema(Interface):
-  name = schema.TextLine(title=_(u"Name"))
-  creatureId = schema.TextLine(title=_(u"Creature ID"))
-  itemId = schema.TextLine(title=_(u"Item ID"))
-  spellId = schema.TextLine(title=_(u"Spell ID"))
-  icon = schema.TextLine(title=_(u"Icon"))
-  source = schema.TextLine(title=_(u"Source"))
-  isCollected = schema.Bool(title=_(u"isCollected"))
-  isGround = schema.Bool(title=_(u"isGround"))
-  isFlying = schema.Bool(title=_(u"isFlying"))
-  isAquatic = schema.Bool(title=_(u"isAquatic"))
-  isJumping = schema.Bool(title=_(u"isJumping"))
+  name = schema.TextLine(title=_(u"Name"),required=False)
+  creatureId = schema.TextLine(title=_(u"Creature ID"),required=False)
+  itemId = schema.TextLine(title=_(u"Item ID"),required=False)
+  spellId = schema.TextLine(title=_(u"Spell ID"),required=False)
+  icon = schema.TextLine(title=_(u"Icon"),required=False)
+  source = schema.TextLine(title=_(u"Source"),required=False)
+  isCollected = schema.Bool(title=_(u"isCollected"),required=False)
+  isGround = schema.Bool(title=_(u"isGround"),required=False)
+  isFlying = schema.Bool(title=_(u"isFlying"),required=False)
+  isAquatic = schema.Bool(title=_(u"isAquatic"),required=False)
+  isJumping = schema.Bool(title=_(u"isJumping"),required=False)
 
+class IPetResourceSchema(Interface):
+  speciesId = schema.TextLine(title=_(u"Species ID"),required=False)
+  health = schema.TextLine(title=_(u"Health"),required=False)
+  power = schema.TextLine(title=_(u"Power"),required=False)
+  speed = schema.TextLine(title=_(u"Speed"),required=False)
+  
 class IPetSchema(Interface):
-  name = schema.TextLine(title=_(u"Name"))
-  creatureName = schema.TextLine(title=_(u"Creature Name"))
-  spellId = schema.TextLine(title=_(u"Spell ID"))
-  creatureId = schema.TextLine(title=_(u"Creature ID"))
-  speciesId = schema.TextLine(title=_(u"Species ID"))
-  qualityId = schema.TextLine(title=_(u"Quality ID"))
-  icon = schema.TextLine(title=_(u"Icon"))
-  breedId = schema.TextLine(title=_(u"Breed ID"))
-  level = schema.TextLine(title=_(u"Level"))
-  health = schema.TextLine(title=_(u"Health"))
-  power = schema.TextLine(title=_(u"Power"))
-  speed = schema.TextLine(title=_(u"Speed"))
-  canBattle = schema.TextLine(title=_(u"Can Battle?"))
+  name = schema.TextLine(title=_(u"Name"),required=False)
+  creatureName = schema.TextLine(title=_(u"Creature Name"),required=False)
+  spellId = schema.TextLine(title=_(u"Spell ID"),required=False)
+  creatureId = schema.TextLine(title=_(u"Creature ID"),required=False)
+  speciesId = schema.TextLine(title=_(u"Species ID"),required=False)
+  qualityId = schema.TextLine(title=_(u"Quality ID"),required=False)
+  icon = schema.TextLine(title=_(u"Icon"),required=False)
+  breedId = schema.TextLine(title=_(u"Breed ID"),required=False)
+  level = schema.TextLine(title=_(u"Level"),required=False)
+  health = schema.TextLine(title=_(u"Health"),required=False)
+  power = schema.TextLine(title=_(u"Power"),required=False)
+  speed = schema.TextLine(title=_(u"Speed"),required=False)
+  canBattle = schema.TextLine(title=_(u"Can Battle?"),required=False)
+
+class IWoWResources(Interface):
+  """ """
+
+class IWoWResourcesSchema(form.Schema):
+  title = schema.TextLine(title=_(u"Title"))
+  form.widget(pets=DataGridFieldFactory)
+  pets = schema.List(title=u"Pets",
+                     value_type=DictRow(title=u"pet", schema=IPetResourceSchema),
+                     required=False,
+         )
+  form.widget(mounts=DataGridFieldFactory)
+  mounts = schema.List(title=u"Mouts",
+                     value_type=DictRow(title=u"mount", schema=IMountResourceSchema),
+                     required=False,
+         )
+  form.widget(gear=DataGridFieldFactory)
+  gear = schema.List(title=u"Gear",
+                     value_type=DictRow(title=u"mount", schema=IGearSchema),
+                     required=False,
+         )
 
 class ISpecSchema(Interface):
   name = schema.TextLine(title=_(u"Name"))

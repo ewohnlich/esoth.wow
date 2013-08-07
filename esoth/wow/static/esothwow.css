@@ -230,16 +230,22 @@ a.slotItem {
   display: none;
 }
 
-#mount-table {
+#mount-table,
+#gear-table,
+#pet-table {
   border: 1px solid #aaa;
 }
 
-#mount-table td, #mount-table th {
+#mount-table td, #mount-table th,
+#gear-table td, #gear-table th,
+#pet-table td, #gear-table th {
   padding: 0.5em 1em;
   border: 1px solid #aaa;
 }
 
-#mount-table th.header {
+#mount-table th.header,
+#gear-table th.header,
+#pet-table th.header {
   background-color: #dddddd;
   background-image: url("++resource++esoth.wow/bg.png");
   background-position: right center !important;
@@ -252,16 +258,22 @@ a.slotItem {
   margin: 0;
 }
 
-#mount-table th.headerSortUp {
+#gear-table th.headerSortUp,
+#mount-table th.headerSortUp,
+#pet-table th.headerSortUp {
   background-image: url("++resource++esoth.wow/asc.png");
   cursor: pointer;
 }
 
-#mount-table th.headerSortDown {
+#mount-table th.headerSortDown,
+#gear-table th.headerSortDown,
+#pet-table th.headerSortDown {
   background-image: url("++resource++esoth.wow/desc.png");
   cursor: pointer;
 }
 
-#mount-table tbody tr.odd td {
+#mount-table tbody tr.odd td,
+#gear-table tbody tr.odd td,
+#pet-table tbody tr.odd td {
     background: none repeat scroll 0 0 #EEEEEE;
 }

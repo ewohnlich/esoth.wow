@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 import json
 from urllib import urlopen
 from five import grok
+import logging
 from plone.dexterity.content import Item
 from plone.directives import dexterity
 from plone.namedfile.file import NamedImage as NamedImageFile
@@ -9,19 +10,20 @@ from zope.component import getUtility
 from zope.interface import implements, Interface
 
 from esoth.wow import _
+from esoth.wow.content.config import cm_mounts, int_specs, spi_specs, str_specs, agi_specs, tank_specs, healer_specs, dps_specs, weapon_map, breedmap, armorMap
 from esoth.wow.content.gear import getGear
 from esoth.wow.interfaces import IGearPath, IPetUtility, IMountUtility, servers
-from esoth.wow.pets import breedmap
+
+logger = logging.getLogger('esoth.wow')
 
 class GearPath(Item):
     """ """
     implements(IGearPath)
-    meta_type = 'GearPath'
     
     def gearMap(self):
       if not self.spec:
         return {}
-      boss,slot,gear = getGear(self.spec)
+      boss,slot,gear = self.getGear()
       _map = {}
 
       worn_slots = ['Weapon','Off Hand','Head','Neck','Shoulders','Back','Chest','Wrists','Hands','Waist','Legs','Feet','Ring1','Ring2','Trinket1','Trinket2']
@@ -78,7 +80,6 @@ class GearPath(Item):
     
     def bossOrder(self):
       return ['Jin\'rokh','Horridon','Zandalari Council','Tortos','Megaera','Ji-Kun','Durumu','Primordius','Dark Animus','Iron Qon','Twin Consorts','Lei Shen','Ra-den','Shared - Throne of Thunder','Legendary']
-
        
     def updateData(self):
       base_image_url = 'http://us.battle.net/static-render/us/'
@@ -312,13 +313,117 @@ class GearPath(Item):
         p['maxH'] = int( round( 25 * (base['health'] + breedmap[p['breedId']]['health']) * rarity * 5 + 100 ))
         p['maxS'] = int( round( 25 * (base['speed'] + breedmap[p['breedId']]['speed']) * rarity ))
         p['maxP'] = int( round( 25 * (base['power'] + breedmap[p['breedId']]['power']) * rarity ))
+  
+    def applyClasses(self, m, default_faction, klass, cm_flag):
+      klass = []
+      faction = default_faction == 'Alliance' and 'A' or 'H'
+      obtainable = 'Y'
+      if m['restriction'] and m['restriction'] != klass:
+        klass.append('restriction'); klass.append('restrictionHidden')
+      klass.append(m.get('isCollected') and 'obtainedMount' or 'unobtainedMount')
+      klass.append(m.get('faction',faction).lower() == 'a' and 'allianceMount' or m['faction'] == 'H' and 'hordeMount' or 'bothMount')
+      if m.get('obtainable',obtainable).lower() == 'n' and not m['isCollected']: # no longer obtainable, but we have it
+        klass.append('unobtainableMount'); klass.append('unobtainableMountHidden')
+      elif cm_flag:
+        klass.append('unobtainableMount'); klass.append('unobtainableMountHidden')
+      else:
+        klass.append('obtainableMount')
+      klass.append(' '.join([m.get(k) and k or 'not'+k for k in ('isJumping','isGround','isFlying','isAquatic',)]))
+      m = m.copy()
+      m['classes'] = ' '.join(klass)
+      return m
     
     def mountData(self):
-      utility = getUtility(IMountUtility)
-      _mounts = {}
+      """ Combine json info on all mounts with collected mount info
+      """
+      resourceMounts = self.resources().mounts
+      data = {}
+      for rm in resourceMounts:
+        data[ str(rm['spellId']) ] = rm
+      
+      mymounts = {}
       for m in self.mountDetails:
-        _mounts[str(m['spellId'])] = m
-      return utility.mountData(_mounts, self.faction, self.klass)
+        mymounts[str(m['spellId'])] = m
+      _mounts = []
+      
+      obt_cm_mounts = [m for m in mymounts.keys() if m in cm_mounts]
+      for id,info in data.items():
+        _mount = {'icon':info.get('icon'),
+                  'isCollected':info.get('isCollected'),
+                  'isGround':info.get('isGround'),
+                  'isFlying':info.get('isFlying'),
+                  'isAquatic':info.get('isAquatic'),
+                  'isJumping':info.get('isJumping'),
+                  'restriction':info.get('restriction'),
+                  'spellId':id,
+                  'name':info['name'],
+                  'location':info['location'],
+                  'obtainable':info['obtainable'],
+                  'faction':info['faction']}
+        mkeys = mymounts.keys()
+        mkeys.sort()
+          
+        if id in mymounts:
+          if mymounts[id]['name'] != info['name']:
+            logger.warn('%s (import) vs %s (blizz)' % (info['name'],mymounts[id]['name']))
+          if info['location'] == 'unknown':
+            logger.warn('unknown location - %s' % info['name'])
+          if info['faction'] == 'U':
+            logger.warn('unknown faction - %s' % info['name'])
+          if info['obtainable'] == 'U':
+            logger.warn('unknown if obtainable - %s' % info['obtainable'])
+          _mount.update({'isCollected':True,
+                         'icon':mymounts[id]['icon'],
+                         'name':mymounts[id]['name'],
+                         'itemId':mymounts[id]['itemId'],
+                         'isGround':mymounts[id]['isGround'],
+                         'isFlying':mymounts[id]['isFlying'],
+                         'isAquatic':mymounts[id]['isAquatic'],
+                         'isJumping':mymounts[id]['isJumping']})
+          if not data[id].get('icon'):
+            data[id]['icon'] = mymounts[id]['icon']
+            data[id]['isGround'] = mymounts[id]['isGround']
+            data[id]['isFlying'] = mymounts[id]['isFlying']
+            data[id]['isAquatic'] = mymounts[id]['isAquatic']
+            data[id]['isJumping'] = mymounts[id]['isJumping']
+        
+        _cm_flag = id in cm_mounts and id not in obt_cm_mounts
+        _mounts.append(self.applyClasses(_mount,self.faction,self.klass,_cm_flag))
+      for id in mymounts.keys():
+        # we don't have any data on this one
+        if id not in data:
+          logger.warn('added - %s' % id)
+          data[id] = {'name':mymounts[id]['name'],'faction':'U','obtainable':'U','location':'unknown'}
+          _mounts.append(self.applyClasses({'isCollected':True,
+                          'icon':mymounts[id]['icon'],
+                          'location':'unknown',
+                          'faction':'U',
+                          'obtainable':'U',
+                          'spellId':id,
+                          'restriction':'',
+                          'itemId':mymounts[id]['itemId'],
+                          'name':mymounts[id]['name'],
+                          'isGround':mymounts[id]['isGround'],
+                          'isFlying':mymounts[id]['isFlying'],
+                          'isAquatic':mymounts[id]['isAquatic'],
+                          'isJumping':mymounts[id]['isJumping']},self.faction,self.klass,_cm_flag))
+            
+      return _mounts
+      
+    def addPetsById(self, pids):
+      pets = self.resources().pets
+      base_url = 'http://us.battle.net/api/wow/battlePet/stats/%s?qualityId=0'
+      for pid in pids:
+        url = base_url % pid
+        try:
+          pdata = json.load(urllib2.urlopen(url))
+        except ValueError:
+          pdata = json.load(urllib2.urlopen('http://www.esoth.com/proxyw?u='+url))
+        pets.append({'health': ( pdata['health'] - 100 ) / 5 - breedmap[ str(pdata['breedId']) ]['health'],
+                     'speed' : pdata['speed'] - breedmap[ str(pdata['breedId']) ]['speed'],
+                     'power' : pdata['power'] - breedmap[ str(pdata['breedId']) ]['power'],
+                     'speciesId': pdata['speciesId'] })
+      self.resources().pets = pets                   
 
     def petData(self):
       data = {'numUnique':0,
@@ -333,15 +438,14 @@ class GearPath(Item):
       uniques = []
       
       #update petdata if needed
-      petu = getUtility(IPetUtility)
-      pkeys = petu.getPets().keys()
+      _resource = self.resources().pets
+      petdata = {}
+      pkeys = [p['speciesId'] for p in _resource]
+      for p in _resource:
+        petdata[ p['speciesId'] ] = p
       newpids = [p['speciesId'] for p in pets if p['speciesId'] not in pkeys and p['speciesId'] != '0']
       if newpids:
-        petu.addPetsById(newpids)
-      petdata = petu.getPets()
-      if not petdata:
-        petu.populate()
-        petdata = petu.getPets()
+        self.addPetsById(newpids)
       
       updates = []
       for p in pets:
@@ -382,6 +486,66 @@ class GearPath(Item):
     
     def displaylastupdated(self):
       return self.lastupdated and self.lastupdated.strftime('%b %d, %Y %I:%M %p') or ''
+      
+    def matchSpec(self,spec,g):
+      if g['agility'] and spec not in agi_specs:
+        return False
+      if g['strength'] and spec not in str_specs:
+        return False
+      if g['intellect'] and spec not in int_specs:
+        return False
+      if g['spirit'] and spec not in spi_specs:
+        return False
+      if (g['dodge'] or g['parry']) and spec not in tank_specs:
+        return False
+      if g.get('dps_flag') and spec not in dps_specs:
+        return False
+      if g.get('healer_flag') and spec not in healer_specs:
+        return False
+      if g['klass'] and self.klass.lower() != g['klass'].lower():
+        return False
+      if g['armorClass'] and g['armorClass'] in armorMap and self.klass.lower() not in armorMap[ g['armorClass'] ]:
+        if g['slot'] != 'Back': # Blizzard counts all backs as cloth
+          return False
+      if g['slot'] == 'Weapon':
+        return spec in weapon_map[ g['weaponType'] ]
+      return True
+      
+    def getGear(self):
+      _gear = self.resources().gear
+      boss = {} # boss[bossname][slot]=itemname
+      slot = {}
+      gear = {}
+    
+      for g in _gear:
+       if self.spec:
+        for spec in self.spec:
+          if self.matchSpec(spec,g):
+            for i,_id in zip(g['ilvls'],g['itemIds']):
+              name = '%s (%s)' % (g['name'],i)
+              if boss.has_key(g['source']):
+                if boss[ g['source'] ].has_key(g['slot']):
+                  boss[ g['source'] ][ g['slot'] ].append(name)
+                else:
+                  boss[ g['source'] ][ g['slot'] ] = [name]
+              else:
+                boss[ g['source'] ] = {g['slot']:[name]}
+              
+              if slot.has_key(g['slot']):
+                slot[ g['slot'] ].append(name)
+              else:
+                slot[ g['slot'] ]=[name]
+          
+              item = {'boss':g['source'],'slot':g['slot'],'id':_id}
+              gear[name] = item
+      
+      _sorter = lambda x,y: cmp(int(x.split('(')[-1].replace(')','')), int(x.split('(')[-1].replace(')','')))
+      for k,v in slot.items():
+        v.sort(_sorter)
+        v.reverse()
+        slot[k]=v
+    
+      return (boss,slot,gear)
     
 class Edit(dexterity.EditForm):
     grok.context(IGearPath)

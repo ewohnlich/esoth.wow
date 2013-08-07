@@ -14,4 +14,11 @@
              expression=""
              id="++resource++esoth.wow/jquery.tablesorter.min.js"
              inline="False"/>
+ <javascript cacheable="True"
+             compression="none"
+             cookable="False"
+             enabled="True"
+             expression=""
+             id="http://static.wowhead.com/widgets/power.js"
+             inline="False"/>
 </object>

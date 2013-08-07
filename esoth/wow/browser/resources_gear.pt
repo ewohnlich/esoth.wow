@@ -1,0 +1,128 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="esoth.wow">
+
+<body>
+  
+<metal:title fill-slot="content-title">
+  <h1>Gear Resources</h1>
+</metal:title>
+
+<metal:content-core fill-slot="content-core"
+                    tal:define="Batch python:modules['Products.CMFPlone'].Batch;
+                                allgear view/gear;
+                                b_start python:request.get('b_start',0);
+                                batch python:Batch(allgear, 50, int(b_start), orphan=2);">
+
+  <a tal:attributes="href string:${context/absolute_url}/@@update-gear">Add Gear</a> |
+  <a tal:attributes="href string:${context/absolute_url}/@@export-resources">Export Resources</a>
+  
+  <div metal:use-macro="context/batch_macros/macros/navigation" />
+  <table class="tablesorter" id="gear-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Source</th>
+        <th>itemIds</th>
+        <th>Ilvls</th>
+        <th>Slot</th>
+        <th>Armor Class</th>
+        <th>Weapon Type</th>
+        <th>Agi</th>
+        <th>Str</th>
+        <th>Int</th>
+        <th>Spi</th>
+        <th>Tank</th>
+        <th>Healer</th>
+        <th>DPS</th>
+        <th>Updates</th>
+        <th>Class</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tal:item repeat="item batch">
+        <tr>
+          <td>
+            <ul class="visualNoMarker">
+              <tal:id repeat="id item/itemIds">
+                <li>
+                  <img tal:attributes="src string:http://us.media.blizzard.com/wow/icons/18/${item/icon}.jpg" />
+                  <a tal:attributes="href string:http://www.wowhead.com/item=${id}" tal:content="item/name" />
+                </li>
+              </tal:id>
+            </ul>
+          </td>
+          <td tal:content="item/source" />
+          <td>
+            <ul class="visualNoMarker">
+              <tal:id repeat="id item/itemIds">
+                <li tal:content="id" />
+              </tal:id>
+            </ul>
+          </td>
+          <td>
+            <ul class="visualNoMarker">
+              <tal:id repeat="ilvl item/ilvls">
+                <li tal:content="ilvl" />
+              </tal:id>
+            </ul>
+          </td>
+          <td tal:content="item/slot" />
+          <td tal:content="item/armorClass" />
+          <td tal:content="item/weaponType" />
+          <td>
+            <span tal:condition="item/agility">&#10004;</span>
+          </td>
+          <td>
+            <span tal:condition="item/strength">&#10004;</span>
+          </td>
+          <td>
+            <span tal:condition="item/intellect">&#10004;</span>
+          </td>
+          <td>
+            <span tal:condition="item/spirit">&#10004;</span>
+          </td>
+          <td>
+            <span tal:condition="python:item['dodge'] or item['parry']">&#10004;</span>
+          </td>
+          <td>
+            <span tal:condition="python:item.get('healer_flag')">&#10004;</span>
+          </td>
+          <td>
+            <span tal:condition="python:item.get('dps_flag')">&#10004;</span>
+          </td>
+          <td>
+            <a tal:attributes="href string:${context/absolute_url}/@@mod-gear?name=${item/name}&agi=True&b_start=${b_start}">Agi</a> |
+            <a tal:attributes="href string:${context/absolute_url}/@@mod-gear?name=${item/name}&strength=True&b_start=${b_start}">Str</a> |
+            <a tal:attributes="href string:${context/absolute_url}/@@mod-gear?name=${item/name}&intellect=True&b_start=${b_start}">Int</a> |
+            <a tal:attributes="href string:${context/absolute_url}/@@mod-gear?name=${item/name}&spirit=True&b_start=${b_start}">Spi</a> |
+            <a tal:attributes="href string:${context/absolute_url}/@@mod-gear?name=${item/name}&tank_flag=True&b_start=${b_start}">Tank</a> |
+            <a tal:attributes="href string:${context/absolute_url}/@@mod-gear?name=${item/name}&healer_flag=True&b_start=${b_start}">Healer</a> |
+            <a tal:attributes="href string:${context/absolute_url}/@@mod-gear?name=${item/name}&dps_flag=True&b_start=${b_start}">DPS</a>
+          </td>
+            
+          <td tal:content="item/klass" />
+        </tr>
+      </tal:item>
+    </tbody>
+  </table>
+
+  <div metal:use-macro="context/batch_macros/macros/navigation" />
+  
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('#gear-table').tablesorter({sortList: [[0,0]]}).bind("sortEnd", function(){
+          $('#gear-table tr:visible:odd').addClass("odd");
+          $('#gear-table tr:visible:even').removeClass("odd");
+      });
+    });
+  </script>
+  
+</metal:content-core>
+
+</body>
+</html>

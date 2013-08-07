@@ -143,6 +143,7 @@
               $('#mount-table tr:visible:even').removeClass("odd");
           });
         });
+      </script>
 
     </metal:content-core>
 </metal:content-core>

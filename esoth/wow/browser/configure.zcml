@@ -89,4 +89,49 @@
         permission="zope2.View"
         />
 
+    <browser:page
+        name="gear-resources"
+        for="*"
+        class=".resources.GearResourcesView"
+        template="resources_gear.pt"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        name="mod-gear"
+        for="*"
+        class=".resources.ModGearResource"
+        permission="cmf.ManagePortal"
+        />
+
+    <browser:page
+        name="mount-resources"
+        for="*"
+        class=".resources.MountResourcesView"
+        template="resources_mounts.pt"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        name="export-resources"
+        for="*"
+        class=".resources.ExportResources"
+        permission="cmf.ManagePortal"
+        />
+
+    <browser:page
+        name="import-resources"
+        for="*"
+        class=".resources.ImportResources"
+        permission="cmf.ManagePortal"
+        />
+
+    <browser:page
+        name="pet-resources"
+        for="*"
+        class=".resources.PetResourcesView"
+        template="resources_pets.pt"
+        permission="zope2.View"
+        />
+
 </configure>
