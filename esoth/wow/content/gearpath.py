@@ -346,6 +346,7 @@ class GearPath(Item):
         mymounts[str(m['spellId'])] = m
       _mounts = []
       
+      _cm_flag = False
       obt_cm_mounts = [m for m in mymounts.keys() if m in cm_mounts]
       for id,info in data.items():
         _mount = {'icon':info.get('icon'),
