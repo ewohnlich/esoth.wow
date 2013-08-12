@@ -310,9 +310,9 @@ class GearPath(Item):
       rarity = int(p['qualityId'])*.1+1
       base = petdata.get( p['speciesId'] )
       if base:
-        p['maxH'] = int( round( 25 * (base['health'] + breedmap[p['breedId']]['health']) * rarity * 5 + 100 ))
-        p['maxS'] = int( round( 25 * (base['speed'] + breedmap[p['breedId']]['speed']) * rarity ))
-        p['maxP'] = int( round( 25 * (base['power'] + breedmap[p['breedId']]['power']) * rarity ))
+        p['maxH'] = str( int( round( 25 * (base['health'] + breedmap[p['breedId']]['health']) * rarity * 5 + 100 )))
+        p['maxS'] = str( int( round( 25 * (base['speed'] + breedmap[p['breedId']]['speed']) * rarity )))
+        p['maxP'] = str( int( round( 25 * (base['power'] + breedmap[p['breedId']]['power']) * rarity )))
   
     def applyClasses(self, m, default_faction, klass, cm_flag):
       klass = []
