@@ -9,7 +9,6 @@ from z3c.form import button
 from urllib import urlopen
 import json
 
-from esoth.wow.content.gear import getGear
 from esoth.wow.content.gearpath import IGearPath
 
 class GearUpdate(BrowserView):
@@ -21,7 +20,7 @@ class GearUpdate(BrowserView):
         
 class GearPathView(BrowserView):
   def __call__(self,action='',item='',slot=''):
-    gear = getGear(self.context.spec)[2]
+    gear = self.context.getGear()[2]
     if action and item:
       if not slot:
         slot = gear[item]['slot']

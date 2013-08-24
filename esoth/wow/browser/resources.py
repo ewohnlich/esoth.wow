@@ -26,6 +26,11 @@ def blizzAPI(id):
   if _blizz.get('allowableClasses'):
     data['klass'] = allowableClasses[ _blizz['allowableClasses'][0] ]
   return data
+
+def wowheadAPI(id):
+  data = {}
+  _wowhead = json.load(urlopen('http://api.wowhead.com/items/'+id))
+  data['name'] = _wowhead['name']
     
 class UpdateGear(form.SchemaForm):
   grok.name('update-gear')
@@ -105,7 +110,7 @@ class UpdateGear(form.SchemaForm):
     self.context.gear = gear
     return item['name']
   
-  @button.buttonAndHandler(u'Update from Blizzard')
+  @button.buttonAndHandler(u'Update from Blizzard or Wowhead')
   def updateGear(self, action):
     data, errors = self.extractData()
     name = self.importItem(data)
@@ -114,12 +119,12 @@ class UpdateGear(form.SchemaForm):
     self.request.response.redirect(self.context.absolute_url()+'/@@gear-resources')
   
   @button.buttonAndHandler(u'Add PTR/beta item')
-  def updateGear(self, action):
+  def updateGearPTR(self, action):
     data, errors = self.extractData()
     gear = self.context.gear
     gear.append(data)
     self.context.gear = gear
-    IStatusMessage(self.request).addStatusMessage(_(u"%s added" % item['name']),"info")
+    IStatusMessage(self.request).addStatusMessage(_(u"%s added" % data['name']),"info")
     self.request.response.redirect(self.context.absolute_url()+'/@@gear-resources')
 
 class GearResourcesView(BrowserView):

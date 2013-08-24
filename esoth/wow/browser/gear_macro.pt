@@ -55,11 +55,14 @@
       </tr>
       <tal:itm repeat="item items/itms">
         <tr tal:attributes="slot slot;
-                            class python:' '.join([c for c in [item['equipped'] and 'equippedItem',item['acquired'] and 'acquiredItem',item['bis'] and 'bisItem',item['downgrade'] and 'downgradeItem'] if c])">
+                            class python:' '.join([c for c in [not (item['equipped'] or item['acquired']) and 'itemLevel-'+item['ilvl'],item['equipped'] and 'equippedItem',item['acquired'] and 'acquiredItem',item['bis'] and 'bisItem',item['downgrade'] and 'downgradeItem'] if c])">
           <td>
             <a class="slotItem"
-               tal:attributes="href string:http://www.wowhead.com?item=${item/id}"
-               tal:content="item/name"/>
+               tal:attributes="href string:http://www.wowhead.com?item=${item/id}">
+              <!-- <img tal:attributes="src string:http://us.media.blizzard.com/wow/icons/18/${item/icon}.jpg" /> -->
+              <img tal:attributes="src string:http://wow.zamimg.com/images/wow/icons/small/${item/icon}.jpg" />
+              <span tal:replace="item/name"/>
+            </a>
           </td>
           <td tal:content="item/boss"/>
           <tal:edit condition="python:checkPermission('Modify portal content',context)">

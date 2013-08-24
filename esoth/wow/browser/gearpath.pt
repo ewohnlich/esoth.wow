@@ -35,6 +35,50 @@
   
     <div class="gearTable">
       <dl class="enableFormTabbing" id="gearTable">
+    
+        <table class="listing">
+          <tr>
+            <th>
+              <input type="checkbox" id="ilvl600" name="ilvl600" onclick="$('.itemLevel-600').toggle()" checked="checked" />
+              <label for="ilvl600">600</label>
+            </th>
+            <th>
+              <input type="checkbox" id="ilvl572" name="ilvl572" onclick="$('.itemLevel-572').toggle()" checked="checked" />
+              <label for="ilvl572">572</label>
+            </th>
+            <th>
+              <input type="checkbox" id="ilvl566" name="ilvl566" onclick="$('.itemLevel-566').toggle()" checked="checked" />
+              <label for="ilvl566">566</label>
+            </th>
+            <th>
+              <input type="checkbox" id="ilvl559" name="ilvl559" onclick="$('.itemLevel-559').toggle()" checked="checked" />
+              <label for="ilvl559">559</label>
+            </th>
+            <th>
+              <input type="checkbox" id="ilvl553" name="ilvl553" onclick="$('.itemLevel-553').toggle()" checked="checked" />
+              <label for="ilvl553">553</label>
+            </th>
+          </tr>
+          <tr>
+            <th>
+              <input type="checkbox" id="ilvl541" name="ilvl541" onclick="$('.itemLevel-541').toggle()" />
+              <label for="ilvl541">541</label>
+            </th>
+            <th>
+              <input type="checkbox" id="ilvl535" name="ilvl535" onclick="$('.itemLevel-535').toggle()" />
+              <label for="ilvl535">535</label>
+            </th>
+            <th>
+              <input type="checkbox" id="ilvl528" name="ilvl528" onclick="$('.itemLevel-528').toggle()" />
+              <label for="ilvl528">528</label>
+            </th>
+            <th>
+              <input type="checkbox" id="ilvl522" name="ilvl522" onclick="$('.itemLevel-522').toggle()" />
+              <label for="ilvl522">522</label>
+            </th>
+            <th />
+          </tr>
+        </table>
         <tal:items define="items gearmap/weapon;
                            slot string:weapon;
                            slotName string:Weapon;">
@@ -159,10 +203,14 @@
            tal:attributes="value string:${context/absolute_url}/@@boss_table" />
     <script type="text/javascript">
       $(document).ready(function() {
+        $('.itemLevel-522').hide();
+        $('.itemLevel-528').hide();
+        $('.itemLevel-535').hide();
+        $('.itemLevel-541').hide();
         $('.downgradeItem').hide();
         $('#verify').prepOverlay({subtype:'ajax'});
         $('#gearhelp').prepOverlay({subtype:'ajax'});
-        $("#bossNeedContainer").load($('#boss_table').val(),function(responseTxt,statusTxt,xhr){});
+        $("#bossNeedContainer").load($('#boss_table').val(),function(responseTxt,statusTxt,xhr){$('.tier14').hide();});
         $('.equip-link').bind('click',function(event){
           event.preventDefault();
           $('#blackout').toggle();

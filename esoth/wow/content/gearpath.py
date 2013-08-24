@@ -11,7 +11,6 @@ from zope.interface import implements, Interface
 
 from esoth.wow import _
 from esoth.wow.content.config import cm_mounts, int_specs, spi_specs, str_specs, agi_specs, tank_specs, healer_specs, dps_specs, weapon_map, breedmap, armorMap
-from esoth.wow.content.gear import getGear
 from esoth.wow.interfaces import IGearPath, IPetUtility, IMountUtility, servers
 
 logger = logging.getLogger('esoth.wow')
@@ -33,6 +32,8 @@ class GearPath(Item):
         itms = []
         for v in slot.get(item_type,[]):
           itm = {'name':v,
+                 'ilvl':v.split('(')[-1].replace(')',''),
+                 'icon':gear[v]['icon'],
                  'id':gear[v]['id'],
                  'boss':gear[v]['boss'],
                  'bis':self.bisItems and v in self.bisItems,
@@ -44,9 +45,9 @@ class GearPath(Item):
       return _map
 
     def bossNeeds(self):
-      boss,slot,gear = getGear(self.spec)
-      heroicIlvls = set([535,541])
-      normalIlvls = set([522,528])
+      boss,slot,gear = self.getGear()
+      heroicIlvls = set([535,541,566,572])
+      normalIlvls = set([522,528,553,559])
       # name, slot
       neededSlots = []
       bossItems = {}
@@ -79,7 +80,39 @@ class GearPath(Item):
       return bossItems
     
     def bossOrder(self):
-      return ['Jin\'rokh','Horridon','Zandalari Council','Tortos','Megaera','Ji-Kun','Durumu','Primordius','Dark Animus','Iron Qon','Twin Consorts','Lei Shen','Ra-den','Shared - Throne of Thunder','Legendary']
+      return [{'name':'Immerseus','tier':'tier15'},
+              {'name':'The Fallen Protectors','tier':'tier15'},
+              {'name':'Norushen','tier':'tier15'},
+              {'name':'Sha of Pride','tier':'tier15'},
+              {'name':'Galakras','tier':'tier15'},
+              {'name':'Iron Juggernaut','tier':'tier15'},
+              {'name':'Kor\'kron Dark Shaman','tier':'tier15'},
+              {'name':'General Nazgrim','tier':'tier15'},
+              {'name':'Malkorok','tier':'tier15'},
+              {'name':'Spoils of Pandaria','tier':'tier15'},
+              {'name':'Thok the Bloodthirsty','tier':'tier15'},
+              {'name':'Siegecrafter Blackfuse','tier':'tier15'},
+              {'name':'Paragons of the Klaxxi','tier':'tier15'},
+              {'name':'Garrosh Hellscream','tier':'tier15'},
+              {'name':'Ordos','tier':'tier15'},
+              {'name':'Jin\'rokh','tier':'tier14'},
+              {'name':'Horridon','tier':'tier14'},
+              {'name':'Zandalari Council','tier':'tier14'},
+              {'name':'Tortos','tier':'tier14'},
+              {'name':'Megaera','tier':'tier14'},
+              {'name':'Ji-Kun','tier':'tier14'},
+              {'name':'Durumu','tier':'tier14'},
+              {'name':'Primordius','tier':'tier14'},
+              {'name':'Dark Animus','tier':'tier14'},
+              {'name':'Iron Qon','tier':'tier14'},
+              {'name':'Twin Consorts','tier':'tier14'},
+              {'name':'Lei Shen','tier':'tier14'},
+              {'name':'Ra-den','tier':'tier14'},
+              {'name':'Shared - Throne of Thunder','tier':'tier14'},
+              {'name':'Legendary','tier':'nontier'},
+              {'name':'Leatherworking','tier':'nontier'},
+              {'name':'Tailoring','tier':'nontier'},
+              {'name':'Blacksmithing','tier':'nontier'}]
        
     def updateData(self):
       base_image_url = 'http://us.battle.net/static-render/us/'
@@ -537,7 +570,7 @@ class GearPath(Item):
               else:
                 slot[ g['slot'] ]=[name]
           
-              item = {'boss':g['source'],'slot':g['slot'],'id':_id}
+              item = {'boss':g['source'],'slot':g['slot'],'id':_id,'icon':g['icon']}
               gear[name] = item
       
       _sorter = lambda x,y: cmp(int(x.split('(')[-1].replace(')','')), int(x.split('(')[-1].replace(')','')))
