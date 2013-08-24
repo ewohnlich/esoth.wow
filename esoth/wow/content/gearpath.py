@@ -92,7 +92,7 @@ class GearPath(Item):
               {'name':'Spoils of Pandaria','tier':'tier15'},
               {'name':'Thok the Bloodthirsty','tier':'tier15'},
               {'name':'Siegecrafter Blackfuse','tier':'tier15'},
-              {'name':'Paragons of the Klaxxi','tier':'tier15'},
+              {'name':'Paragons of the Klaaxi','tier':'tier15'},
               {'name':'Garrosh Hellscream','tier':'tier15'},
               {'name':'Ordos','tier':'tier15'},
               {'name':'Jin\'rokh','tier':'tier14'},
