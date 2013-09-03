@@ -14,13 +14,14 @@ esoth.wow.egg-info/top_level.txt
 esoth/wow/__init__.py
 esoth/wow/config.py
 esoth/wow/interfaces.py
-esoth/wow/mount_builder.py
-esoth/wow/mounts.py
-esoth/wow/pets.py
 esoth/wow/browser/__init__.py
+esoth/wow/browser/config.py
 esoth/wow/browser/find_player.py
 esoth/wow/browser/gearpath.py
+esoth/wow/browser/resources.py
 esoth/wow/content/__init__.py
+esoth/wow/content/config.py
 esoth/wow/content/display.py
 esoth/wow/content/gear.py
 esoth/wow/content/gearpath.py
+esoth/wow/content/resources.py

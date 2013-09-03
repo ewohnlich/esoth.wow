@@ -450,9 +450,9 @@ class GearPath(Item):
       for pid in pids:
         url = base_url % pid
         try:
-          pdata = json.load(urllib2.urlopen(url))
+          pdata = json.load(urlopen(url))
         except ValueError:
-          pdata = json.load(urllib2.urlopen('http://www.esoth.com/proxyw?u='+url))
+          pdata = json.load(urlopen('http://www.esoth.com/proxyw?u='+url))
         pets.append({'health': ( pdata['health'] - 100 ) / 5 - breedmap[ str(pdata['breedId']) ]['health'],
                      'speed' : pdata['speed'] - breedmap[ str(pdata['breedId']) ]['speed'],
                      'power' : pdata['power'] - breedmap[ str(pdata['breedId']) ]['power'],
