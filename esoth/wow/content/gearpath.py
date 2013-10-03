@@ -220,7 +220,8 @@ class GearPath(Item):
                  "Mogu'shan Vaults",
                  'Heart of Fear',
                  'Terrace of Endless Spring',
-                 'Throne of Thunder']
+                 'Throne of Thunder',
+                 'Siege of Orgrimmar']
       raids = data['progression']['raids']
       progression = []
       for raid in raids:

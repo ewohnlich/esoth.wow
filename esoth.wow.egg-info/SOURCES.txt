@@ -22,6 +22,5 @@ esoth/wow/browser/resources.py
 esoth/wow/content/__init__.py
 esoth/wow/content/config.py
 esoth/wow/content/display.py
-esoth/wow/content/gear.py
 esoth/wow/content/gearpath.py
 esoth/wow/content/resources.py

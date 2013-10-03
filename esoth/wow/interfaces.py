@@ -43,6 +43,7 @@ specs = SimpleVocabulary(
      SimpleTerm(value=u'protection-warrior', title=_(u'Warrior (Protection)')),]
     )
 
+realms = []
 try:
   realms = json.load(urlopen('http://us.battle.net/api/wow/realm/status'))['realms']
 except:
