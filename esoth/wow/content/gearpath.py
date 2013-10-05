@@ -288,7 +288,7 @@ class GearPath(Item):
       raids = {}
       bosses = {}
       # tier key: 0-2=Tier 11, 3=Tier 12, 4=Tier 13, 5-7=Tier 14, 8=Tier 15
-      tierkey = ['Tier 11','Tier 11','Tier 11','Tier 12','Tier 13','Tier 14','Tier 14','Tier 14','Tier 15']
+      tierkey = ['Tier 11','Tier 11','Tier 11','Tier 12','Tier 13','Tier 14','Tier 14','Tier 14','Tier 15','Tier 16']
       # fix for Ragnaros bug
       ragn = {}
       ragh = {}
@@ -445,20 +445,21 @@ class GearPath(Item):
             
       return _mounts
       
-    def addPetsById(self, pids):
+    def addPetById(self, pid):
       pets = self.resources().pets
       base_url = 'http://us.battle.net/api/wow/battlePet/stats/%s?qualityId=0'
-      for pid in pids:
-        url = base_url % pid
-        try:
-          pdata = json.load(urlopen(url))
-        except ValueError:
-          pdata = json.load(urlopen('http://www.esoth.com/proxyw?u='+url))
-        pets.append({'health': ( pdata['health'] - 100 ) / 5 - breedmap[ str(pdata['breedId']) ]['health'],
-                     'speed' : pdata['speed'] - breedmap[ str(pdata['breedId']) ]['speed'],
-                     'power' : pdata['power'] - breedmap[ str(pdata['breedId']) ]['power'],
-                     'speciesId': pdata['speciesId'] })
-      self.resources().pets = pets                   
+      url = base_url % pid
+      try:
+        pdata = json.load(urlopen(url))
+      except ValueError:
+        pdata = json.load(urlopen('http://www.esoth.com/proxyw?u='+url))
+      pet = {'health': ( pdata['health'] - 100 ) / 5 - breedmap[ str(pdata['breedId']) ]['health'],
+                   'speed' : pdata['speed'] - breedmap[ str(pdata['breedId']) ]['speed'],
+                   'power' : pdata['power'] - breedmap[ str(pdata['breedId']) ]['power'],
+                   'speciesId': pdata['speciesId'] }
+      pets.append(pet)
+      self.resources().pets = pets
+      return pet
 
     def petData(self):
       data = {'numUnique':0,
@@ -479,9 +480,9 @@ class GearPath(Item):
       for p in _resource:
         petdata[ p['speciesId'] ] = p
       newpids = [p['speciesId'] for p in pets if p['speciesId'] not in pkeys and p['speciesId'] != '0']
-      if newpids:
-        self.addPetsById(newpids)
-      
+      for newpid in newpids:
+        petdata[newpid] = self.addPetById(newpid)
+
       updates = []
       for p in pets:
         self.predictPet(petdata,p)
