@@ -5,6 +5,14 @@
     i18n_domain="esoth.wow">
 
     <browser:page
+        name="gnabb"
+        for="*"
+        template="timeless.pt"
+        class=".timeless.GnabbView"
+        permission="zope2.View"
+        />
+
+    <browser:page
         name="find-player"
         for="*"
         class=".find_player.FindPlayer"
