@@ -138,7 +138,7 @@ gnabb = [
   'id':104320},
 {'name':'Golden Moss',
   'source':'Rock Moss',
-  'rare':Trie,
+  'rare':True,
   'pet':False,
   'location':'Cavern of Lost Souls',
   'alternative':'',
