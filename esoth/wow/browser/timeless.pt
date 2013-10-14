@@ -5,6 +5,9 @@
       lang="en"
       metal:use-macro="context/main_template/macros/master"
       i18n:domain="plone">
+ <metal:override fill-slot="top_slot"
+    tal:define="disable_column_one python:request.set('disable_plone.leftcolumn',1);
+                disable_column_two python:request.set('disable_plone.rightcolumn',1);"/>
 <body>
 
 <metal:main fill-slot="content">
@@ -58,7 +61,10 @@
             <a tal:attributes="href string:http://www.wowhead.com/item=${item/id}"
                tal:content="item/name" />
           </td>
-          <td tal:content="item/source" />
+          <td>
+            <a tal:attributes="href item/source_url"
+               tal:content="item/source" />
+          </td>
           <td tal:content="item/location" />
           <td>
             <tal:bool condition="item/rare" content="string:Yes" />
@@ -86,14 +92,53 @@
   <script type="text/javascript">
     function gnabber_hide() {
       $('.gnabb-item').each(function (index) {
-        if ( $(this).attr('checked') == 'checked' ) {
+        if ( $(this).attr('checked')) {
           $(this).closest('tr').hide();
         }
       });
     }
     
+    // http://jsfiddle.net/2YbkH/
+    function binaryToHex(s) {
+        var i, k, part, accum, ret = '';
+        for (i = s.length-1; i >= 3; i -= 4) {
+            // extract out in substrings of 4 and convert to hex
+            part = s.substr(i+1-4, 4);
+            accum = 0;
+            for (k = 0; k < 4; k += 1) {
+                if (part[k] !== '0' && part[k] !== '1') {
+                    // invalid character
+                    return { valid: false };
+                }
+                // compute the length 4 substring
+                accum = accum * 2 + parseInt(part[k], 10);
+            }
+            if (accum >= 10) {
+                // 'A' to 'F'
+                ret = String.fromCharCode(accum - 10 + 'A'.charCodeAt(0)) + ret;
+            } else {
+                // '0' to '9'
+                ret = String(accum) + ret;
+            }
+        }
+        // remaining characters, i = 0, 1, or 2
+        if (i >= 0) {
+            accum = 0;
+            // convert from front
+            for (k = 0; k <= i; k += 1) {
+                if (s[k] !== '0' && s[k] !== '1') {
+                    return { valid: false };
+                }
+                accum = accum * 2 + parseInt(s[k], 10);
+            }
+            // 3 bits, value cannot exceed 2^3 - 1 = 7, just convert
+            ret = String(accum) + ret;
+        }
+        return ret;
+    }
+    
     function gnabber(o) {
-      if (o.attr('checked') == 'checked') {
+      if (o.attr('checked')) {
         row = o.closest('tr')
         row.addClass('completed-row')
         row.fadeOut('200',function () {
@@ -103,9 +148,9 @@
       x = ''
       $('.gnabb-item').each(function (index) {
         var checked = $(this).attr('checked');
-        x = (checked == 'checked') ? (x += '1') : x += '0';
+        x = checked ? (x += '1') : x += '0';
       });
-      var new_url = $('#gnabb-base').val()+x;
+      var new_url = $('#gnabb-base').val()+binaryToHex(x);
       $('#gnabb-link').attr('href',new_url);
       $('#gnabb-link').text(new_url);
     }
