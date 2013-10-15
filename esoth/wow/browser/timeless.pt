@@ -29,6 +29,24 @@
              tal:content="string:${context/absolute_url}/gnabb?s=${request/s}" />
            <input id="gnabb-base" type="hidden"
             tal:attributes="value string:${context/absolute_url}/gnabb?s=" />
+  </p><br/>
+  
+  <p>
+    <form tal:attributes="action string:${context/absolute_url}/@@gnabb">
+      <select name="server">
+        <tal:server repeat="server view/servers">
+          <option tal:content="server/title" tal:attributes="value server/value;
+                                                             selected python:request.get('server') == server.value and 'selected'" />
+        </tal:server>
+      </select>
+      <select name="region">
+        <option value="us">US</option>
+        <option value="eu">EU</option>
+      </select>
+      <input name="character" type="text" tal:attributes="value request/character|string:" />
+      <input name="s" type="hidden" />
+      <input type="submit" value="Get it from armory" />
+    </form>
   </p>
                         
   <table class="listing nosort" id="timeless"

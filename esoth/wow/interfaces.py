@@ -46,12 +46,20 @@ specs = SimpleVocabulary(
 realms = []
 try:
   realms = json.load(urlopen('http://us.battle.net/api/wow/realm/status'))['realms']
+  slugs = [r['slug'] for r in realms]
+  for r in json.load(urlopen('http://eu.battle.net/api/wow/realm/status'))['realms']:
+    if r['slug'] not in slugs:
+      realms.append(r)
 except:
   try:
     realms = json.load(urlopen('http://www.esoth.com/proxyw?u=http://us.battle.net/api/wow/realm/status'))['realms']
+    slugs = [r['slug'] for r in realms]
+    for r in json.load(urlopen('http://www.esoth.com/proxyw?u=http://eu.battle.net/api/wow/realm/status'))['realms']:
+      if r['slug'] not in slugs:
+        realms.append(r)
   except:
     pass
-servers = SimpleVocabulary([SimpleTerm(value=r['slug'], title=_('%s (US)' % r['name'])) for r in realms])
+servers = SimpleVocabulary([SimpleTerm(value=r['slug'], title=_('%s' % r['name'])) for r in realms])
 
 class ICharDisplay(form.Schema):
   title = schema.TextLine(title=_(u"Display name"))

@@ -528,7 +528,41 @@ gnabb = [
 class GnabbView(BrowserView):
   gnabb = gnabb
   
+  def servers(self):
+    from esoth.wow.interfaces import servers
+    return servers
+  
+  def armory(self):
+    server = self.request.get('server')
+    char = self.request.get('character')
+    region = self.request.get('region')
+    if not server or not char or not region:
+      return
+    
+    achurl = 'http://%s.battle.net/api/wow/achievement/8728' % region
+    charurl = 'http://%s.battle.net/api/wow/character/%s/%s?fields=achievements' % (region,server,char)
+    try:
+      achievement = json.load(urlopen(achurl))
+      progress = json.load(urlopen(charurl))
+    except:
+      achurl = 'http://www.esoth.com/proxyw?u='+achurl
+      charurl = 'http://www.esoth.com/proxyw?u='+charurl
+      achievement = json.load(urlopen(achurl))
+      progress = json.load(urlopen(charurl))
+      
+    ach_criteria = [a['id'] for a in achievement['criteria']]
+    criteria = progress['achievements']['criteria']
+    for i in range(0,len(ach_criteria)):
+      if ach_criteria[i] in criteria:
+        self.gnabb[i]['completed'] = True
+      else:
+        self.gnabb[i]['completed'] = False
+    return self.gnabb
+  
   def progress(self):
+    armory = self.armory()
+    if armory:
+      return armory
     _progress = self.request.get('s','')
     # it's hex, convert to binary
     if _progress:
