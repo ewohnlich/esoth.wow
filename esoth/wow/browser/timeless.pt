@@ -58,8 +58,10 @@
                    onclick="gnabber($(this))" />
           </td>
           <td>
-            <a tal:attributes="href string:http://www.wowhead.com/item=${item/id}"
-               tal:content="item/name" />
+            <a tal:attributes="href string:http://www.wowhead.com/item=${item/id}">
+              <img tal:attributes="src string:http://us.media.blizzard.com/wow/icons/18/${item/icon}.jpg" />
+              <span tal:content="item/name" />
+            </a>
           </td>
           <td>
             <a tal:attributes="href item/source_url"
@@ -90,6 +92,7 @@
   </a>
   
   <script type="text/javascript">
+    
     function gnabber_hide() {
       $('.gnabb-item').each(function (index) {
         if ( $(this).attr('checked')) {
