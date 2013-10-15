@@ -189,7 +189,7 @@ gnabb = [
   'alternative':'Rock Moss',
   'id':104312,
   'source_url':'http://www.wowhead.com/npc=72771',
-  'icon':'inv_misc_necklacea6'},
+  'icon':'spell_druid_wildmushroom_bloom'},
 {'name':'Eternal Kiln',
   'source':'Eternal Kilnmasters',
   'rare':False,
