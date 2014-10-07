@@ -19,6 +19,7 @@ esoth/wow/browser/config.py
 esoth/wow/browser/find_player.py
 esoth/wow/browser/gearpath.py
 esoth/wow/browser/resources.py
+esoth/wow/browser/timeless.py
 esoth/wow/content/__init__.py
 esoth/wow/content/config.py
 esoth/wow/content/display.py

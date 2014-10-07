@@ -120,12 +120,6 @@ class IMountSchema(Interface):
   isFlying = schema.Bool(title=_(u"isFlying"),required=False)
   isAquatic = schema.Bool(title=_(u"isAquatic"),required=False)
   isJumping = schema.Bool(title=_(u"isJumping"),required=False)
-
-class IPetResourceSchema(Interface):
-  speciesId = schema.TextLine(title=_(u"Species ID"),required=False)
-  health = schema.TextLine(title=_(u"Health"),required=False)
-  power = schema.TextLine(title=_(u"Power"),required=False)
-  speed = schema.TextLine(title=_(u"Speed"),required=False)
   
 class IPetSchema(Interface):
   name = schema.TextLine(title=_(u"Name"),required=False)
@@ -147,11 +141,6 @@ class IWoWResources(Interface):
 
 class IWoWResourcesSchema(form.Schema):
   title = schema.TextLine(title=_(u"Title"))
-  form.widget(pets=DataGridFieldFactory)
-  pets = schema.List(title=u"Pets",
-                     value_type=DictRow(title=u"pet", schema=IPetResourceSchema),
-                     required=False,
-         )
   form.widget(mounts=DataGridFieldFactory)
   mounts = schema.List(title=u"Mouts",
                      value_type=DictRow(title=u"mount", schema=IMountResourceSchema),

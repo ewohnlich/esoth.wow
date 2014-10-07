@@ -12,6 +12,7 @@ from zope.interface import implements, Interface
 from esoth.wow import _
 from esoth.wow.content.config import cm_mounts, int_specs, spi_specs, str_specs, agi_specs, tank_specs, healer_specs, dps_specs, weapon_map, breedmap, armorMap
 from esoth.wow.interfaces import IGearPath, IPetUtility, IMountUtility, servers
+from esoth.wow.config import API_KEY
 
 logger = logging.getLogger('esoth.wow')
 
@@ -116,7 +117,7 @@ class GearPath(Item):
        
     def updateData(self):
       base_image_url = 'http://us.battle.net/static-render/us/'
-      url = 'http://us.battle.net/api/wow/character/%s/%s?fields=guild,talents,stats,items,reputation,professions,appearance,companions,mounts,pets,achievements,progression,titles' % (self.server,self.title.lower())
+      url = 'https://us.api.battle.net/wow/character/%(server)s/%(character)s?apikey=%s&fields=guild,talents,stats,items,reputation,professions,appearance,companions,mounts,pets,achievements,progression,titles' % (API_KEY,self.server,self.title.lower())
       equipped = set([])
       try:
         data = json.load(urlopen(url))
@@ -444,22 +445,6 @@ class GearPath(Item):
                           'isJumping':mymounts[id]['isJumping']},self.faction,self.klass,_cm_flag))
             
       return _mounts
-      
-    def addPetById(self, pid):
-      pets = self.resources().pets
-      base_url = 'http://us.battle.net/api/wow/battlePet/stats/%s?qualityId=0'
-      url = base_url % pid
-      try:
-        pdata = json.load(urlopen(url))
-      except ValueError:
-        pdata = json.load(urlopen('http://www.esoth.com/proxyw?u='+url))
-      pet = {'health': ( pdata['health'] - 100 ) / 5 - breedmap[ str(pdata['breedId']) ]['health'],
-                   'speed' : pdata['speed'] - breedmap[ str(pdata['breedId']) ]['speed'],
-                   'power' : pdata['power'] - breedmap[ str(pdata['breedId']) ]['power'],
-                   'speciesId': pdata['speciesId'] }
-      pets.append(pet)
-      self.resources().pets = pets
-      return pet
 
     def petData(self):
       data = {'numUnique':0,
@@ -471,36 +456,13 @@ class GearPath(Item):
               'uniquePets': []}
       pets = self.pets
       data['numTotal'] = len(pets)
-      uniques = []
+      uniques = {}
       
-      #update petdata if needed
-      _resource = self.resources().pets
-      petdata = {}
-      pkeys = [p['speciesId'] for p in _resource]
-      for p in _resource:
-        petdata[ p['speciesId'] ] = p
-      newpids = [p['speciesId'] for p in pets if p['speciesId'] not in pkeys and p['speciesId'] != '0']
-      for newpid in newpids:
-        petdata[newpid] = self.addPetById(newpid)
-
-      updates = []
-      for p in pets:
-        self.predictPet(petdata,p)
-        if p['level'] == '25':
-          pbase = petdata[ p['speciesId'] ]
-          if p['maxH'] != int(p['health']) or p['maxP'] != int(p['power']) or p['maxS'] != int(p['speed']):
-            #updates.append(p)
-            p['maxH'] = p['health']
-            p['maxP'] = p['power']
-            p['maxS'] = p['speed']
-        if p['creatureName'] not in [u['creatureName'] for u in uniques]:
-          uniques.append( p )
-        elif int(p['qualityId']) > int([u['qualityId'] for u in uniques if u['creatureName'] == p['creatureName']][0]):
-          uniques = [u for u in uniques if u['name'] != p['name']]
-          uniques.append( p )
-      #if updates:
-      #  petu.updateBaseStats(updates)
-      uniques.sort(lambda x,y: cmp(int(x['level']),int(y['level'])))
+      for pet in pets:
+        if (pet['creatureId'] in uniques and pet['level'] > uniques[ pet['creatureId'] ]['level']) or pet['creatureId'] not in uniques:
+          uniques[ pet['creatureId'] ] = pet
+      uniques = uniques.values()
+          
       data['numUnique'] = len(uniques)
 
       data['numMaxLevel'] = len( [p for p in pets if p['level'] == '25'] )
@@ -511,7 +473,7 @@ class GearPath(Item):
       data['numRare'] = len( [p for p in pets if p['qualityId'] == '3'] )
 
       data['uniquePets'] = uniques
-
+      
       return data
 
     def autoUpdateData(self):

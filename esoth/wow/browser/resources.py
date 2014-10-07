@@ -9,7 +9,7 @@ from z3c.form import button
 from zope import schema
 
 from esoth.wow import _
-from esoth.wow.interfaces import IWoWResources, IGearSchema, IMountResourceSchema, IPetResourceSchema
+from esoth.wow.interfaces import IWoWResources, IGearSchema, IMountResourceSchema
 from config import statmap, inventoryType, allowableClasses, armorSubClass
   
 def blizzAPI(id):
@@ -227,7 +227,7 @@ class MountResourcesView(BrowserView):
 
 class ExportResources(BrowserView):
   def __call__(self):
-    data = {'gear':self.context.gear,'pets':self.context.pets,'mounts':self.context.mounts}
+    data = {'gear':self.context.gear,'mounts':self.context.mounts}
     jsondata = json.dumps(data)
     
     self.request.response.setHeader('Content-type','application/json')
@@ -243,53 +243,3 @@ class ImportResources(BrowserView):
     self.context.gear = data.get('gear')
     self.context.pets = data.get('pets')
     self.context.mounts = data.get('mounts')
-    
-class UpdatePets(form.SchemaForm):
-  grok.name('update-pets')
-  grok.require('cmf.ManagePortal')
-  grok.context(IWoWResources)
-  ignoreContext = True
-  
-  schema = IPetResourceSchema
-  
-#  @button.buttonAndHandler(u'Import old pets')
-#  def oldPets(self, action):
-#    """ Temporary button to handle import """
-#    pets = []
-#    path = os.path.dirname(os.path.realpath(__file__))
-#    data = json.load(open(os.path.join(path,'..','pets.json')))
-#    for speciesId, pet in data.items():
-#      pet['speciesId'] = speciesId
-#      pets.append(pet)
-#    self.context.pets = pets
-#    IStatusMessage(self.request).addStatusMessage(_(u"Pets updated"),"info")
-#    self.request.response.redirect(self.context.absolute_url()+'/@@pet-resources')
-  
-  @button.buttonAndHandler(u'Update Pet')
-  def updatePet(self, action):
-    data, errors = self.extractData()
-    pets = self.context.pets
-    pet = {}
-    name = data.get('name')
-    match = {}
-    if data.get('speciesId'):
-      for p in pets:
-        if p['speciesId'] == data['speciesId']:
-          match = p.copy()
-          pets.remove(p)
-    match['speciesId'] = data.get('speciesId') or match.get('speciesId') or ''
-    match['health'] = data.get('health') or match.get('health') or ''
-    match['speed'] = data.get('speed') or match.get('speed') or ''
-    match['power'] = data.get('power') or match.get('power') or ''
-    pets.append(match)
-    self.context.pets = pets
-    
-    IStatusMessage(self.request).addStatusMessage(_(u"%s updated" % data.get('speciesId')),"info")
-    self.request.response.redirect(self.context.absolute_url()+'/@@pet-resources')
-
-class PetResourcesView(BrowserView):
-  
-  def pets(self):
-    pets = self.context.pets
-    pets.sort(lambda x,y: cmp(x['speciesId'],y['speciesId']))
-    return pets
