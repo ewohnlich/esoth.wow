@@ -134,12 +134,4 @@
         permission="cmf.ManagePortal"
         />
 
-    <browser:page
-        name="pet-resources"
-        for="*"
-        class=".resources.PetResourcesView"
-        template="resources_pets.pt"
-        permission="zope2.View"
-        />
-
 </configure>
