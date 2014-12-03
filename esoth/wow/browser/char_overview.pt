@@ -29,6 +29,7 @@
               <th>Mounts</th>
               <th>Pets (unique)</th>
               <th>Titles</th>
+              <th>Leg. Ring</th>
               <th>iLvl (total)</th>
               <th>iLvl (equipped)</th>
             </tr>
@@ -66,12 +67,15 @@
                 <td tal:content="char/mounts"/>
                 <td tal:content="char/numcompanions"/>
                 <td tal:content="char/titles"/>
+                <td tal:content="python:char.legring and 'Yes' or 'No'"/>
                 <td tal:content="char/averageItemLevel"/>
                 <td tal:content="char/averageItemLevelEquipped"/>
               </tr>
             </tal:char>
           </tbody>
         </table>
+        
+        <a class="updater" tal:attributes="href string:${context/absolute_url}/@@armory">update</a>
             
 
     </metal:content-core>

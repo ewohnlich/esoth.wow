@@ -117,7 +117,7 @@ class GearPath(Item):
        
     def updateData(self):
       base_image_url = 'http://us.battle.net/static-render/us/'
-      url = 'https://us.api.battle.net/wow/character/%(server)s/%(character)s?apikey=%s&fields=guild,talents,stats,items,reputation,professions,appearance,companions,mounts,pets,achievements,progression,titles' % (API_KEY,self.server,self.title.lower())
+      url = 'https://us.api.battle.net/wow/character/%(server)s/%(character)s?apikey=%(api_key)s&fields=guild,talents,stats,items,reputation,professions,appearance,companions,mounts,pets,achievements,progression,titles' % {'server':self.server,'character':self.title.lower(),'api_key':API_KEY}
       equipped = set([])
       try:
         data = json.load(urlopen(url))
@@ -210,7 +210,10 @@ class GearPath(Item):
       self.crit = data['stats']['critRating']
       self.haste = data['stats']['hasteRating']
       self.mastery = data['stats']['masteryRating']
-      self.hit = data['stats']['hitRating']
+      self.multistrike = int(data['stats']['multistrikeRating'])
+      self.versatility = data['stats']['versatility']
+      
+      self.legring = 'Timeless Solium Band' in data['items']['finger1']['name'] or 'Timeless Solium Band' in data['items']['finger2']['name']
 
       # progression
       tiermap = ['Blackwing Descent',

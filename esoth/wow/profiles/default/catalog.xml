@@ -16,6 +16,7 @@
  <column value="klass"/>
  <column value="points"/>
  <column value="mounts"/>
+ <column value="legring"/>
  <column value="numcompanions"/>
  <column value="titles"/>
  <column value="averageItemLevel"/>

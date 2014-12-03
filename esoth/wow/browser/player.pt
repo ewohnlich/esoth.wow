@@ -126,7 +126,7 @@
               <ul class="visualNoMarker">
                 <tal:talent repeat="talent context/mainTalents">
                   <li>
-                    <span tal:content="python:(int(talent['tier'])+1)*15"/>:
+                    <span tal:content="python:min((int(talent['tier'])+1)*15,100)"/>:
                     <img tal:attributes="src string:http://us.media.blizzard.com/wow/icons/18/${talent/icon}.jpg"/>
                     <a tal:attributes="href string:http://www.wowhead.com?spell=${talent/id}"
                        tal:content="talent/name"/>
@@ -140,7 +140,7 @@
               <ul class="visualNoMarker">
                 <tal:talent repeat="talent context/secondTalents">
                   <li>
-                    <span tal:content="python:(int(talent['tier'])+1)*15"/>:
+                    <span tal:content="python:min((int(talent['tier'])+1)*15,100)"/>:
                     <img tal:attributes="src string:http://us.media.blizzard.com/wow/icons/18/${talent/icon}.jpg"/>
                     <a tal:attributes="href string:http://www.wowhead.com?spell=${talent/id}"
                        tal:content="talent/name"/>
@@ -183,7 +183,13 @@
               <th>Mastery</th>
               <td tal:content="context/mastery|string:;"/>
             </tr>
-            <tr tal:condition="python:int(context.spirit)>500">
+            <tr>
+              <th>Multistrike</th>
+              <td tal:content="context/multistrike|string:;"/>
+              <th>Versatility</th>
+              <td tal:content="context/versatility|string:;"/>
+            </tr>
+            <tr>
               <th>Spirit</th>
               <td tal:content="context/spirit|string:;"/>
               <th/><td/>

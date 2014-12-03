@@ -403,8 +403,8 @@ class IGearPath(form.Schema):
   mode(mastery='hidden')
   mastery = schema.TextLine(required=False)
   
-  mode(hit='hidden')
-  hit = schema.TextLine(required=False)
+  mode(multistrike='hidden')
+  multistrike = schema.TextLine(required=False)
   
-  mode(expertise='hidden')
-  expertise = schema.TextLine(required=False)
+  mode(versatility='hidden')
+  versatility = schema.TextLine(required=False)

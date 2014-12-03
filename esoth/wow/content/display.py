@@ -1,6 +1,10 @@
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone import PloneMessageFactory as _
+from Products.statusmessages.interfaces import IStatusMessage
 from plone.dexterity.content import Item
 from zope.interface import implements
+
+from five import grok
 
 from esoth.wow.interfaces import ICharDisplay
 
@@ -25,4 +29,13 @@ class WoWDisplay(Item):
       for player in self.players():
         o=player.getObject()
         o.updateData()
-      return self()
+
+class UpdateDisplay(grok.View):
+    grok.name('armory')
+    grok.context(ICharDisplay)
+    
+    def render(self):
+      self.context.updateDisplay()
+      
+      IStatusMessage(self.request).addStatusMessage(_(u"Roster updated"),"info")
+      self.request.response.redirect(self.context.absolute_url())
