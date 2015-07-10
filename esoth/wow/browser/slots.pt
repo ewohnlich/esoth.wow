@@ -1,0 +1,57 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="plone">
+<body>
+
+  <metal:content-core fill-slot="content-core"
+                        tal:define="dummy python:None">
+
+    <div id="gear-toggles">
+      <a href="javascript:void(0);" onclick="$('.raid-normal').toggle();$(this).toggleClass('strikethrough')">normal</a> |
+      <a href="javascript:void(0);" onclick="$('.raid-heroic').toggle();$(this).toggleClass('strikethrough')">heroic</a> |
+      <a href="javascript:void(0);" onclick="$('.raid-mythic').toggle();$(this).toggleClass('strikethrough')">mythic</a>
+    </div>
+
+    <p>
+      <a tal:attributes="href string:http://${context/region}.battle.net/en/wow/character/${context/server}/${context/name}">Armory</a>
+    </p>
+
+    <h3>Stat Values</h3>
+    <table class="listing">
+      <tr>
+        <th>Agi</th>
+        <th>Crit</th>
+        <th>Haste</th>
+        <th>Mastery</th>
+        <th>Multistrike</th>
+        <th>Versatility</th>
+      </tr>
+      <tr>
+        <td tal:content="context/agility"/>
+        <td tal:content="context/crit"/>
+        <td tal:content="context/haste"/>
+        <td tal:content="context/mastery"/>
+        <td tal:content="context/multistrike"/>
+        <td tal:content="context/versatility"/>
+      </tr>
+    </table>
+
+    <dl>
+      <tal:boss repeat="slot view/raid">
+        <dt tal:content="slot/slot" />
+        <dd>
+          <tal:gear repeat="gear slot/gear">
+            <metal:gear use-macro="context/wow_macros/macros/gear_item" />
+          </tal:gear>
+        </dd>
+      </tal:boss>
+    </dl>
+
+  </metal:content-core>
+
+</body>
+</html>

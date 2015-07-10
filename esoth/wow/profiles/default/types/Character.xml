@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<object name="GearPath" meta_type="Dexterity FTI"
+<object name="Character" meta_type="Dexterity FTI"
    i18n:domain="esoth.wow" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
  <!-- Basic metadata -->
@@ -12,13 +12,13 @@
  <property name="content_icon">++resource++esoth.wow/wowchar.png</property>
 
  <!-- schema interface -->
- <property name="schema">esoth.wow.interfaces.IGearPath</property>
+ <property name="schema">esoth.wow.interfaces.ICharacter</property>
 
  <!-- class used for content items -->
- <property name="klass">esoth.wow.content.gearpath.GearPath</property>
+ <property name="klass">esoth.wow.content.character.Character</property>
 
  <!-- add permission -->
- <property name="add_permission">esoth.wow.AddGearPath</property>
+ <property name="add_permission">esoth.wow.AddCharacter</property>
 
  <!-- enabled behaviors -->
  <property name="behaviors">
@@ -27,10 +27,10 @@
  </property>
 
  <!-- View information -->
- <property name="default_view">@@player-view</property>
+ <property name="default_view">@@view</property>
  <property name="default_view_fallback">False</property>
  <property name="view_methods">
-  <element value="@@player-view"/>
+  <element value="@@view"/>
  </property>
 
  <!-- Method aliases -->
@@ -46,6 +46,10 @@
  </action>
  <action title="Edit" action_id="edit" category="object" condition_expr=""
     url_expr="string:${object_url}/edit" visible="True">
+  <permission value="Modify portal content"/>
+ </action>
+ <action title="Update" action_id="update" category="object" condition_expr=""
+    url_expr="string:${object_url}/update" visible="True">
   <permission value="Modify portal content"/>
  </action>
 </object>

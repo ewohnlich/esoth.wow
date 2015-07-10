@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
-<object name="WoWResources" meta_type="Dexterity FTI"
+<object name="GearItem" meta_type="Dexterity FTI"
    i18n:domain="esoth.wow" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
  <!-- Basic metadata -->
- <property name="title" i18n:translate="">WoW Resources</property>
- <property name="description" i18n:translate="">Contains info on all items, pets, and mounts</property>
+ <property name="title" i18n:translate="">WoW Gear Item</property>
+ <property name="description" i18n:translate="">A piece of gear</property>
  <property name="allow_discussion">False</property>
  <property name="global_allow">True</property>
  <property name="filter_content_types">False</property>
@@ -12,13 +12,13 @@
  <property name="content_icon">++resource++esoth.wow/wowchar.png</property>
 
  <!-- schema interface -->
- <property name="schema">esoth.wow.interfaces.IWoWResourcesSchema</property>
+ <property name="schema">esoth.wow.interfaces.IGearItem</property>
 
  <!-- class used for content items -->
- <property name="klass">esoth.wow.content.resources.WoWResources</property>
+ <property name="klass">esoth.wow.content.gearitem.GearItem</property>
 
  <!-- add permission -->
- <property name="add_permission">esoth.wow.AddGearPath</property>
+ <property name="add_permission">esoth.wow.AddGearItem</property>
 
  <!-- enabled behaviors -->
  <property name="behaviors">
@@ -27,10 +27,10 @@
  </property>
 
  <!-- View information -->
- <property name="default_view">@@find-player</property>
+ <property name="default_view">@@view</property>
  <property name="default_view_fallback">False</property>
  <property name="view_methods">
-  <element value="@@find-player"/>
+  <element value="view"/>
  </property>
 
  <!-- Method aliases -->
@@ -48,16 +48,8 @@
     url_expr="string:${object_url}/edit" visible="True">
   <permission value="Modify portal content"/>
  </action>
- <action title="Mounts" action_id="mounts" category="object" condition_expr=""
-    url_expr="string:${object_url}/@@mount-resources" visible="True">
-  <permission value="Manage portal"/>
- </action>
- <action title="Pets" action_id="pets" category="object" condition_expr=""
-    url_expr="string:${object_url}/@@pet-resources" visible="True">
-  <permission value="Manage portal"/>
- </action>
- <action title="Gear" action_id="gear" category="object" condition_expr=""
-    url_expr="string:${object_url}/@@gear-resources" visible="True">
-  <permission value="Manage portal"/>
+ <action title="Update" action_id="update" category="object" condition_expr=""
+    url_expr="string:${object_url}/update" visible="True">
+  <permission value="Modify portal content"/>
  </action>
 </object>

@@ -1,24 +1,16 @@
 <?xml version="1.0"?>
 <object name="portal_catalog" meta_type="CMF Catalog">
- <index name="guild" meta_type="FieldIndex">
-  <indexed_attr value="guild"/>
+ <index name="boss" meta_type="FieldIndex">
+  <indexed_attr value="boss"/>
  </index>
- <index name="server" meta_type="FieldIndex">
-  <indexed_attr value="server"/>
+ <index name="slot" meta_type="FieldIndex">
+  <indexed_attr value="slot"/>
  </index>
- <index name="groups" meta_type="KeywordIndex">
-  <indexed_attr value="groups"/>
+ <index name="item_id" meta_type="FieldIndex">
+  <indexed_attr value="item_id"/>
  </index>
- <column value="serverTitle"/>
- <column value="guild"/>
- <column value="hasAvatar"/>
- <column value="server"/>
- <column value="klass"/>
- <column value="points"/>
- <column value="mounts"/>
- <column value="legring"/>
- <column value="numcompanions"/>
- <column value="titles"/>
- <column value="averageItemLevel"/>
- <column value="averageItemLevelEquipped"/>
+ <column value="contexts"/>
+ <column value="item_id"/>
+ <column value="boss"/>
+ <column value="slot"/>
 </object>

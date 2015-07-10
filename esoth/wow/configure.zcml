@@ -5,17 +5,16 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:grok="http://namespaces.zope.org/grok"
     i18n_domain="esoth.wow">
-    
+
     <include package="Products.CMFCore" file="permissions.zcml" />
     <grok:grok package="." />
-  
+
     <browser:resourceDirectory
                   name="esoth.wow"
                   directory="static"
                   />
-    
+
     <include file="permissions.zcml" />
-    <include package=".content" />
     <include package=".browser" />
 
     <genericsetup:registerProfile

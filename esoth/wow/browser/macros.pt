@@ -1,0 +1,10 @@
+<metal:gear define-macro="gear_item">
+  <div tal:attributes="class python:' '.join(('boss-item','gear-status-%s' % gear['status'],next(iter(gear['item']['gear_context'].split()),'')))">
+    <a tal:attributes="href string:http://www.wowhead.com/item=${gear/id};
+                       title gear/name">
+      <img tal:attributes="src string:${portal_url}/${gear/icon}" />
+      <span tal:content="gear/item/gear_context_name" />:
+      <span class="score" tal:content="gear/score_diff"/>
+    </a>
+  </div>
+</metal:gear>

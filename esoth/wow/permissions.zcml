@@ -3,13 +3,13 @@
     i18n_domain="esoth.wow">
 
     <permission
-        id="esoth.wow.AddGearPath"
-        title="esoth.wow: Add GearPath"
+        id="esoth.wow.AddCharacter"
+        title="esoth.wow: Add Character"
         />
 
     <permission
-        id="esoth.wow.AddCharDisplay"
-        title="esoth.wow: Add Character Display"
+        id="esoth.wow.AddGearItem"
+        title="esoth.wow: Add Gear Item"
         />
 
 </configure>

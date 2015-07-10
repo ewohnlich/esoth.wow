@@ -1,0 +1,62 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="plone">
+<body>
+  <metal:content-title fill-slot="content-title">
+    <h1 tal:content="context/title" />
+  </metal:content-title>
+
+
+  <metal:content-core fill-slot="content-core">
+    <div tal:condition="context/icon" class="gear-icon">
+       <img tal:attributes="src string:${view/resource_base_url}/wow/icons/36/${context/icon}.jpg" />
+    </div>
+
+    <a tal:attributes="href string:http://www.wowhead.com/item=${context/item_id}">Wowhead</a>
+
+    <ul>
+      <li>Source: <span tal:content="context/boss" />
+      <li>Armor Class: <span tal:content="context/armor_class" /></li>
+      <li>Slot: <span tal:content="context/slot" /></li>
+    </ul>
+
+    <div class="field">
+      <h3>Contexts</h3>
+
+      <table class="listing">
+        <thead>
+          <tr>
+            <th>Context</th>
+            <th>ilvl</th>
+            <th>Agility</th>
+            <th>Crit</th>
+            <th>Haste</th>
+            <th>Mastery</th>
+            <th>Multistrike</th>
+            <th>Versatility</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tal:context repeat="gear_context context/contexts">
+            <tr>
+              <th tal:content="gear_context/gear_context" />
+              <td tal:content="gear_context/ilvl" />
+              <td tal:content="gear_context/agility" />
+              <td tal:content="gear_context/crit" />
+              <td tal:content="gear_context/haste" />
+              <td tal:content="gear_context/mastery" />
+              <td tal:content="gear_context/multistrike" />
+              <td tal:content="gear_context/versatility" />
+            </tr>
+          </tal:context>
+        </tbody>
+      </table>
+    </div>
+  </metal:content-core>
+
+</body>
+</html>
