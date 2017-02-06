@@ -1,11 +1,15 @@
 import logging
+import plone.api
 from plone.dexterity.content import Item
 from Products.CMFCore.utils import getToolByName
 from zope.component import getUtility
 from zope.interface import implements, Interface
+from zope.schema import getFieldsInOrder
 
 from esoth.wow import _
 from esoth.wow.config import API_KEY
+from esoth.wow.interfaces import IGearSlots
+from esoth.wow.tools import get_character
 
 logger = logging.getLogger('esoth.wow')
 
@@ -21,11 +25,34 @@ class Character(Item):
     return statmap[max([getattr(self,s) for s in stats])]
 
   def getIcon(self,dummy=True):
-    return '@@get_icon?tag=%s&avatar=True' % self.thumbnail
+    if self.thumbnail:
+      return '@@get_icon?tag=%s&avatar=True' % self.thumbnail
+    else:
+      return '%s/++resource++esoth.wow/wowchar.png' % plone.api.portal.get().absolute_url()
+
+  def update_character(self):
+    if self.region and self.server and self.title:
+      character = get_character(self.region,self.server,self.title)
+      self.thumbnail = character['thumbnail']
+
+      if not self.gear:
+        self.gear = set()
+      for slot,dummy in getFieldsInOrder(IGearSlots):
+        if slot in character['items']: # offhand might not exist
+          gear_item = '%d_%s' % (character['items'][slot]['id'], character['items'][slot]['context'])
+          if 562 in character['items'][slot]['bonusLists']:
+            gear_item += ' (w)'
+          if 565 in character['items'][slot]['bonusLists']:
+            gear_item += ' (s)'
+          self.gear.add(gear_item)
+      self.reindexObject()
 
   def get_gear(self):
     catalog = getToolByName(self, 'portal_catalog')
     gear_set = []
+
+    if not self.gear:
+      self.update_character()
 
     for gearstring in self.gear:
       item_id,gear_context = gearstring.split('_')

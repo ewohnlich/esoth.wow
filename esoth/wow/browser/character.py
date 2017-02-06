@@ -6,7 +6,7 @@ from zope.schema import getFieldsInOrder
 from esoth.wow import _
 from esoth.wow.config import GEM_VALUE
 from esoth.wow.interfaces import ICharacter, IGearSlots, slot_alt_name
-from esoth.wow.tools import context_name, get_character
+from esoth.wow.tools import context_name
 
 grok.templatedir('.')
 
@@ -86,20 +86,7 @@ class CharacterUpdate(grok.View):
   grok.name('update')
 
   def render(self):
-    character = get_character(self.context.region,self.context.server,self.context.title)
-    self.context.thumbnail = character['thumbnail']
-
-    if not self.context.gear:
-      self.context.gear = set()
-    for slot,dummy in getFieldsInOrder(IGearSlots):
-      if slot in character['items']: # offhand might not exist
-        gear_item = '%d_%s' % (character['items'][slot]['id'], character['items'][slot]['context'])
-        if 562 in character['items'][slot]['bonusLists']:
-          gear_item += ' (w)'
-        if 565 in character['items'][slot]['bonusLists']:
-          gear_item += ' (s)'
-        self.context.gear.add(gear_item)
-    self.context.reindexObject()
+    self.context.update_character()
 
     IStatusMessage(self.request).addStatusMessage(_(u"Character updated"),"info")
     self.request.response.redirect(self.context.absolute_url())

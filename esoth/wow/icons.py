@@ -10,4 +10,5 @@ class GetIcon(grok.View):
 
   def render(self):
     self.request.response.setHeader('Content-Type','image/jpeg; charset=utf-8')
+    icon=get_icon(self.request['tag'],avatar=self.request.get('avatar'))
     return urlopen(get_icon(self.request['tag'],avatar=self.request.get('avatar'))).read()

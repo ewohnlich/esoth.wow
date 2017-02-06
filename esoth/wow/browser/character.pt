@@ -17,7 +17,7 @@
     </div>
 
     <p>
-      <a tal:attributes="href string:http://${context/region}.battle.net/en/wow/character/${context/server}/${context/name}">Armory</a>
+      <a tal:attributes="href string:http://${context/region}.battle.net/en/wow/character/${context/server}/${context/title}">Armory</a>
     </p>
 
     <h3>Stat Values</h3>

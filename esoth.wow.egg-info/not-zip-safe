@@ -1,4 +1,1 @@
-setuptools
 
-[tests]
-zope.testing

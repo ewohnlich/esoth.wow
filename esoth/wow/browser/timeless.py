@@ -6,6 +6,7 @@ from Products.CMFPlone import PloneMessageFactory as _
 from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile, ViewPageTemplateFile
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import button
+from zope.interface import Interface
 from urllib import urlopen
 import json
 
@@ -527,18 +528,18 @@ gnabb = [
 
 class GnabbView(BrowserView):
   gnabb = gnabb
-  
+
   def servers(self):
     from esoth.wow.interfaces import servers
     return servers
-  
+
   def armory(self):
     server = self.request.get('server')
     char = self.request.get('character')
     region = self.request.get('region')
     if not server or not char or not region:
       return
-    
+
     achurl = 'http://%s.battle.net/api/wow/achievement/8728' % region
     charurl = 'http://%s.battle.net/api/wow/character/%s/%s?fields=achievements' % (region,server,char)
     try:
@@ -549,7 +550,7 @@ class GnabbView(BrowserView):
       charurl = 'http://www.esoth.com/proxyw?u='+charurl
       achievement = json.load(urlopen(achurl))
       progress = json.load(urlopen(charurl))
-      
+
     ach_criteria = [a['id'] for a in achievement['criteria']]
     criteria = progress['achievements']['criteria']
     for i in range(0,len(ach_criteria)):
@@ -558,7 +559,7 @@ class GnabbView(BrowserView):
       else:
         self.gnabb[i]['completed'] = False
     return self.gnabb
-  
+
   def progress(self):
     armory = self.armory()
     if armory:
@@ -576,6 +577,12 @@ class GnabbView(BrowserView):
       except IndexError: # you fucked up
         return []
     return self.gnabb
-    
+
   def completed(self):
     return [g['id'] for g in self.gnabb if g.get('completed')]
+
+grok.templatedir('.')
+class Crossword(grok.View):
+  grok.name('cw')
+  grok.context(Interface)
+  grok.template('cw')
