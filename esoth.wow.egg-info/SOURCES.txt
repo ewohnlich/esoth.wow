@@ -8,6 +8,7 @@ esoth.wow.egg-info/dependency_links.txt
 esoth.wow.egg-info/entry_points.txt
 esoth.wow.egg-info/namespace_packages.txt
 esoth.wow.egg-info/not-zip-safe
+esoth.wow.egg-info/paster_plugins.txt
 esoth.wow.egg-info/requires.txt
 esoth.wow.egg-info/top_level.txt
 esoth/wow/__init__.py
